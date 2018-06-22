@@ -1,0 +1,94 @@
+var l_count = 0;
+var lines = [];
+console.log("started2");
+function edge(start,end){
+	this.id = l_count.toString()+"line";
+	l_count++;
+	this.start = start;
+	this.end = end;
+	console.log(start+end);
+	
+	console.log(this.end);
+	console.log(this.start);
+	
+	lines[lines.length] = this;
+	
+	var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+	$(g).attr({
+        width: "100%",
+        height: "100%"
+    });
+	var el = $(document.createElementNS('http://www.w3.org/2000/svg', 'line')).attr({
+        x1: "50",
+        y1:"50",
+		x2:"55",
+		y2:"55",
+        id: this.id,
+        fill:"yellow",
+		stroke: "black"
+    });
+	$(el).attr("stroke-width","2");
+	$(g).append(el);
+	var elem = document.getElementById("svg1");
+    elem.appendChild(g);
+	
+	//console.log("succes"+lines);
+	
+	this.rep = el;
+	this.name = "#"+this.id;
+	
+	this.update = function(){
+		let adr = this.start.name;
+		let temp = $(adr).attr("x");
+		let n = this.name;
+		//console.log("updating"+adr+temp+n);
+		temp = (parseFloat(temp)).toString();
+		$(n).attr("x1",temp);
+		temp = $(adr).attr("y");
+		temp = (parseFloat(temp)+10).toString();
+		$(n).attr("y1",temp);
+		adr = this.end.name;
+		temp = $(adr).attr("x");
+		temp = (parseFloat(temp)+20).toString();
+		$(n).attr("x2",temp);
+		temp = $(adr).attr("y");
+		temp = (parseFloat(temp)+10).toString();
+		$(n).attr("y2",temp);
+		
+		//and the color based on the state
+		if (this.start.val){
+			$((this.rep)).attr("stroke","yellow");
+		}
+		else{
+			$((this.rep)).attr("stroke","black");
+		}
+	}
+	
+	
+	rem_edge(this);
+}
+
+function rem_edge(ob){
+	$((ob.rep)).click(function(e){
+		//removing the edge from the array
+		for (var i = 0; i < lines.length; i++) {
+			if (lines[i] == (ob.id)) {
+				lines.splice(i, 1);
+			}
+		}
+		
+		//removing the visual
+		$((ob.rep)).remove();
+		
+		//fixing the actual start and end pins
+		ob.start.nei = "yay";
+		ob.start.val = false;
+		ob.start.state = true;
+		ob.end.val = false;
+		ob.end.state = true;
+	});
+}
+
+
+
+

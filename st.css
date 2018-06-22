@@ -1,0 +1,22 @@
+body {
+    background-color:rgba(0,0,0,0.7);
+	/*
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+	*/
+	margin:0;
+}
+
+.heavy { font: bold 20px sans-serif; }
+
+img {
+	border-radius: 17px;
+	height: 74;
+	width: 74;
+}
+
+#butt {
+	rx: 10;
+	ry: 10;
+}
