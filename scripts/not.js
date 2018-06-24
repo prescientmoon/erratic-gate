@@ -74,6 +74,7 @@ function not(id){
 function addclk11(ob){
 	var rep = ob.rep;
 	$((ob.img)).mousedown(function(e){
+		e.preventDefault();
 		var svg = document.getElementById("svg1");
 		$(svg).append(ob.rep);
 		$(svg).append($(ob.pin1.rep));

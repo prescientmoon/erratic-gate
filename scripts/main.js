@@ -28,6 +28,9 @@ $(modal).mousedown(function(e){
 	//and 'addel' is the true id of the modal from DOM
 	$("#addel").modal("show");
 	
+	//being sure we wont move the components
+	moveing = false;
+	
 	//activatng the drag and drop for the blue box
 	selected = "butt"; 
 });
@@ -66,11 +69,12 @@ function addel(){
 //================================preventing deafult actions==========================
 
 //nothing to say here
-$("img,rect,circle,p").mousedown(function(e){
+$("img,rect,circle,p,foreignObject").mousedown(function(e){
 	e.preventDefault();
 });
 $("*").mouseup(function(e){
 	e.preventDefault();
+	moveing = false;
 });
 $("img").click(function(e){
 	e.preventDefault();
@@ -102,38 +106,12 @@ let snap = false;
 $("body").mousemove(function(e){
 	//calling the drag function
 	drag(e,selected);
-	
-	if (moveing){
-		if (!(zooming)){
-			zooming = true;
-			
-			//setting our first mouse poitions
-			xbeg = e.pageX * zoomx/window.innerWidth;
-			ybeg = e.pageY * zoomy/window.innerHeight;
-			
-			xbeg += xvb;
-			ybeg += yvb;
-			console.log("started zooming"+xbeg+"and"+ybeg);
-		}
-		
-		var newx = e.pageX * zoomx/window.innerWidth;
-		var newy = e.pageY * zoomy/window.innerHeight;
-		
-		newx += xvb;
-		newy += yvb;
-		
-		xvb -= newx - xbeg;
-		yvb -= newy - ybeg;
-		updatescr();
-		
-		console.log(xvb+"newx"+newx+"xbeg"+xbeg);
-	}
 });
 $("body").mouseup(function(e){
 	selected = "yay";
+	console.log("got a mouse up");
 });
 $("body").mousedown(function(e){
-	
 	//beeing sure that we actually want to drag something
 	if (selected!="yay"){
 		

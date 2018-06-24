@@ -63,14 +63,47 @@ var xbeg = 0;
 var ybeg = 0;
 var moveing = false;
 
-$("#svg1").mousedown(function(e){
+$("svg").mousemove(function(e){
+	if (moveing && selected == "yay"){
+		if (!(zooming)){
+			zooming = true;
+			
+			//setting our first mouse poitions
+			xbeg = e.pageX * zoomx/window.innerWidth;
+			ybeg = e.pageY * zoomy/window.innerHeight;
+			
+			xbeg += xvb;
+			ybeg += yvb;
+			console.log("started zooming"+xbeg+"and"+ybeg);
+			//moveing = (moveing +1)%2;
+		}
+		
+		var newx = e.pageX * zoomx/window.innerWidth;
+		var newy = e.pageY * zoomy/window.innerHeight;
+		
+		newx += xvb;
+		newy += yvb;
+		
+		xvb -= newx - xbeg;
+		yvb -= newy - ybeg;
+		updatescr();
+		
+		console.log(xvb+"newx"+newx+"xbeg"+xbeg);
+	}
+});
+
+
+$("svg").mousedown(function(e){
+	//e.preventDefault();
 	moveing = true;
 });
 
-$("#svg1").mouseup(function(e){
+
+$("svg").mouseup(function(e){
+	e.preventDefault();
+	selected = "yay";
 	zooming = false;
 	moveing = false;
-	console.log("got a mouse up");
 });
 
 
