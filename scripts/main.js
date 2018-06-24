@@ -1,31 +1,72 @@
 //the absolute start, adding the buttons
 //adding the button for the modal
+//in main.js i have some basic functions like adding rectangles
+//and drag and drop
+
+//====================first adding the modal=================================
+
+//order is used to generate new id's for components
 var order = 0;
+
+//selected indicates what is the last element the user clicked on
 var selecte="yay"
+
+//piece would contain all the components 
+//(without pins and edges)
+//we will use that array for updating the value and the position
 var pieces = [];
+
+//this 'modal' variable is used to keep the blue box
+//basically when you click on it the modal for adding components will pop
 var modal =  add(40,40,"blue","black","butt",false);
+
+//adding the event for clicking
 $(modal).mousedown(function(e){
+	
+	//showing the modal
+	//actually 'modal' is just the button
+	//and 'addel' is the true id of the modal from DOM
 	$("#addel").modal("show");
+	
+	//activatng the drag and drop for the blue box
 	selected = "butt"; 
 });
+
+//the event for finishing the drag and drop on the blue box
 $(modal).mouseup(function(e){
+	//telling that we dont want to drag it anymore
 	selected = "yay"; 
 });
+
+//changing the positon of the blue box
+//we dont want it to be in the left top corner at 0 0
 $(modal).attr("y","500");
 $(modal).attr("x","500");
 
 //var desc = new text(modal,"+")
 
+
+//used for actually getting the new ids
 function getname(){
+	//getting the 'order'
+	//than making it bigger by 1
+	//convert it to string
+	//than add 'piece' to it for avoiding confusion between pieces and pins
 	return ((order++).toString()+"piece")
 }
 
+//the function that fires when you tap 'add'
 function addel(){
 	var added =  eval("new "+$("#sel option:selected").attr("value")+"(getname())");
 }
 
-//variables
-$("img,rect,circle,svg,p").mousedown(function(e){
+
+
+
+//================================preventing deafult actions==========================
+
+//nothing to say here
+$("img,rect,circle,p").mousedown(function(e){
 	e.preventDefault();
 });
 $("*").mouseup(function(e){
@@ -34,26 +75,81 @@ $("*").mouseup(function(e){
 $("img").click(function(e){
 	e.preventDefault();
 });
+
+
+
+//===============================variables============================================
+
+//setting the drag and drop to our value
+//'yay' means 'nothing selected'
 var selected = "yay";
+
+//the first positios of the clicks
 var firstx = 0;
 var firsty = 0;
+
+//the first position of an element dragged
 var fx = 0;
 var fy = 0;
-let snap = false;
-console.log("started");
-//events 
 
+//snap settings
+let snap = false;
+
+//=====================================some events===================================
+
+//nothing to say here...
+//just some basic things
 $("body").mousemove(function(e){
+	//calling the drag function
 	drag(e,selected);
+	
+	if (moveing){
+		if (!(zooming)){
+			zooming = true;
+			
+			//setting our first mouse poitions
+			xbeg = e.pageX * zoomx/window.innerWidth;
+			ybeg = e.pageY * zoomy/window.innerHeight;
+			
+			xbeg += xvb;
+			ybeg += yvb;
+			console.log("started zooming"+xbeg+"and"+ybeg);
+		}
+		
+		var newx = e.pageX * zoomx/window.innerWidth;
+		var newy = e.pageY * zoomy/window.innerHeight;
+		
+		newx += xvb;
+		newy += yvb;
+		
+		xvb -= newx - xbeg;
+		yvb -= newy - ybeg;
+		updatescr();
+		
+		console.log(xvb+"newx"+newx+"xbeg"+xbeg);
+	}
 });
 $("body").mouseup(function(e){
 	selected = "yay";
 });
 $("body").mousedown(function(e){
+	
+	//beeing sure that we actually want to drag something
 	if (selected!="yay"){
-		firstx = e.pageX;
-		firsty = e.pageY;
+		
+		//setting our first mouse poitions
+		firstx = e.pageX * zoomx/window.innerWidth;
+		firsty = e.pageY * zoomy/window.innerHeight;
+		
+		firstx += xvb;
+		firsty += yvb;
+		
+		//conveerting the id to an actual thing 
 		name = "#"+selected;
+		
+		//beeing sure we get the corect attributes
+		//circle have 'cx' and 'cy'
+		//and rectangles have 'x' and 'y'
 		if ($(name).attr("class")=="light"){
 			fx = parseFloat($(name).attr("cx"));
 			fy = parseFloat($(name).attr("cy"));
@@ -64,7 +160,13 @@ $("body").mousedown(function(e){
 		}
 	}
 });
-//functions
+
+
+
+//======================================funcctions for actual draging===========================
+
+
+//thefunction that tranfers the data from the event to our set_position function
 function drag(e,selected){
 	
 	//the name
@@ -74,13 +176,26 @@ function drag(e,selected){
 	let x = e.pageX;
 	let y = e.pageY;
 	
+	x *= zoomx/window.innerWidth;
+	y *= zoomy/window.innerHeight;
+	
 	//updating positions
 	set_position(name,x,y);
 }
 
+//our main place to change things
 function set_position(name,x,y){
 	var obj,objx,objy;
 	obj = "#"+selected;
+	
+	x = parseFloat(x);
+	y = parseFloat(y);
+	
+	x += xvb;
+	y += yvb;
+	
+	
+	
 	if ($(name).attr("class")!="light"){
 		//getting the variables
 		obj = "#"+selected;

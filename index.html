@@ -14,8 +14,8 @@
 		!--Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	</head>
-	<body>
-		<svg height = "100%" width = "100%" id = "svg1">
+	<body id="body">
+		<svg height = "100%" width = "100%" id = "svg1" viewbox = "0 0 700 700">
 		</svg>
 		
 		<!--And-->
@@ -34,8 +34,14 @@
 		<script src="scripts/text.js"></script>
 		<!--not-->
 		<script src="scripts/not.js"></script>
-		<!--buffer-->
-		<script src="scripts/buffer.js"></script>
+		<!--nand-->
+		<script src="scripts/nand.js"></script>
+		<!--nand with 3 inputs-->
+		<script src="scripts/nand3.js"></script>
+		<!--xor-->
+		<script src="scripts/xor.js"></script>
+		<!--zoom-->
+		<script src="scripts/events.js"></script>
 		<!--Main-->
 		<script src="scripts/main.js"></script>
 		
@@ -56,6 +62,9 @@
 							<option value = "buffer">Buffer</option>
 							<option value = "or">Or gate</option>
 							<option value = "and">And gate</option>
+							<option value = "nand">Nand gate</option>
+							<option value = "nand3">Nand gate (3 inputs)</option>
+							<option value = "xor">Xor gate</option>
 						</select>
 					</div>
 					<div class = "modal-footer">
