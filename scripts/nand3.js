@@ -76,7 +76,8 @@ function nand3(id){
 
 function clk(ob,arr){
 	var rep = ob.rep;
-	$((ob.img)).mousedown(function(e){
+	$((ob.img)).on("mousedown touchstart",function(e){
+		e.preventDefault();
 		var svg = document.getElementById("svg1");
 		$(svg).append(ob.rep);
 		$(svg).append($(ob.pin1.rep));
@@ -86,7 +87,7 @@ function clk(ob,arr){
 		$(svg).append($(ob.skin));
 		selected = ob.id;
 	});
-	$((ob.img)).mouseup(function(e){
+	$((ob.img)).on("mouseup touchend",function(e){
 		selected = "yay";
 	});
 }

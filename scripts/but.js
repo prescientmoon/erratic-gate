@@ -38,7 +38,7 @@ function but(id){
 }
 function addevt(ob){
 	/*
-	$((ob.rep)).click(function(){
+	$((ob.rep)).on("click touchstart",function(){
 		ob.val = (ob.val+1)%2;
 		if (ob.val){
 			$((ob.rep)).attr("fill","red");
@@ -49,12 +49,12 @@ function addevt(ob){
 	});
 	*/
 	
-	$((ob.rep)).mousedown(function(e){
+	$((ob.rep)).on("mousedown touchstart",function(e){
 		var svg = document.getElementById("svg1");
 		$(svg).append(ob.rep);
 		$(svg).append($(ob.o.rep));
 		selected = ob.id;
-		
+		e.preventDefault();
 		if (ob.wait){
 			ob.val = (ob.val+1)%2;
 			if (ob.val){
@@ -66,7 +66,7 @@ function addevt(ob){
 			ob.wait = false;
 		}
 	});
-	$((ob.rep)).mouseup(function(e){
+	$((ob.rep)).on("mouseup touchend",function(e){
 		selected = "yay";
 		ob.wait = true;
 	});

@@ -69,7 +69,8 @@ function edge(start,end){
 }
 
 function rem_edge(ob){
-	$((ob.rep)).click(function(e){
+	$((ob.rep)).on("click touchstart",function(e){
+		e.preventDefault();
 		//removing the edge from the array
 		for (var i = 0; i < lines.length; i++) {
 			if (lines[i] == (ob.id)) {

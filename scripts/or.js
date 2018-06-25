@@ -75,7 +75,7 @@ function or(id){
 /*
 function addclk(ob){
 	var rep = ob.rep;
-	$(ob.rep).mousedown(function(e){
+	$(ob.rep).on("mousedown touchstart",function(e){
 		var svg = document.getElementById("svg1");
 		$(svg).append(ob.rep);
 		$(svg).append($(ob.pin1.rep));

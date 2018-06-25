@@ -46,7 +46,8 @@ function pin(type){
 }
 
 function clicked(ob){
-	$(ob.rep).click(function(e){
+	$(ob.rep).on("click touchstart",function(e){
+		e.preventDefault();
 		if (ob.type == true){
 			sels = ob;
 		}

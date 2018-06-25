@@ -69,7 +69,8 @@ function light(id){
 
 function addclk_light(ob){
 	var rep = ob.rep;
-	$(ob.rep).mousedown(function(e){
+	$(ob.rep).on("mousedown touchstart",function(e){
+		e.preventDefault();
 		var svg = document.getElementById("svg1");
 		$(svg).append(ob.rep);
 		$(svg).append($(ob.i.rep));

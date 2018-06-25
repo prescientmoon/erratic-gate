@@ -73,7 +73,7 @@ function not(id){
 
 function addclk11(ob){
 	var rep = ob.rep;
-	$((ob.img)).mousedown(function(e){
+	$((ob.img)).on("mousedown touchstart",function(e){
 		e.preventDefault();
 		var svg = document.getElementById("svg1");
 		$(svg).append(ob.rep);
@@ -82,7 +82,7 @@ function addclk11(ob){
 		$(svg).append($(ob.skin));
 		selected = ob.id;
 	});
-	$((ob.img)).mouseup(function(e){
+	$((ob.img)).on("mouseup touchend",function(e){
 		selected = "yay";
 	});
 }

@@ -26,7 +26,7 @@ function text(parent,value){
 	var elem = document.getElementById("svg1");
     elem.appendChild(g);
 	this.rep = el;
-	$((this.rep)).click(function(e){
+	$((this.rep)).on("click touchstart",function(e){
 		e.preventDefault();
 	});
 	

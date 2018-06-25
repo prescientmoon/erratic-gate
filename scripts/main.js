@@ -21,7 +21,7 @@ var pieces = [];
 var modal =  add(40,40,"blue","black","butt",false);
 
 //adding the event for clicking
-$(modal).mousedown(function(e){
+$(modal).on("mousedown touchstart",function(e){
 	
 	//showing the modal
 	//actually 'modal' is just the button
@@ -36,7 +36,7 @@ $(modal).mousedown(function(e){
 });
 
 //the event for finishing the drag and drop on the blue box
-$(modal).mouseup(function(e){
+$(modal).on("mouseup touchend",function(e){
 	//telling that we dont want to drag it anymore
 	selected = "yay"; 
 });
@@ -60,7 +60,9 @@ function getname(){
 
 //the function that fires when you tap 'add'
 function addel(){
-	var added =  eval("new "+$("#sel option:selected").attr("value")+"(getname())");
+	for (var i = 0;i < parseFloat($("#times").val());i++){
+		var added =  eval("new "+$("#sel option:selected").attr("value")+"(getname())");
+	}
 }
 
 
@@ -69,14 +71,14 @@ function addel(){
 //================================preventing deafult actions==========================
 
 //nothing to say here
-$("img,rect,circle,p,foreignObject").mousedown(function(e){
+$("img,rect,circle,p,foreignObject").on("mousedown touchstart",function(e){
 	e.preventDefault();
 });
-$("*").mouseup(function(e){
+$("*").on("mouseup touchend",function(e){
 	e.preventDefault();
 	moveing = false;
 });
-$("img").click(function(e){
+$("img").on("click touchstart",function(e){
 	e.preventDefault();
 });
 
@@ -103,15 +105,15 @@ let snap = false;
 
 //nothing to say here...
 //just some basic things
-$("body").mousemove(function(e){
+$("body").on("mousemove touchmove",function(e){
 	//calling the drag function
 	drag(e,selected);
 });
-$("body").mouseup(function(e){
+$("body").on("mouseup touchend",function(e){
 	selected = "yay";
 	console.log("got a mouse up");
 });
-$("body").mousedown(function(e){
+$("body").on("mousedown touchstart",function(e){
 	//beeing sure that we actually want to drag something
 	if (selected!="yay"){
 		

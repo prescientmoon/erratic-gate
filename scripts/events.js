@@ -63,7 +63,7 @@ var xbeg = 0;
 var ybeg = 0;
 var moveing = false;
 
-$("svg").mousemove(function(e){
+$("svg").on("mousemove touchmove",function(e){
 	if (moveing && selected == "yay"){
 		if (!(zooming)){
 			zooming = true;
@@ -93,13 +93,13 @@ $("svg").mousemove(function(e){
 });
 
 
-$("svg").mousedown(function(e){
+$("svg").on("mousedown touchstart",function(e){
 	//e.preventDefault();
 	moveing = true;
 });
 
 
-$("svg").mouseup(function(e){
+$("svg").on("mouseup touchend",function(e){
 	e.preventDefault();
 	selected = "yay";
 	zooming = false;
