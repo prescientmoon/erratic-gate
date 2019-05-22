@@ -4,7 +4,7 @@
     "description": "A template for writing jam games in HTML5 + TypeScript",
     "main": "./src/index.ts",
     "scripts": {
-        "start": "webpack-dev-server --open --mode development",
+        "dev": "webpack-dev-server --open --mode development",
         "build": "webpack --mode production"
     },
     "repository": {
@@ -32,5 +32,13 @@
         "webpack": "^4.29.5",
         "webpack-cli": "^3.2.3",
         "webpack-dev-server": "^3.2.0"
+    },
+    "dependencies": {
+        "@eix/utils": "git+https://github.com/eix-js/utils.git",
+        "haunted": "^4.3.0",
+        "lit-html": "^1.0.0",
+        "lit-rx": "0.0.2",
+        "prelude-ts": "^0.8.2",
+        "rxjs": "^6.5.2"
     }
 }
