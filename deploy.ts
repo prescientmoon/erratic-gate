@@ -6,7 +6,7 @@ const args = process.argv.splice(2)
 const randomEmoji = () => random({ count: 1 })[0].character
 
 const mFlag = ((args.indexOf("--message") + 1) || (args.indexOf("-m") + 1)) - 1
-const message = `${randomEmoji()} ${(mFlag) ? args[mFlag + 1] : "automated update"} ${randomEmoji()}`
+const message = `${randomEmoji()}  ${(mFlag) ? args[mFlag + 1] : "automated update"} ${randomEmoji()}`
 
 console.log("Deploying...");
 
@@ -29,7 +29,7 @@ const run = (command: string): Promise<string> => {
         if (!args.includes("--skipBuild") && !args.includes("-sb"))
             await run("npm run build")
         await run("git add .")
-        await run(`git commit -m "  ${message} "`)
+        await run(`git commit -m " ${message} "`)
         await run("git push origin master")
         await new Promise((res, rej) => {
             console.log("🏃  Updating github pages")
