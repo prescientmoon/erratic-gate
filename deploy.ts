@@ -3,9 +3,12 @@ import { exec } from "child_process"
 import { random } from "random-emoji"
 
 const args = process.argv.splice(2)
+const randomEmoji = () => random({ count: 1 })[0].character
 
 const mFlag = ((args.indexOf("--message") + 1) || (args.indexOf("-m") + 1)) - 1
-const message = `${random({count: 1})} ${(mFlag) ? args[mFlag + 1] : "automated update"} ${random({count: 1})}`
+const message = `${randomEmoji()} 
+    ${(mFlag) ? args[mFlag + 1] : "automated update"} 
+    ${randomEmoji()}`
 
 console.log("Deploying...");
 
