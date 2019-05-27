@@ -1,5 +1,7 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ClosurePlugin = require('closure-webpack-plugin');
+
 module.exports = {
     devtool: 'inline-source-map',
     module: {

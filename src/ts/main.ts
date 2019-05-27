@@ -14,7 +14,6 @@ manager.components.push(new Component("not",[200,500],[100,100]))
 manager.components.push(new Component("true",[200,500],[100,100]))
 manager.update()
 
-
 const handleEvent = <T>(e:T,func:(e:T) => any) => {
     if (manager.barAlpha.value == "0")
         func(e)
