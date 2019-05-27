@@ -10,13 +10,13 @@ export class Screen {
     viewBox = combineLatest(this.width, this.height).pipe(map((values: [number,number]) =>
         this.getViewBox(...values)
     ));
-
-    private scrollStep = 1.3
-    private position = [0, 0]
+    
+    public position = [0, 0]
     public scale = [2, 2]
 
     private zoomLimits: [number,number] = [0.1,10]
 
+    private scrollStep = 1.3
     public mousePosition = [this.width.value / 2, this.height.value / 2]
 
     constructor() {

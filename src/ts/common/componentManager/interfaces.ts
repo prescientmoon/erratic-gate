@@ -1,5 +1,17 @@
 import { ComponentState } from "../component/interfaces";
+import { WireState } from "../wires/interface";
 
-export interface MnanagerState {
+export interface ManagerState {
     components: ComponentState[]
+    scale: [number,number]
+    position: [number,number]
+    wires: WireState
+}
+
+export interface ComponentTemplate {
+    name: string
+    version: string
+    activation: string
+    inputs: number
+    outputs: number
 }
