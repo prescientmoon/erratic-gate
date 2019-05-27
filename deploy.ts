@@ -28,7 +28,7 @@ const run = (command: string): Promise<string> => {
         await run('git commit -m "automated update"')
         await run("git push origin master")
         await new Promise((res, rej) => {
-            console.log("Updating github pages")
+            console.log("🏃  Updating github pages")
             publish("dist", (err) => {
                 if (err)
                     rej(err)
