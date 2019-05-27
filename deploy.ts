@@ -1,10 +1,11 @@
 import { publish } from "gh-pages"
 import { exec } from "child_process"
+import { random } from "random-emoji"
 
 const args = process.argv.splice(2)
 
 const mFlag = ((args.indexOf("--message") + 1) || (args.indexOf("-m") + 1)) - 1
-const message = (mFlag) ? args[mFlag + 1] : "automated update"
+const message = `${random({count: 1})} ${(mFlag) ? args[mFlag + 1] : "automated update"} ${random({count: 1})}`
 
 console.log("Deploying...");
 

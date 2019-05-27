@@ -22,7 +22,8 @@
         "esModuleInterop": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "deploy.ts"
     ],
     "exclude": [
         "node_modules"
