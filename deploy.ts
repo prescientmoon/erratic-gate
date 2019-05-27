@@ -24,6 +24,7 @@ const run = (command: string): Promise<string> => {
     })
 }
 
+
 (async () => {
     try {
         if (!args.includes("--skipBuild") && !args.includes("-sb"))
