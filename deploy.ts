@@ -2,8 +2,6 @@ import { publish } from "gh-pages"
 import { exec } from "child_process"
 
 const args = process.argv.splice(2)
-const argsNoFlags = args.filter(val => val[0] !== "-")
-
 
 const mFlag = ((args.indexOf("--message") + 1) || (args.indexOf("-m") + 1)) - 1
 const message = (mFlag) ? args[mFlag + 1] : "automated update"

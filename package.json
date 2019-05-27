@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "webpack-dev-server --open --mode development",
         "build": "webpack --mode production",
-        "deploy": "#needs node 12.2.0 && npm run build && ts-node deploy"
+        "deploy": "ts-node deploy"
     },
     "sideEffects": [
         "*.scss"
