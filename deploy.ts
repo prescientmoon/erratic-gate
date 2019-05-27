@@ -29,7 +29,7 @@ const run = (command: string): Promise<string> => {
         if (!args.includes("--skipBuild") && !args.includes("-sb"))
             await run("npm run build")
         await run("git add .")
-        await run(`git commit -m " ${message} "`)
+        await run(`git commit -m " ${message}  "`)
         await run("git push origin master")
         await new Promise((res, rej) => {
             console.log("🏃  Updating github pages")
