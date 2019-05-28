@@ -1,4 +1,5 @@
 @import "./toastr.scss";
+@import "./modal.scss";
 
 html, body {
     padding: 0;
@@ -57,4 +58,18 @@ svg {
 .toasts{
     background-color: #000000;
     box-shadow: 0 0 0px black !important;
+}
+
+div.component-container{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    img.component {
+        // border: 10px solid black; 
+        border-radius: 20px;
+        user-select: none;
+    }
 }

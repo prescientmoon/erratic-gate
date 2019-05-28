@@ -6,6 +6,10 @@ import { success, error } from "toastr"
 export class Settings {
     version = "1.0.0"
 
+    settings = {
+        jumpToNewSimulations: true
+    }
+
     commands = (ctx: ComponentManager, args: string[], flags: string[]) => {
         //important flags
         for (let i of flags) {

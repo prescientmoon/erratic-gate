@@ -56,6 +56,8 @@ render(html`
             ${ subscribe(manager.svgs) }
         </svg>
     </div>
+
+    <div class="ModalContainer"></div>
 `, document.body)
 
 manager.update()

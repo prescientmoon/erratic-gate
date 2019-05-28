@@ -13,3 +13,5 @@ export interface activationContext {
     succes: (mes: string) => any
     error: (mes:string) => any
 }
+
+export type materialMode = "standard_image" | "color"

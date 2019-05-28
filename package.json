@@ -24,6 +24,7 @@
     "devDependencies": {
         "@types/file-saver": "^2.0.1",
         "@types/gh-pages": "^2.0.0",
+        "@types/micromodal": "^0.3.0",
         "@types/toastr": "^2.1.37",
         "css-loader": "^2.1.0",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -50,6 +51,7 @@
         "haunted": "^4.3.0",
         "lit-html": "^1.0.0",
         "lit-rx": "0.0.2",
+        "micromodal": "^0.4.0",
         "prelude-ts": "^0.8.2",
         "rxjs": "^6.5.2",
         "toastr": "^2.1.4"

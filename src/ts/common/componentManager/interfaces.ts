@@ -1,4 +1,4 @@
-import { ComponentState } from "../component/interfaces";
+import { ComponentState, materialMode } from "../component/interfaces";
 import { WireState } from "../wires/interface";
 
 export interface ManagerState {
@@ -14,4 +14,8 @@ export interface ComponentTemplate {
     activation: string
     inputs: number
     outputs: number
+    material: {
+        mode: materialMode
+        data: string
+    }
 }

@@ -72,7 +72,11 @@ export class ComponentTemplateStore {
             version: "1.0.0",
             activation: `
                 ctx.outputs[0].value = ctx.inputs[0].value
-            `.trim()
+            `.trim(),
+            material: {
+                mode: "color",
+                data: "blue"
+            }
         })
         this.store.set("not", {
             inputs: 1,
@@ -81,7 +85,11 @@ export class ComponentTemplateStore {
             version: "1.0.0",
             activation: `
                 ctx.outputs[0].value = !ctx.inputs[0].value
-            `.trim()
+            `.trim(),
+            material: {
+                mode: "color",
+                data: "red"
+            }
         })
         this.store.set("and", {
             inputs: 2,
@@ -90,7 +98,11 @@ export class ComponentTemplateStore {
             version: "1.0.0",
             activation: `
                 ctx.outputs[0].value = ctx.inputs[0].value && ctx.inputs[1].value
-            `.trim()
+            `.trim(),
+            material: {
+                mode: "standard_image",
+                data: "and"
+            }
         })
         this.store.set("true", {
             inputs: 0,
@@ -99,7 +111,11 @@ export class ComponentTemplateStore {
             version: "1.0.0",
             activation: `
                 ctx.outputs[0].value = true
-            `.trim()
+            `.trim(),
+            material:{
+                mode:"color",
+                data:"green"
+            }
         })
     }
 }

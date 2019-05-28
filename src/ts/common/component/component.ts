@@ -11,6 +11,7 @@ import { success, error } from "toastr"
 import { alertOptions } from "../componentManager/alertOptions";
 import { WireManager } from "../wires";
 import { runCounter } from "./runCounter";
+import { Material } from "./material";
 
 export class Component {
     private static store = new ComponentTemplateStore()
@@ -21,23 +22,24 @@ export class Component {
     public position = new BehaviorSubject<number[]>(null)
     public scale = new BehaviorSubject<number[]>(null)
     public clicked = false
+    public id: number
+    public material: Material
+    public clickedChanges = new BehaviorSubject(false)
 
     private mouserDelta: number[]
     private strokeColor = "#888888"
     private inputs: number
     private outputs: number
     private activation: (ctx: activationContext) => any
-    private subscriptions:Subscription[] = []
+    private subscriptions: Subscription[] = []
 
     public inputPins: Pin[] = []
     public outputPins: Pin[] = []
 
-    public id: number
-
     constructor(private template: string,
         position: [number, number] = [0, 0],
         scale: [number, number] = [0, 0],
-        id? : number) {
+        id?: number) {
 
         //set initial props
         this.position.next(position)
@@ -74,14 +76,17 @@ export class Component {
         })
 
         this.activate()
+
+        this.material = new Material(data.material.mode, data.material.data)
     }
 
-    public dispose(){
+    public dispose() {
         this.subscriptions.forEach(val => val.unsubscribe())
     }
 
     public handleMouseUp(e: MouseEvent) {
         this.clicked = false
+        this.clickedChanges.next(this.clicked)
     }
 
     private activate() {
@@ -107,6 +112,7 @@ export class Component {
             mousePosition[index] - value
         )
         this.clicked = true
+        this.clickedChanges.next(this.clicked)
     }
 
     handlePinClick(e: MouseEvent, pin: Pin) {
@@ -149,17 +155,18 @@ export class Component {
 
         return ((mode === "input") ? this.inputPins : this.outputPins)
             .map((val, index) => {
-                const y = subscribe(this.piny(mode === "input",index))
+                const y = subscribe(this.piny(mode === "input", index))
 
-                const x = subscribe(this.pinx(mode === "input",pinLength))
+                const x = subscribe(this.pinx(mode === "input", pinLength))
 
                 const linex = subscribe(this.x.pipe(map(val =>
                     val + ((mode === "input") ? -pinLength : pinLength + this.scale.value[0])
                 )))
 
-                const middleX = subscribe(this.x.pipe(map(val =>
-                    val + this.scale.value[0] / 2
-                )))
+                const middleX = subscribe(this.x.pipe(map(val => {
+                    const scale = this.scale.value[0]
+                    return val + ((mode === "input") ? scale / 10 : 9 * scale / 10 )
+                })))
 
                 return svg`
                     <line stroke=${this.strokeColor} y1=${y} y2=${y}
@@ -177,7 +184,7 @@ export class Component {
                 `})
     }
 
-    public pinx(mode = true, pinLength = 15){
+    public pinx(mode = true, pinLength = 15) {
         return this.x.pipe(
             map(val => val + (
                 (mode) ?
@@ -187,7 +194,7 @@ export class Component {
         )
     }
 
-    public piny(mode = true, index: number){
+    public piny(mode = true, index: number) {
         const space = this.scale.value[1] / (mode ? this.inputs : this.outputs)
         return this.y.pipe(
             map(val => val + space * (2 * index + 1) / 2)

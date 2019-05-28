@@ -1,7 +1,7 @@
 import { Singleton } from "@eix/utils";
 import { Component } from "../component";
 import { Subject, BehaviorSubject, fromEvent } from "rxjs";
-import { svg, SVGTemplateResult } from "lit-html";
+import { svg, SVGTemplateResult, html } from "lit-html";
 import { subscribe } from "lit-rx";
 import { Screen } from "../screen.ts";
 import { ManagerState } from "./interfaces";
@@ -14,6 +14,10 @@ import { WireManager } from "../wires";
 import { runCounter } from "../component/runCounter";
 import { Settings } from "../store/settings";
 import { download } from "./download";
+import Modal from "micromodal"
+import { modal } from "../modals";
+import { map } from "rxjs/operators";
+
 
 @Singleton
 export class ComponentManager {
@@ -167,15 +171,55 @@ export class ComponentManager {
         this.barAlpha.next("1")
     }
 
-    create() {
+    async create() {
         const elem = <HTMLInputElement>document.getElementById("nameInput")
         this.barAlpha.next("0")
 
-        if (this.inputMode == "create")
+        if (this.inputMode == "create") {
+            await this.createEmptySimulation(elem.value)
             success(`Succesfully created simulation ${elem.value}`, "", this.alertOptions)
+        }
 
         else if (this.inputMode == "command")
             this.eval(elem.value)
+    }
+
+    private async handleDuplicateModal(name: string) {
+        const result = await modal({
+            title: "Warning",
+            content: html`There was already a simulation called ${name},
+are you sure you want to override it?
+All you work will be lost!`
+        })
+
+        return result
+    }
+
+    public createEmptySimulation(name: string) {
+        const create = () => {
+            this.store.set(name, {
+                wires: [],
+                components: [],
+                position: [0, 0],
+                scale: [1, 1]
+            })
+
+            if (name !== this.name)
+                this.save()
+            this.refresh()
+        }
+
+        return new Promise(async (res, rej) => {//get wheater theres already a simulation with that name
+            if (this.store.get(name) && await this.handleDuplicateModal(name) ||
+                !this.store.get(name)) {
+                create()
+                res(true)
+            }
+        })
+    }
+
+    public switchTo(name: string) {
+        //TODO: implement
     }
 
     eval(command: string) {
@@ -265,26 +309,42 @@ export class ComponentManager {
         let toRemoveDuplicatesFor: Component
 
         const size = 10
-        const result = this.components.map(component => svg`
+        const result = this.components.map(component => {
+            const mouseupHandler = (e: MouseEvent) => {
+                component.handleMouseUp(e)
+                toRemoveDuplicatesFor = component
+            }
+
+            const stroke = subscribe(component.clickedChanges.pipe(map(
+                val => val ? "yellow" : "black"
+            )))
+
+            return svg`
             <g>
                 ${component.pinsSvg(10, 20)}
                 ${component.pinsSvg(10, 20, "output")}
 
-                <rect width=${ subscribe(component.width)}
-                height=${ subscribe(component.height)} 
-                x=${ subscribe(component.x)}
-                y=${ subscribe(component.y)}
-                fill="red"
-                stroke="black"
-                rx=20
-                ry=20
-                @mousedown=${ (e: MouseEvent) => component.handleClick(e)}
-                @mouseup=${(e: MouseEvent) => {
-                component.handleMouseUp(e)
-                toRemoveDuplicatesFor = component
-            }}></rect>
+                <g @mousedown=${ (e: MouseEvent) => component.handleClick(e)}
+                    @mouseup=${mouseupHandler}>
+                    <rect width=${ subscribe(component.width)}
+                    height=${ subscribe(component.height)} 
+                    x=${ subscribe(component.x)}
+                    y=${ subscribe(component.y)}
+                    stroke=${stroke}
+                    fill=${(component.material.mode === "standard_image") ?
+                    "rgba(0,0,0,0)" :
+                    subscribe(component.material.color)}
+                    rx=20
+                    ry=20>
+                </rect>
+                ${(component.material.mode === "standard_image") ? component.material.innerHTML(
+                        subscribe(component.x),
+                        subscribe(component.y),
+                        subscribe(component.width),
+                        subscribe(component.height)) : ""}
+                </g>
             </g>
-        `);
+        `});
 
         if (toRemoveDuplicatesFor)
             this.removeDuplicates(toRemoveDuplicatesFor)
