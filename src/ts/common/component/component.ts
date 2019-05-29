@@ -1,5 +1,4 @@
-import { Vector } from "prelude-ts"
-import { Subject, BehaviorSubject, Subscription, timer } from "rxjs";
+import { BehaviorSubject, Subscription, timer } from "rxjs";
 import { ComponentState, activationContext } from "./interfaces";
 import { map, debounce } from "rxjs/operators";
 import { Screen } from "../screen.ts";
@@ -17,7 +16,6 @@ export class Component {
     private static store = new ComponentTemplateStore()
     private static screen = new Screen()
     private static wireManager = new WireManager()
-    private static lastId = runCounter.get() + 1
 
     public position = new BehaviorSubject<number[]>(null)
     public scale = new BehaviorSubject<number[]>(null)
@@ -46,7 +44,7 @@ export class Component {
         this.scale.next(scale)
 
         //set the correct id
-        this.id = (typeof id === "number") ? id : Component.lastId++
+        this.id = (typeof id === "number") ? id : Component.getId()
 
         //load template
         const data = Component.store.store.get(template)
@@ -57,8 +55,8 @@ export class Component {
         this.inputs = data.inputs
         this.outputs = data.outputs
 
-        this.inputPins = [...Array(this.inputs)].fill(true).map(val => new Pin(false, this))
-        this.outputPins = [...Array(this.outputs)].fill(true).map(val => new Pin(true, this))
+        this.inputPins = [...Array(this.inputs)].fill(true).map(() => new Pin(false, this))
+        this.outputPins = [...Array(this.outputs)].fill(true).map(() => new Pin(true, this))
 
         this.activation = new Function(`return (ctx) => {
             try{
@@ -71,7 +69,7 @@ export class Component {
 
         this.inputPins.forEach(val => {
             const subscription = val.valueChanges.pipe(debounce(() => timer(1000 / 60)))
-                .subscribe(val => this.activate())
+                .subscribe(() => this.activate())
             this.subscriptions.push(subscription)
         })
 
@@ -171,10 +169,10 @@ export class Component {
                 return svg`
                     <line stroke=${this.strokeColor} y1=${y} y2=${y}
                     x1=${(mode === "input") ? linex : middleX}
-                    x2=${(mode !== "input") ? linex : middleX} 
+                    x2=${(mode !== "input") ? linex : middleX}
                     stroke-width=${stroke}></line>
-                    
-                    <circle fill=${subscribe(val.svgColor)} 
+
+                    <circle fill=${subscribe(val.svgColor)}
                     stroke=${this.strokeColor}
                     r=${pinScale}
                     cx=${x}
@@ -203,5 +201,11 @@ export class Component {
 
     static fromState(state: ComponentState) {
         return new Component(state.template, state.position, state.scale, state.id)
+    }
+
+    public static getId(){
+        const data = runCounter.get()
+        runCounter.increase()
+        return data
     }
 }
