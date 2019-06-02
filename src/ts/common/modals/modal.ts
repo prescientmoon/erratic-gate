@@ -1,7 +1,7 @@
 import { render, html } from "lit-html"
 import { confirmModalOptions } from "./interfaces";
 import { fromEvent } from "rxjs";
-import MicroModal from "micromodal"
+import { MDCDialog } from '@material/dialog';
 
 let lastId = 0
 
@@ -14,60 +14,65 @@ export const modal = (options: Partial<confirmModalOptions>) => new Promise((res
     }
 
     const parent = document.getElementsByClassName("ModalContainer")[0]
-    const finalOptions: confirmModalOptions = { ...defaultOptions, ...options }
+    const { title, content, yes, no }: confirmModalOptions = { ...defaultOptions, ...options }
     const id = lastId++
 
     if (!parent)
         rej(false)
 
     const template = html`
-    <div class="modal micromodal-slide" id="modal-${id}" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
-                <header class="modal__header">
-                    <h2 class="modal__title" id="modal-${id}-title">
-                        ${finalOptions.title}
-                    </h2>
-                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-                </header>
-                <main class="modal__content" id="modal-${id}-content">
-                    ${finalOptions.content}
-                </main>
-                <footer class="modal__footer">
-                    <button class="modal__btn" id="yes-${id}">${finalOptions.yes}</button>
-                    <button class="modal__btn modal__btn-primary" id="no-${id}" aria-label="Close this dialog window">
-                        ${finalOptions.no}
+    <div class="mdc-dialog"
+     id="modal-${id}"
+     role="alertdialog"
+     aria-modal="true"
+     aria-labelledby="${title}"
+     aria-describedby="my-dialog-content">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface">
+                <h2 class="mdc-dialog__title" id="${title}">
+                    ${title}
+                </h2>
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    ${content}
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" id="no-${id}">
+                        <span class="mdc-button__label">${no}</span>
+                    </button>
+                    <button type="button" class="mdc-button mdc-dialog__button" id="yes-${id}">
+                        <span class="mdc-button__label">${yes}</span>
                     </button>
                 </footer>
             </div>
         </div>
-    </div>
-    </div>
+        <div class="mdc-dialog__scrim"></div>
+        </div>
     `
 
     render(template, parent)
 
-    const yes = document.getElementById(`yes-${id}`)
-    const no = document.getElementById(`no-${id}`)
+    const dialog = new MDCDialog(document.querySelector(`#modal-${id}`))
+    dialog.open()
+
+    const _yes = document.getElementById(`yes-${id}`)
+    const _no = document.getElementById(`no-${id}`)
 
     const clear = () => {
         // render(html``,parent)
-        MicroModal.close()
+        dialog.close()
         subscriptions.forEach(val => val.unsubscribe())
     }
 
     const subscriptions = [
-        fromEvent(yes, "click").subscribe(val => {
+        fromEvent(_yes, "click").subscribe(val => {
             clear()
             res(true)
         }),
-        fromEvent(no, "click").subscribe(val => {
+        fromEvent(_no, "click").subscribe(val => {
             clear()
             res(false)
         })
     ]
-
-    MicroModal.show(`modal-${id}`)
 })
 
 

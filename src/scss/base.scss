@@ -1,7 +1,18 @@
 @import "./toastr.scss";
 @import "./modal.scss";
+
+$mdc-theme-primary: black;
+$mdc-theme-secondary: #feeae6;
+$mdc-theme-on-primary: white;
+$mdc-theme-surface: black;
+$mdc-theme-on-secondary: #442b2d;
+
 @import "@material/drawer/mdc-drawer.scss";
-@import "@material/list/mdc-list.scss";
+@import "@material/list/mdc-list";
+@import "@material/dialog/mdc-dialog";
+@import "@material/button/mdc-button";
+@import "@material/menu-surface/mdc-menu-surface";
+@import "@material/menu/mdc-menu";
 
 html, body {
     padding: 0;

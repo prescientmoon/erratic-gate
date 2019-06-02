@@ -48,8 +48,12 @@
     "dependencies": {
         "@eix/input": "git+https://github.com/eix-js/input.git",
         "@eix/utils": "git+https://github.com/eix-js/utils.git",
+        "@material/button": "^2.3.0",
+        "@material/dialog": "^2.3.0",
         "@material/drawer": "^2.3.0",
         "@material/list": "^2.3.0",
+        "@material/menu": "^2.3.0",
+        "@material/theme": "^1.1.0",
         "file-saver": "^2.0.2",
         "haunted": "^4.3.0",
         "lit-html": "^1.0.0",
