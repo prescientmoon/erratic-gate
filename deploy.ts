@@ -1,6 +1,8 @@
-import { publish } from "gh-pages"
-import { exec } from "child_process"
-import { random } from "random-emoji"
+const { publish } = require("gh-pages")
+const { exec } = require("child_process")
+const { random } = require("random-emoji")
+
+// const { publish } = require("gh-pages")
 
 const args = process.argv.splice(2)
 const randomEmoji = () => random({ count: 1 })[0].character
@@ -13,6 +15,7 @@ console.log("Deploying...");
 const run = (command: string): Promise<string> => {
     return new Promise((res, rej) => {
         console.log(`🏃  Running: '${command}'`)
+        //@ts-ignore
         exec(command, (err, stdout, stderr) => {
             if (err != null)
                 rej(err)
@@ -34,6 +37,7 @@ const run = (command: string): Promise<string> => {
         await run("git push origin master")
         await new Promise((res, rej) => {
             console.log("🏃  Updating github pages")
+            //@ts-ignore
             publish("dist", (err) => {
                 if (err)
                     rej(err)
