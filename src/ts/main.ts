@@ -12,6 +12,7 @@ const manager = new ComponentManager()
 manager.components.push(new Component("and",[200,100],[100,100]))
 manager.components.push(new Component("not",[200,500],[100,100]))
 manager.components.push(new Component("true",[200,500],[100,100]))
+manager.components.push(new Component("false",[200,500],[100,100]))
 manager.update()
 
 const handleEvent = <T>(e:T,func:(e:T) => any) => {
@@ -28,18 +29,18 @@ render(html`
             manager.handleMouseMove(e)
             screen.updateMouse(e)
         })}
-        @mousedown=${(e:MouseEvent) => handleEvent(e,(e:MouseEvent) => 
+        @mousedown=${(e:MouseEvent) => handleEvent(e,(e:MouseEvent) =>
             manager.handleMouseDown(e)
         )}
-        @mouseup=${(e:MouseEvent) => handleEvent(e,(e:MouseEvent) => 
+        @mouseup=${(e:MouseEvent) => handleEvent(e,(e:MouseEvent) =>
             manager.handleMouseUp(e)
         )}
-        @wheel=${(e:MouseEvent) => handleEvent(e,(e:WheelEvent) => 
+        @wheel=${(e:MouseEvent) => handleEvent(e,(e:WheelEvent) =>
             screen.handleScroll(e)
         )}>
 
-        <div id=${subscribe(manager.barAlpha.pipe(map(val => 
-            (val == "1") ? "shown" : ""    
+        <div id=${subscribe(manager.barAlpha.pipe(map(val =>
+            (val == "1") ? "shown" : ""
         )))}
         class=createBar>
             <div class="topContainer">
@@ -50,14 +51,31 @@ render(html`
                 </div>
             </div>
         </div>
-        <svg height=${ subscribe(screen.height) } 
+        <svg height=${ subscribe(screen.height) }
             width=${ subscribe(screen.width) }
             viewBox=${subscribe(screen.viewBox)}>
             ${ subscribe(manager.svgs) }
         </svg>
     </div>
-
     <div class="ModalContainer"></div>
+    <aside class="mdc-drawer main-sidebar">
+    <div class="mdc-drawer__content">
+        <nav class="mdc-list">
+        <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
+            <span class="mdc-list-item__text">Something</span>
+        </a>
+        <a class="mdc-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
+            <span class="mdc-list-item__text">something else</span>
+        </a>
+        <a class="mdc-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
+            <span class="mdc-list-item__text">another thing</span>
+        </a>
+        </nav>
+    </div>
+    </aside>
 `, document.body)
 
 manager.update()

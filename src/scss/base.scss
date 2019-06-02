@@ -1,12 +1,14 @@
 @import "./toastr.scss";
 @import "./modal.scss";
+@import "@material/drawer/mdc-drawer.scss";
+@import "@material/list/mdc-list.scss";
 
 html, body {
     padding: 0;
     margin: 0;
     overflow: hidden;
     height:100%;
-    display: block;
+    display: flex;
 }
 
 svg {
@@ -14,6 +16,10 @@ svg {
     height: 100%;
     width: 100%;
     display: block;
+}
+
+.modal__btn-primary{
+    background: orange !important;
 }
 
 .createBar {
@@ -68,8 +74,28 @@ div.component-container{
     align-items: center;
     justify-content: center;
     img.component {
-        // border: 10px solid black; 
+        // border: 10px solid black;
         border-radius: 20px;
         user-select: none;
     }
+}
+
+.main-sidebar {
+    position: absolute;
+    display: flex;
+    background: #111111;
+    color: white;
+    right: 0;
+}
+
+.mdc-list-item {
+    color:white !important;
+}
+
+.material-icons {
+    color: white !important;
+}
+
+.mdc-list-item--activated {
+    background : orange;
 }

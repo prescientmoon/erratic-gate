@@ -28,11 +28,23 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(scss|sass)$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader', 'sass-loader']
-                })
+                test: /\.scss$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'style.css',
+                        },
+                    },
+                    { loader: 'extract-loader' },
+                    { loader: 'css-loader' },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            includePaths: ['./node_modules']
+                        }
+                    },
+                ]
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,

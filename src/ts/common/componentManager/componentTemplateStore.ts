@@ -18,7 +18,7 @@ export class ComponentTemplateStore {
                             return success("1.0.1", "", ctx.alertOptions)
                     }
 
-                    error(`Welcome to the component template program! 
+                    error(`Welcome to the component template program!
                         To get started, try running this basic commands:
                             ${["--version", "ls"].map(val => `${val}`).join(" ")}
                     `, "", {
@@ -115,6 +115,19 @@ export class ComponentTemplateStore {
             material:{
                 mode:"color",
                 data:"green"
+            }
+        })
+        this.store.set("false", {
+            inputs: 0,
+            outputs: 1,
+            name: "false",
+            version: "1.0.0",
+            activation: `
+                ctx.outputs[0].value = false
+            `.trim(),
+            material:{
+                mode:"color",
+                data:"yellow"
             }
         })
     }
