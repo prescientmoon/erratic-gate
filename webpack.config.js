@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     devtool: 'inline-source-map',
@@ -74,5 +75,8 @@ module.exports = {
     },
     entry: [
         "./src/index.ts"
-    ]
+    ],
+    optimization: {
+        minimizer: [new TerserPlugin()],
+    }
 };

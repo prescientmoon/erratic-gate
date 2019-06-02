@@ -14,7 +14,6 @@ import { WireManager } from "../wires";
 import { runCounter } from "../component/runCounter";
 import { Settings } from "../store/settings";
 import { download } from "./download";
-import Modal from "micromodal"
 import { modal } from "../modals";
 import { map } from "rxjs/operators";
 
@@ -327,7 +326,7 @@ All you work will be lost!`
                 <g @mousedown=${ (e: MouseEvent) => component.handleClick(e)}
                     @mouseup=${mouseupHandler}>
                     <rect width=${ subscribe(component.width)}
-                    height=${ subscribe(component.height)} 
+                    height=${ subscribe(component.height)}
                     x=${ subscribe(component.x)}
                     y=${ subscribe(component.y)}
                     stroke=${stroke}
