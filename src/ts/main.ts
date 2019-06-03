@@ -10,10 +10,11 @@ import { MDCMenu } from '@material/menu';
 const screen = new Screen()
 
 const manager = new ComponentManager()
-manager.components.push(new Component("and", [200, 100], [100, 100]))
-manager.components.push(new Component("not", [200, 500], [100, 100]))
-manager.components.push(new Component("true", [200, 500], [100, 100]))
-manager.components.push(new Component("false", [200, 500], [100, 100]))
+// manager.components.push(new Component("and", [200, 100], [100, 100]))
+// manager.components.push(new Component("not", [200, 500], [100, 100]))
+// manager.components.push(new Component("true", [200, 500], [100, 100]))
+// manager.components.push(new Component("false", [200, 500], [100, 100]))
+manager.save()
 manager.update()
 
 const handleEvent = <T>(e: T, func: (e: T) => any) => {
@@ -62,20 +63,15 @@ render(html`
     <aside class="mdc-drawer main-sidebar">
     <div class="mdc-drawer__content">
         <nav class="mdc-list">
-        <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
-            <span class="mdc-list-item__text">Something</span>
+        <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page" @click=${() => manager.prepareNewSimulation()}>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
+            <span class="mdc-list-item__text">Create new simulation</span>
         </a>
         <a class="mdc-list-item" href="#" id="openSimulation" @click=${() => {
         menu.open = true
-        // menu.setAbsolutePosition(screen.mousePosition[0], screen.mousePosition[1])
     }}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>
             <span class="mdc-list-item__text">Open simulation</span>
-        </a>
-        <a class="mdc-list-item" href="#">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
-            <span class="mdc-list-item__text">another thing</span>
         </a>
         </nav>
     </div>
@@ -83,11 +79,11 @@ render(html`
 
     <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary">
         <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
-            ${subscribe(manager.saves.pipe(map(val => html`
-                <li class= "mdc-list-item" role = "menuitem" >
+            ${subscribe(manager.saves.pipe(map(_ => _.map(val => html`
+                <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.switchTo(val)}>
                     <span class="mdc-list-item__text"> ${val} </span>
                 </li>`
-            )))}
+            ))))}
         </ul>
     </div>
 `, document.body)

@@ -16,6 +16,7 @@ import { Settings } from "../store/settings";
 import { download } from "./download";
 import { modal } from "../modals";
 import { map } from "rxjs/operators";
+import { persistent } from "../store/persistent";
 
 
 @Singleton
@@ -48,7 +49,8 @@ export class ComponentManager {
     private upEvent = new KeyboardInput("up")
     private downEvent = new KeyboardInput("down")
 
-    public name = "current"
+    @persistent<ComponentManager, string>("current", "main'")
+    public name: string
     public alertOptions = alertOptions
 
     private commandHistory: string[] = []
@@ -140,9 +142,7 @@ export class ComponentManager {
             else {
                 if (this.ctrlEvent.value) {
                     if (this.createEvent.value) {
-                        this.preInput()
-                        this.inputMode = "create"
-                        this.placeholder.next("Create simulation")
+                        this.prepareNewSimulation()
                     }
                     else if (this.shiftEvent.value && this.palleteEvent.value) {
                         this.preInput()
@@ -164,10 +164,16 @@ export class ComponentManager {
 
         this.wireManager.update.subscribe(val => this.update())
         this.saves.next(this.store.ls())
-        //if (this.saves.value.length === 0)
-        //    this.save()
+        if (this.saves.value.length === 0)
+            this.save()
+
     }
 
+    public prepareNewSimulation() {
+        this.preInput()
+        this.inputMode = "create"
+        this.placeholder.next("Create simulation")
+    }
     preInput() {
         const elem = <HTMLInputElement>document.getElementById("nameInput")
         elem.value = ""
@@ -199,6 +205,7 @@ All you work will be lost!`
     }
 
     public createEmptySimulation(name: string) {
+        console.log(name)
         const create = () => {
             this.store.set(name, {
                 wires: [],
@@ -209,6 +216,7 @@ All you work will be lost!`
 
             if (name !== this.name)
                 this.save()
+            this.name = name
             this.refresh()
         }
 
@@ -222,12 +230,14 @@ All you work will be lost!`
     }
 
     public switchTo(name: string) {
+        console.log(`switching to ${name}`)
+
         const data = this.store.get(name)
         if (!data)
-            error(`An error occured when trying to load ${name}`,"",this.alertOptions)
+            error(`An error occured when trying to load ${name}`, "", this.alertOptions)
 
-        else
-            this.loadState(data)
+        this.name = name
+        this.refresh()
     }
 
     eval(command: string) {
@@ -259,6 +269,8 @@ All you work will be lost!`
     }
 
     refresh() {
+        console.log(this.name)
+
         if (this.store.get(this.name)) {
             this.loadState(this.store.get(this.name))
         }
@@ -401,6 +413,7 @@ All you work will be lost!`
 
         this.screen.scale = state.scale
         this.screen.position = state.position
+        this.screen.update()
 
         this.update()
     }
@@ -410,8 +423,8 @@ All you work will be lost!`
             const element = this.commandHistory[i];
             this.commandHistoryStore.set(i.toString(), element)
         }
-        this.store.set(name || this.name, this.state)
+        this.store.set(this.name, this.state)
         this.saves.next(this.store.ls())
-        success("Saved the simulation succesfully!", "", this.alertOptions)
+        success(`Saved the simulation ${this.name} succesfully!`, "", this.alertOptions)
     }
 }

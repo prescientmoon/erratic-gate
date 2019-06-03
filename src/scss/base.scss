@@ -1,7 +1,7 @@
 @import "./toastr.scss";
 @import "./modal.scss";
 
-$mdc-theme-primary: black;
+$mdc-theme-primary: orange / 2;
 $mdc-theme-secondary: #feeae6;
 $mdc-theme-on-primary: white;
 $mdc-theme-surface: black;
@@ -29,9 +29,9 @@ svg {
     display: block;
 }
 
-.modal__btn-primary{
-    background: orange !important;
-}
+// .modal__btn-primary{
+    // background: orange  !important;
+// }
 
 .createBar {
     z-index:10;
