@@ -4,7 +4,7 @@ a better version of my logic gate simulator
 Check out the [demo](https://mateiadrielrafael.github.io/logicGateSimulator2/)
 
 To run locally clone this repo, and then run: `npm install`
-to install all dependenices.
+to install all dependenices, `npm run dev` to start the development server or `npm run build` to bundle it.
 
 This project wouldnt have been possible without the follownig libraries:
 - [typescript](https://github.com/microsoft/TypeScript) and [sass](https://github.com/sass/sass)
