@@ -10,7 +10,7 @@ import { MDCMenu } from '@material/menu';
 const screen = new Screen()
 
 const manager = new ComponentManager()
-// manager.components.push(new Component("and", [200, 100], [100, 100]))
+manager.components.push(new Component("and", [200, 100], [100, 100]))
 // manager.components.push(new Component("not", [200, 500], [100, 100]))
 // manager.components.push(new Component("true", [200, 500], [100, 100]))
 // manager.components.push(new Component("false", [200, 500], [100, 100]))
