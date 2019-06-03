@@ -23,6 +23,7 @@ export class ComponentManager {
     public components: Component[] = []
     public svgs = new Subject<SVGTemplateResult>()
     public placeholder = new BehaviorSubject("Create simulation")
+    public saves = new BehaviorSubject<string[]>(["hello world"])
 
     private temporaryCommnad = ""
     private onTop: Component
@@ -162,6 +163,9 @@ export class ComponentManager {
         })
 
         this.wireManager.update.subscribe(val => this.update())
+        this.saves.next(this.store.ls())
+        //if (this.saves.value.length === 0)
+        //    this.save()
     }
 
     preInput() {
@@ -218,7 +222,12 @@ All you work will be lost!`
     }
 
     public switchTo(name: string) {
-        //TODO: implement
+        const data = this.store.get(name)
+        if (!data)
+            error(`An error occured when trying to load ${name}`,"",this.alertOptions)
+
+        else
+            this.loadState(data)
     }
 
     eval(command: string) {
@@ -402,6 +411,7 @@ All you work will be lost!`
             this.commandHistoryStore.set(i.toString(), element)
         }
         this.store.set(name || this.name, this.state)
+        this.saves.next(this.store.ls())
         success("Saved the simulation succesfully!", "", this.alertOptions)
     }
 }

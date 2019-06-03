@@ -16,7 +16,7 @@ export class Pin {
     public valueChanges = new Subject<number>()
 
     public svgColor = this.color.pipe(map(val =>
-        `rgb(${val.join(",")})`
+        `rgba(${val.join(",")})`
     ))
 
     constructor(public allowWrite = true, public of: Component) {
@@ -38,10 +38,10 @@ export class Pin {
         this._value = clamp(value, 0, 1)
         this.valueChanges.next(this._value)
 
-        const color: [number, number, number, number] = (value > 0.5) ? 
-            [255, 216, 20, 1] : 
+        const color: [number, number, number, number] = (value > 0.5) ?
+            [255, 216, 20, 1] :
             [90, 90, 90, 1]
-        
+
             this.color.next((this.pair) ? color : [0,0,0,0])
     }
 
