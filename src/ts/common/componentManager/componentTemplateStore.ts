@@ -112,9 +112,9 @@ export class ComponentTemplateStore {
             activation: `
                 ctx.outputs[0].value = true
             `.trim(),
-            material:{
-                mode:"color",
-                data:"green"
+            material: {
+                mode: "color",
+                data: "green"
             }
         })
         this.store.set("false", {
@@ -125,10 +125,46 @@ export class ComponentTemplateStore {
             activation: `
                 ctx.outputs[0].value = false
             `.trim(),
-            material:{
-                mode:"color",
-                data:"yellow"
+            material: {
+                mode: "color",
+                data: "yellow"
             }
+        })
+        this.store.set("light", {
+            inputs: 1,
+            outputs: 0,
+            name: "light",
+            version: "1.0.0",
+            activation: `
+                if (ctx.inputs[0].value)
+                    ctx.color("yellow")
+                else
+                    ctx.color("white")
+            `.trim(),
+            material: {
+                mode: "color",
+                data: "white"
+            }
+        })
+        this.store.set("button", {
+            inputs: 0,
+            outputs: 1,
+            name: "button",
+            version: "1.0.0",
+            activation: `
+                ctx.outputs[0].value = ctx.outputs[0].memory.value
+            `.trim(),
+            material: {
+                mode: "color",
+                data: "red"
+            },
+            onclick: `
+                ctx.outputs[0].memory.value = !ctx.outputs[0].memory.value
+                if (ctx.outputs[0].memory.value)
+                    ctx.color("#880000")
+                else
+                    ctx.color("red")
+            `
         })
     }
 }

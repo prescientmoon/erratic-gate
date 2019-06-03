@@ -28,7 +28,7 @@ export class Component {
     private strokeColor = "#888888"
     private inputs: number
     private outputs: number
-    private activation: (ctx: activationContext) => any
+    private activation: ((ctx: activationContext) => any)[] = []
     private subscriptions: Subscription[] = []
 
     public inputPins: Pin[] = []
@@ -58,14 +58,17 @@ export class Component {
         this.inputPins = [...Array(this.inputs)].fill(true).map(() => new Pin(false, this))
         this.outputPins = [...Array(this.outputs)].fill(true).map(() => new Pin(true, this))
 
-        this.activation = new Function(`return (ctx) => {
-            try{
-                ${data.activation}
-            }
-            catch(err){
-                ctx.error(err,"",ctx.alertOptions)
-            }
-        }`)()
+        this.activation = [data.activation, data.onclick ? data.onclick : ""]
+            .map(val => {
+                return new Function(`return (ctx) => {
+                    try{
+                        ${val}
+                    }
+                    catch(err){
+                        ctx.error(err,"",ctx.alertOptions)
+                    }
+                }`)()
+            })
 
         this.inputPins.forEach(val => {
             const subscription = val.valueChanges.pipe(debounce(() => timer(1000 / 60)))
@@ -87,12 +90,15 @@ export class Component {
         this.clickedChanges.next(this.clicked)
     }
 
-    private activate() {
-        this.activation({
+    private activate(index: number = 0) {
+        this.activation[index]({
             outputs: this.outputPins,
             inputs: this.inputPins,
             succes: (mes: string) => { success(mes, "", alertOptions) },
-            error: (mes: string) => { error(mes, "", alertOptions) }
+            error: (mes: string) => { error(mes, "", alertOptions) },
+            color: (color: string) => {
+                this.material.color.next(color)
+            }
         } as activationContext)
     }
 
@@ -111,6 +117,9 @@ export class Component {
         )
         this.clicked = true
         this.clickedChanges.next(this.clicked)
+
+        this.activate(1)
+        this.activate(0)
     }
 
     handlePinClick(e: MouseEvent, pin: Pin) {
@@ -163,7 +172,7 @@ export class Component {
 
                 const middleX = subscribe(this.x.pipe(map(val => {
                     const scale = this.scale.value[0]
-                    return val + ((mode === "input") ? scale / 10 : 9 * scale / 10 )
+                    return val + ((mode === "input") ? scale / 10 : 9 * scale / 10)
                 })))
 
                 return svg`
@@ -203,7 +212,7 @@ export class Component {
         return new Component(state.template, state.position, state.scale, state.id)
     }
 
-    public static getId(){
+    public static getId() {
         const data = runCounter.get()
         runCounter.increase()
         return data

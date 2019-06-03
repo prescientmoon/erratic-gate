@@ -7,6 +7,7 @@ declare function require<T>(path:string):T
 type partFactory = (part:Part) => void
 
 export class Material {
+    private static cache = false
     private static images: {
         [key: string]: string
     } = {
@@ -19,8 +20,8 @@ export class Material {
 
     constructor (public mode: materialMode,public name:string) {
         const saved = Material.cached.get(mode + name)
-        
-        if (saved)
+
+        if (saved && Material.cache)
             return saved
 
         else Material.cached.set(mode + name,this)

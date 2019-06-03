@@ -12,6 +12,7 @@ export interface ComponentTemplate {
     name: string
     version: string
     activation: string
+    onclick?: string
     inputs: number
     outputs: number
     material: {

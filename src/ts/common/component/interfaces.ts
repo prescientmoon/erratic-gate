@@ -12,6 +12,7 @@ export interface activationContext {
     outputs: Pin[]
     succes: (mes: string) => any
     error: (mes:string) => any
+    color: (color:string) => void
 }
 
 export type materialMode = "standard_image" | "color"
