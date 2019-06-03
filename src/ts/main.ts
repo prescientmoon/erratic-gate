@@ -10,10 +10,6 @@ import { MDCMenu } from '@material/menu';
 const screen = new Screen()
 
 const manager = new ComponentManager()
-manager.components.push(new Component("and", [200, 100], [100, 100]))
-// manager.components.push(new Component("not", [200, 500], [100, 100]))
-// manager.components.push(new Component("true", [200, 500], [100, 100]))
-// manager.components.push(new Component("false", [200, 500], [100, 100]))
 manager.save()
 manager.update()
 
@@ -64,23 +60,40 @@ render(html`
     <div class="mdc-drawer__content">
         <nav class="mdc-list">
         <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page" @click=${() => manager.prepareNewSimulation()}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">note_add</i>
             <span class="mdc-list-item__text">Create new simulation</span>
         </a>
         <a class="mdc-list-item" href="#" id="openSimulation" @click=${() => {
-        menu.open = true
+        menus[0].open = true
     }}>
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>
             <span class="mdc-list-item__text">Open simulation</span>
+        </a>
+        <a class="mdc-list-item" href="#" id="openGates" @click=${() => {
+        menus[1].open = true
+    }}>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
+            <span class="mdc-list-item__text">Add logic gate</span>
         </a>
         </nav>
     </div>
     </aside>
 
-    <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary">
+    <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary" id="saveMenu">
         <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
             ${subscribe(manager.saves.pipe(map(_ => _.map(val => html`
                 <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.switchTo(val)}>
+                    <span class="mdc-list-item__text"> ${val} </span>
+                    <span class="material-icons mdc-list-item__meta" @click=${() => manager.delete(val)}> delete </span>
+                </li>`
+            ))))}
+        </ul>
+    </div>
+
+    <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary" id="gateMenu">
+        <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+            ${subscribe(manager.gates.pipe(map(_ => _.map(val => html`
+                <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.add(val)}>
                     <span class="mdc-list-item__text"> ${val} </span>
                 </li>`
             ))))}
@@ -88,8 +101,9 @@ render(html`
     </div>
 `, document.body)
 
-const menu = new MDCMenu(document.querySelector('.mdc-menu'));
-menu.hoistMenuToBody()
-menu.setAnchorElement(document.querySelector(`#openSimulation`))
+const menus =  [new MDCMenu(document.querySelector('#saveMenu')), new MDCMenu(document.querySelector('#gateMenu'))]
+menus.forEach(menu => menu.hoistMenuToBody())
+menus[0].setAnchorElement(document.querySelector(`#openSimulation`))
+menus[1].setAnchorElement(document.querySelector("#openGates"))
 
 manager.update()

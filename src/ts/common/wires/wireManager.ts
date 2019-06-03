@@ -11,8 +11,8 @@ import { WireState, WireStateVal } from "./interface";
 export class WireManager {
     public start: Pin
     public end: Pin
-    
-    private wires: Wire[] = []
+
+    public wires: Wire[] = []
 
     public update = new Subject<boolean>()
 

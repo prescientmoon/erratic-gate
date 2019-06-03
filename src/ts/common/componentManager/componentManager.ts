@@ -18,13 +18,14 @@ import { modal } from "../modals";
 import { map } from "rxjs/operators";
 import { persistent } from "../store/persistent";
 
+const defaultName = "default"
 
 @Singleton
 export class ComponentManager {
     public components: Component[] = []
     public svgs = new Subject<SVGTemplateResult>()
     public placeholder = new BehaviorSubject("Create simulation")
-    public saves = new BehaviorSubject<string[]>(["hello world"])
+    public barAlpha = new BehaviorSubject<string>("0");
 
     private temporaryCommnad = ""
     private onTop: Component
@@ -34,6 +35,13 @@ export class ComponentManager {
     private wireManager = new WireManager()
     private templateStore = new ComponentTemplateStore()
     private settings = new Settings()
+    private standard: {
+        offset: number
+        scale: [number, number]
+    } = {
+            offset: 50,
+            scale: [100, 100]
+        }
 
     private commandHistoryStore = new Store<string>("commandHistory")
     private store = new Store<ManagerState>("simulationStates")
@@ -49,7 +57,7 @@ export class ComponentManager {
     private upEvent = new KeyboardInput("up")
     private downEvent = new KeyboardInput("down")
 
-    @persistent<ComponentManager, string>("current", "main'")
+    @persistent<ComponentManager, string>(defaultName, "main")
     public name: string
     public alertOptions = alertOptions
 
@@ -88,7 +96,8 @@ export class ComponentManager {
         }
     private inputMode: string
 
-    public barAlpha = new BehaviorSubject<string>("0");
+    public gates = this.templateStore.store.lsChanges
+    public saves = this.store.lsChanges
 
     constructor() {
         runCounter.increase()
@@ -150,7 +159,10 @@ export class ComponentManager {
                         this.placeholder.next("Command palette")
                     }
                     else if (this.clearEvent.value) {
-                        this.clear()
+                        if (this.shiftEvent.value)
+                            this.clear()
+                        else
+                            this.smartClear()
                     }
                     else if (this.saveEvent.value) {
                         this.save()
@@ -163,7 +175,6 @@ export class ComponentManager {
         })
 
         this.wireManager.update.subscribe(val => this.update())
-        this.saves.next(this.store.ls())
         if (this.saves.value.length === 0)
             this.save()
 
@@ -174,13 +185,14 @@ export class ComponentManager {
         this.inputMode = "create"
         this.placeholder.next("Create simulation")
     }
-    preInput() {
+
+    private preInput() {
         const elem = <HTMLInputElement>document.getElementById("nameInput")
         elem.value = ""
         this.barAlpha.next("1")
     }
 
-    async create() {
+    private async create() {
         const elem = <HTMLInputElement>document.getElementById("nameInput")
         this.barAlpha.next("0")
 
@@ -204,8 +216,35 @@ All you work will be lost!`
         return result
     }
 
+    public add(template: string, position?: [number, number]) {
+        const pos = position ? position : [...Array(2)].fill(this.standard.offset * this.components.length) as [number, number]
+
+        this.components.push(new Component(template, pos, this.standard.scale))
+        this.update()
+    }
+
+    public async delete(name: string) {
+        const res = await modal({
+            title: "Are you sure?",
+            content: html`Deleting a simulations is ireversible, and all work will be lost!`
+        })
+
+        if (res) {
+            if (this.name === name) {
+                if (this.saves.value.length > 1) {
+                    this.switchTo(this.saves.value.find(val => val !== name))
+                }
+                else {
+                    let newName = (name === defaultName) ? `${defaultName}(1)` : defaultName
+                    await this.createEmptySimulation(newName)
+                    this.switchTo(newName)
+                }
+            }
+            this.store.delete(name)
+        }
+    }
+
     public createEmptySimulation(name: string) {
-        console.log(name)
         const create = () => {
             this.store.set(name, {
                 wires: [],
@@ -230,8 +269,6 @@ All you work will be lost!`
     }
 
     public switchTo(name: string) {
-        console.log(`switching to ${name}`)
-
         const data = this.store.get(name)
         if (!data)
             error(`An error occured when trying to load ${name}`, "", this.alertOptions)
@@ -260,7 +297,15 @@ All you work will be lost!`
                 "", this.alertOptions)
     }
 
-    clear() {
+    public smartClear() {
+        this.components = this.components.filter(({ id }) =>
+            this.wireManager.wires.find(val => val.input.of.id == id || val.output.of.id == id)
+        )
+        this.update()
+        success("Succesfully cleared all unconnected components", "", this.alertOptions)
+    }
+
+    public clear() {
         this.components = []
         this.wireManager.dispose()
         this.update()
@@ -269,8 +314,6 @@ All you work will be lost!`
     }
 
     refresh() {
-        console.log(this.name)
-
         if (this.store.get(this.name)) {
             this.loadState(this.store.get(this.name))
         }
@@ -424,7 +467,6 @@ All you work will be lost!`
             this.commandHistoryStore.set(i.toString(), element)
         }
         this.store.set(this.name, this.state)
-        this.saves.next(this.store.ls())
         success(`Saved the simulation ${this.name} succesfully!`, "", this.alertOptions)
     }
 }
