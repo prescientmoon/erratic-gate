@@ -24,6 +24,7 @@ export class Component {
     public id: number
     public material: Material
     public clickedChanges = new BehaviorSubject(false)
+    public scaling = false
 
     private mouserDelta: number[]
     private strokeColor = "#888888"
@@ -34,6 +35,22 @@ export class Component {
 
     public inputPins: Pin[] = []
     public outputPins: Pin[] = []
+
+    public x = this.position.pipe(map(val =>
+        val[0]
+    ))
+
+    public y = this.position.pipe(map(val =>
+        val[1]
+    ))
+
+    public width = this.scale.pipe(map(val =>
+        val[0]
+    ))
+
+    public height = this.scale.pipe(map(val =>
+        val[1]
+    ))
 
     constructor(private template: string,
         position: [number, number] = [0, 0],
@@ -87,6 +104,7 @@ export class Component {
 
     public handleMouseUp() {
         this.clicked = false
+        this.scaling = false
         this.clickedChanges.next(this.clicked)
     }
 
@@ -110,8 +128,6 @@ export class Component {
     }
 
     handleClick(e: MouseEvent) {
-        console.log(e.button)
-
         if (e.button === 0) {
             const mousePosition = Component.screen.getWorldPosition(e.clientX, e.clientY)
 
@@ -125,6 +141,9 @@ export class Component {
             this.activate(0)
         }
 
+        else if (e.button === 1) {
+            this.scaling = true
+        }
         else if (e.button === 2) {
             manager.components = manager.components.filter(({ id }) => id !== this.id)
             manager.wireManager.wires
@@ -132,9 +151,7 @@ export class Component {
                 .forEach(val => {
                     manager.wireManager.remove(val)
                 })
-            manager.wireManager.update.next(true)
-
-            manager.update()
+            manager.silentRefresh()
         }
     }
 
@@ -149,28 +166,6 @@ export class Component {
             template: this.template,
             id: this.id
         }
-    }
-
-    get x() {
-        return this.position.pipe(map(val =>
-            val[0]
-        ))
-    }
-    get y() {
-        return this.position.pipe(map(val =>
-            val[1]
-        ))
-    }
-
-    get width() {
-        return this.scale.pipe(map(val =>
-            val[0]
-        ))
-    }
-    get height() {
-        return this.scale.pipe(map(val =>
-            val[1]
-        ))
     }
 
     pinsSvg(pinScale: number, pinLength = 20, mode = "input") {
@@ -208,8 +203,8 @@ export class Component {
     }
 
     public pinx(mode = true, pinLength = 15) {
-        return this.x.pipe(
-            map(val => val + (
+        return this.position.pipe(
+            map(val => val[0] + (
                 (mode) ?
                     -pinLength :
                     this.scale.value[0] + pinLength

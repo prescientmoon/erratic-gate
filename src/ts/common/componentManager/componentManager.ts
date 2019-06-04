@@ -27,9 +27,9 @@ export class ComponentManager {
     public placeholder = new BehaviorSubject("Create simulation")
     public barAlpha = new BehaviorSubject<string>("0");
     public wireManager = new WireManager()
+    public onTop: Component
 
     private temporaryCommnad = ""
-    private onTop: Component
     private clicked = false
 
     private screen = new Screen()
@@ -51,6 +51,7 @@ export class ComponentManager {
     private closeInputEvent = new KeyboardInput("enter")
     private ctrlEvent = new KeyboardInput("ctrl")
     private palleteEvent = new KeyboardInput("p")
+    private undoEvent = new KeyboardInput("z")
     private shiftEvent = new KeyboardInput("shift")
     private refreshEvent = new KeyboardInput("r")
     private clearEvent = new KeyboardInput("delete")
@@ -105,9 +106,10 @@ export class ComponentManager {
             clear: () => this.clear(),
             clean: () => this.smartClear(),
             save: () => this.save(),
-            refresh: () => this.refresh(),
+            undo: () => this.refresh(),
             download: () => download(this, [], []),
-            delete: () => this.delete(this.name)
+            delete: () => this.delete(this.name),
+            refresh: () => this.silentRefresh(true)
         }
 
     constructor() {
@@ -172,8 +174,11 @@ export class ComponentManager {
                     else if (this.saveEvent.value) {
                         this.save()
                     }
-                    else if (this.refreshEvent.value) {
+                    else if (this.undoEvent.value) {
                         this.refresh()
+                    }
+                    else if (this.refreshEvent.value){
+                        this.silentRefresh(true)
                     }
                 }
                 else if (this.clearEvent.value) {
@@ -328,7 +333,7 @@ All you work will be lost!`
         success("Succesfully cleared all components", "", this.alertOptions)
     }
 
-    refresh() {
+    public refresh() {
         if (this.store.get(this.name)) {
             this.loadState(this.store.get(this.name))
         }
@@ -369,10 +374,9 @@ All you work will be lost!`
                 }
             }
 
+            // if (false) { }
             if (toAddOnTop >= 0) {
-                this.onTop = this.components[toAddOnTop]
-                this.components.push(this.onTop)
-                this.update()
+                this.top(this.components[toAddOnTop])
             }
 
             else if (outsideComponents && this.clicked) {
@@ -385,7 +389,21 @@ All you work will be lost!`
         }
     }
 
-    render() {
+    public silentRefresh(verboose = false){
+        this.loadState(this.state)
+        if (verboose)
+            success("Succesfully reloaded all components", "", this.alertOptions)
+    }
+
+    public top(component: Component) {
+        if (this.onTop !== component) {
+            this.onTop = component
+            this.components.push(component)
+        }
+        this.update()
+    }
+
+    private render() {
         let toRemoveDuplicatesFor: Component
 
         const result = this.components.map(component => {
@@ -451,11 +469,15 @@ All you work will be lost!`
         }
     }
 
+    get scaling(): Component {
+        return this.components.find(val => val.scaling)
+    }
+
     public getComponentById(id: number) {
         return this.components.find(val => val.id === id)
     }
 
-    loadState(state: ManagerState) {
+    private loadState(state: ManagerState) {
         if (!state.wires) //old state
             return
 

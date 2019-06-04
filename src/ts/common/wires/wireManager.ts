@@ -26,7 +26,7 @@ export class WireManager {
         this.tryResolving()
     }
 
-    public dispose(){
+    public dispose() {
         for (let i of this.wires)
             i.dispose()
 
@@ -57,24 +57,27 @@ export class WireManager {
     }
 
     get svg() {
-        return this.wires.map(val => {
+        return svg`${this.wires.map((val) => {
             const i = val.input.of
             const o = val.output.of
+            const inputIndex = i.outputPins.indexOf(val.input)
+            const input = i.piny(false, inputIndex)
+            const output = o.piny(true, o.inputPins.indexOf(val.output))
             return svg`
-            <line x1=${subscribe(i.pinx(false, 20))}
-                x2=${subscribe(o.pinx(true, 20))}
-                y1=${subscribe(i.piny(false,i.outputPins.indexOf(val.input)))}
-                y2=${subscribe(o.piny(true,o.inputPins.indexOf(val.output)))}
+            <line x2=${subscribe(i.pinx(false, 20))}
+                x1=${subscribe(o.pinx(true, 20))}
+                y2=${subscribe(input)}
+                y1=${subscribe(output)}
                 stroke=${subscribe(val.input.svgColor)}
                 stroke-width=10
                 @click=${() => this.remove(val)}
             >
             </line>
-        `})
+        `})}`
     }
 
     get state() {
-        return this.wires.map((val):WireStateVal => ({
+        return this.wires.map((val): WireStateVal => ({
             from: {
                 owner: val.input.of.id,
                 index: val.input.of.outputPins.indexOf(val.input)
