@@ -422,7 +422,9 @@ All you work will be lost!`
                 ${component.pinsSvg(10, 20, "output")}
 
                 <g @mousedown=${ (e: MouseEvent) => component.handleClick(e)}
-                    @mouseup=${mouseupHandler}>
+                    @touchstart=${(e: MouseEvent) => component.handleClick(e)}
+                    @mouseup=${mouseupHandler}
+                    @touchend=${mouseupHandler}>
                     <rect width=${ subscribe(component.width)}
                     height=${ subscribe(component.height)}
                     x=${ subscribe(component.x)}
