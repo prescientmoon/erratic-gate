@@ -117,7 +117,20 @@ export class ComponentTemplateStore {
                 data: "or"
             }
         })
-         this.store.set("xor", {
+        this.store.set("nor", {
+            inputs: 2,
+            outputs: 1,
+            name: "nor",
+            version: "1.0.0",
+            activation: `
+                ctx.outputs[0].value = !(ctx.inputs[0].value || ctx.inputs[1].value)
+            `.trim(),
+            material: {
+                mode: "standard_image",
+                data: "nor"
+            }
+        })
+        this.store.set("xor", {
             inputs: 2,
             outputs: 1,
             name: "xor",

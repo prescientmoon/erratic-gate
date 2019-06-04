@@ -12,7 +12,8 @@ export class Material {
     } = {
             and: require("../../../assets/and_gate.jpg"),
             or: require("../../../assets/or_gate.png"),
-            xor: require("../../../assets/xor_gate.png")
+            xor: require("../../../assets/xor_gate.png"),
+            nor: require("../../../assets/nor_gate.png")
         }
 
 
