@@ -14,7 +14,7 @@ manager.save()
 manager.update()
 
 window.onerror = (message: string, url: string, lineNumber: number): boolean => {
-    error(message,"",{
+    error(message, "", {
         ...manager.alertOptions,
         onclick: () => modal({
             no: "",
@@ -51,18 +51,27 @@ const handleEvent = <T>(e: T, func: (e: T) => any) => {
         manager.barAlpha.next("0")
 }
 
-render(html`
-    <div @mousemove=${(e: MouseEvent) => handleEvent(e, (e: MouseEvent) => {
+const moveHandler = (e: MouseEvent) => handleEvent(e, (e: MouseEvent) => {
     manager.handleMouseMove(e)
     screen.updateMouse(e)
-})}
+})
+
+render(html`
+    <div @mousemove=${moveHandler}
+    @touchmove=${moveHandler}
         @mousedown=${(e: MouseEvent) => handleEvent(e, () =>
     manager.handleMouseDown()
 )}
-        @mouseup=${(e: MouseEvent) => handleEvent(e, () =>
+        @touchdown=${(e: MouseEvent) => handleEvent(e, () =>
+    manager.handleMouseDown()
+)}
+                @mouseup=${(e: MouseEvent) => handleEvent(e, () =>
     manager.handleMouseUp()
 )}
-        @wheel=${(e: MouseEvent) => handleEvent(e, (e: WheelEvent) =>
+        @touchup=${(e: MouseEvent) => handleEvent(e, () =>
+    manager.handleMouseUp()
+)}
+                @wheel=${(e: MouseEvent) => handleEvent(e, (e: WheelEvent) =>
     screen.handleScroll(e)
 )}>
 
