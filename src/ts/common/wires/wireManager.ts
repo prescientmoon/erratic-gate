@@ -3,9 +3,8 @@ import { Pin } from "../pin";
 import { Wire } from "./wire";
 import { svg } from "lit-html";
 import { subscribe } from "lit-rx";
-import { ComponentManager } from "../componentManager";
-import { Observable, Subject } from "rxjs";
-import { WireState, WireStateVal } from "./interface";
+import { Subject } from "rxjs";
+import { WireStateVal } from "./interface";
 
 @Singleton
 export class WireManager {
@@ -36,7 +35,7 @@ export class WireManager {
 
     public tryResolving() {
         if (this.start && this.end && this.start != this.end) {
-            if (this.canBind(this.start, this.end)) {
+            if (this.canBind(this.end)) {
                 this.wires.push(new Wire(this.start, this.end))
                 this.start = null
                 this.end = null
@@ -45,13 +44,13 @@ export class WireManager {
         }
     }
 
-    private canBind(start: Pin, end: Pin) {
+    private canBind(end: Pin) {
         if (this.wires.find(val => val.output === end))
             return false
         return true
     }
 
-    private remove(target: Wire) {
+    public remove(target: Wire) {
         target.dispose()
         this.wires = this.wires.filter(val => val !== target)
         this.update.next(true)

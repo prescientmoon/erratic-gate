@@ -102,13 +102,13 @@ export class ComponentManager {
     public file: {
         [key: string]: () => void
     } = {
-        clear: () => this.clear(),
-        clean: () => this.smartClear(),
-        save: () => this.save(),
-        refresh: () => this.refresh(),
-        download: () => download(this,[],[]),
-        delete: () => this.delete(this.name)
-    }
+            clear: () => this.clear(),
+            clean: () => this.smartClear(),
+            save: () => this.save(),
+            refresh: () => this.refresh(),
+            download: () => download(this, [], []),
+            delete: () => this.delete(this.name)
+        }
 
     constructor() {
         runCounter.increase()
@@ -185,7 +185,11 @@ export class ComponentManager {
             }
         })
 
-        this.wireManager.update.subscribe(val => this.update())
+        this.wireManager.update.subscribe(() => {
+            // this.save()
+            this.update()
+            // this.save()
+        })
         if (this.saves.value.length === 0)
             this.save()
 
@@ -270,7 +274,7 @@ All you work will be lost!`
             this.refresh()
         }
 
-        return new Promise(async (res, rej) => {//get wheater theres already a simulation with that name
+        return new Promise(async (res) => {//get wheater theres already a simulation with that name
             if (this.store.get(name) && await this.handleDuplicateModal(name) ||
                 !this.store.get(name)) {
                 create()
@@ -341,51 +345,52 @@ All you work will be lost!`
         this.svgs.next(this.render())
     }
 
-    handleMouseDown(e: MouseEvent) {
+    handleMouseDown() {
         this.clicked = true
     }
 
-    handleMouseUp(e: MouseEvent) {
+    handleMouseUp() {
         this.clicked = false
     }
 
     handleMouseMove(e: MouseEvent) {
-        let toAddOnTop: number
-        let outsideComponents = true
+        if (e.button === 0) {
+            let toAddOnTop: number
+            let outsideComponents = true
 
-        for (let i = 0; i < this.components.length; i++) {
-            const component = this.components[i]
-            if (component.clicked) {
-                outsideComponents = false
-                component.move(e)
-                if (this.onTop != component) {
-                    toAddOnTop = i
+            for (let i = 0; i < this.components.length; i++) {
+                const component = this.components[i]
+                if (component.clicked) {
+                    outsideComponents = false
+                    component.move(e)
+                    if (this.onTop != component) {
+                        toAddOnTop = i
+                    }
                 }
             }
-        }
 
-        if (toAddOnTop >= 0) {
-            this.onTop = this.components[toAddOnTop]
-            this.components.push(this.onTop)
-            this.update()
-        }
+            if (toAddOnTop >= 0) {
+                this.onTop = this.components[toAddOnTop]
+                this.components.push(this.onTop)
+                this.update()
+            }
 
-        else if (outsideComponents && this.clicked) {
-            const mousePosition = [e.clientX, e.clientY]
-            const delta = mousePosition.map((value, index) =>
-                this.screen.mousePosition[index] - value
-            ) as [number, number]
-            this.screen.move(...delta)
+            else if (outsideComponents && this.clicked) {
+                const mousePosition = [e.clientX, e.clientY]
+                const delta = mousePosition.map((value, index) =>
+                    this.screen.mousePosition[index] - value
+                ) as [number, number]
+                this.screen.move(...delta)
+            }
         }
     }
 
     render() {
         let toRemoveDuplicatesFor: Component
 
-        const size = 10
         const result = this.components.map(component => {
-            const mouseupHandler = (e: MouseEvent) => {
-                component.handleMouseUp(e)
+            const mouseupHandler = () => {
+                component.handleMouseUp()
                 toRemoveDuplicatesFor = component
             }
 
@@ -433,7 +438,7 @@ All you work will be lost!`
         instances.pop()
 
         this.components = this.components
-            .filter((val, index) => instances.indexOf(index) != -1)
+            .filter((_, index) => instances.indexOf(index) != -1)
     }
 
     get state(): ManagerState {
@@ -472,7 +477,7 @@ All you work will be lost!`
         this.update()
     }
 
-    save(name?: string) {
+    save() {
         for (let i = 0; i < this.commandHistory.length; i++) {
             const element = this.commandHistory[i];
             this.commandHistoryStore.set(i.toString(), element)

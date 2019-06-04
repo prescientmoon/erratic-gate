@@ -78,7 +78,6 @@ export class Component {
         })
 
         this.material = new Material(data.material.mode, data.material.data)
-
         this.activate()
     }
 
@@ -86,7 +85,7 @@ export class Component {
         this.subscriptions.forEach(val => val.unsubscribe())
     }
 
-    public handleMouseUp(e: MouseEvent) {
+    public handleMouseUp() {
         this.clicked = false
         this.clickedChanges.next(this.clicked)
     }
@@ -126,17 +125,35 @@ export class Component {
             this.activate(0)
         }
 
-        else if (e.button === 2){
-            manager.components = manager.components.filter(val => val !== this)
-            manager.wireManager.wires
-                .filter(val => val.input.of === this || val.output.of === this)
-                .forEach(val => val.dispose())
-            manager.wireManager.update.next(true)
-            manager.update()
+        else if (e.button === 2) {
+            // setTimeout(() => {
+                console.log("removed")
+                manager.components = manager.components.filter(({ id }) => id !== this.id)
+                manager.update()
+
+                manager.wireManager.wires
+                    .filter(val => val.input.of.id == this.id || val.output.of.id == this.id)
+                    .forEach(val => {
+                        manager.wireManager.remove(val)
+                    })
+                // manager.to
+
+                console.log("removed 1")
+
+                manager.wireManager.update.next(true)
+
+                console.log("removed 2")
+
+                manager.update()
+
+                console.log("removed 3")
+                console.log(manager.components)
+                console.log(manager.wireManager)
+            // }, 0)
         }
     }
 
-    handlePinClick(e: MouseEvent, pin: Pin) {
+    handlePinClick(pin: Pin) {
         Component.wireManager.add(pin)
     }
 
@@ -200,7 +217,7 @@ export class Component {
                     r=${pinScale}
                     cx=${x}
                     cy=${y} stroke-width=${stroke}
-                    @click=${(e: MouseEvent) => this.handlePinClick(e, val)}
+                    @click=${() => this.handlePinClick(val)}
                     ></circle>
                 `})
     }

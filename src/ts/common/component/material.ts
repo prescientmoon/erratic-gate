@@ -1,42 +1,33 @@
-import { TemplateResult, svg, SVGTemplateResult, Part } from "lit-html";
-import { Subject, BehaviorSubject } from "rxjs";
+import { svg, Part } from "lit-html";
+import { BehaviorSubject } from "rxjs";
 import { materialMode } from "./interfaces";
 
-declare function require<T>(path:string):T
+declare function require<T>(path: string): T
 
-type partFactory = (part:Part) => void
+type partFactory = (part: Part) => void
 
 export class Material {
-    private static cache = false
     private static images: {
         [key: string]: string
     } = {
-        and: require("../../../assets/and_gate.jpg"),
-        or: require("../../../assets/or_gate.png"),
-        xor: require("../../../assets/xor_gate.png")
-    }
+            and: require("../../../assets/and_gate.jpg"),
+            or: require("../../../assets/or_gate.png"),
+            xor: require("../../../assets/xor_gate.png")
+        }
 
-    private static cached = new Map()
 
     public color = new BehaviorSubject<string>("rgba(0,0,0,0)")
 
-    constructor (public mode: materialMode,public name:string) {
-        const saved = Material.cached.get(mode + name)
-
-        if (saved && Material.cache)
-            return saved
-
-        else Material.cached.set(mode + name,this)
-
+    constructor(public mode: string, public name: materialMode | string) {
         if (this.mode === "color")
             this.color.next(name)
     }
 
-    innerHTML (x: partFactory, y: partFactory, w: partFactory, h: partFactory) {
+    innerHTML(x: partFactory, y: partFactory, w: partFactory, h: partFactory) {
         return svg`<foreignobject x=${x} y=${y} width=${w} height=${h}>
             <div class="component-container">
                 <img src=${Material.images[this.name]} height="97%" width="97%" draggable=false class="component">
-            </div>
+           </div>
         </foreignobject>`
     }
 }

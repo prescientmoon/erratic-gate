@@ -1,7 +1,6 @@
-import { render, html, svg } from "lit-html"
+import { render, html } from "lit-html"
 import { subscribe } from "lit-rx"
 import { Screen } from "./common/screen.ts";
-import { Component } from "./common/component";
 import { ComponentManager } from "./common/componentManager";
 import { map } from "rxjs/operators";
 import { MDCMenu } from '@material/menu';
@@ -57,11 +56,11 @@ render(html`
     manager.handleMouseMove(e)
     screen.updateMouse(e)
 })}
-        @mousedown=${(e: MouseEvent) => handleEvent(e, (e: MouseEvent) =>
-    manager.handleMouseDown(e)
+        @mousedown=${(e: MouseEvent) => handleEvent(e, () =>
+    manager.handleMouseDown()
 )}
-        @mouseup=${(e: MouseEvent) => handleEvent(e, (e: MouseEvent) =>
-    manager.handleMouseUp(e)
+        @mouseup=${(e: MouseEvent) => handleEvent(e, () =>
+    manager.handleMouseUp()
 )}
         @wheel=${(e: MouseEvent) => handleEvent(e, (e: WheelEvent) =>
     screen.handleScroll(e)
