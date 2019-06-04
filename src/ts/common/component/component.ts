@@ -126,30 +126,15 @@ export class Component {
         }
 
         else if (e.button === 2) {
-            // setTimeout(() => {
-                console.log("removed")
-                manager.components = manager.components.filter(({ id }) => id !== this.id)
-                manager.update()
+            manager.components = manager.components.filter(({ id }) => id !== this.id)
+            manager.wireManager.wires
+                .filter(val => val.input.of.id == this.id || val.output.of.id == this.id)
+                .forEach(val => {
+                    manager.wireManager.remove(val)
+                })
+            manager.wireManager.update.next(true)
 
-                manager.wireManager.wires
-                    .filter(val => val.input.of.id == this.id || val.output.of.id == this.id)
-                    .forEach(val => {
-                        manager.wireManager.remove(val)
-                    })
-                // manager.to
-
-                console.log("removed 1")
-
-                manager.wireManager.update.next(true)
-
-                console.log("removed 2")
-
-                manager.update()
-
-                console.log("removed 3")
-                console.log(manager.components)
-                console.log(manager.wireManager)
-            // }, 0)
+            manager.update()
         }
     }
 
