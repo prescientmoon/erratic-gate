@@ -2,16 +2,46 @@ import { render, html, svg } from "lit-html"
 import { subscribe } from "lit-rx"
 import { Screen } from "./common/screen.ts";
 import { Component } from "./common/component";
-import { FunctionStore } from "./common/activation/activationStore";
 import { ComponentManager } from "./common/componentManager";
 import { map } from "rxjs/operators";
 import { MDCMenu } from '@material/menu';
+import { error } from "toastr"
+import { modal } from "./common/modals";
 
 const screen = new Screen()
 
-const manager = new ComponentManager()
+export const manager = new ComponentManager()
 manager.save()
 manager.update()
+
+window.onerror = (message: string, url: string, lineNumber: number): boolean => {
+    error(message,"",{
+        ...manager.alertOptions,
+        onclick: () => modal({
+            no: "",
+            yes: "close",
+            title: "Error",
+            content: html`
+                <table>
+                    <tr>
+                        <td>Url:</td>
+                        <td>${url}</td>
+                    </tr>
+                    <tr>
+                        <td>Message:</td>
+                        <td>${message}</td>
+                    </tr>
+                    <tr>
+                        <td>Line:</td>
+                        <td>${lineNumber}</td>
+                    </tr>
+                </table>
+            `
+        })
+    })
+
+    return true;
+};
 
 const handleEvent = <T>(e: T, func: (e: T) => any) => {
     if (manager.barAlpha.value == "0")
@@ -75,6 +105,12 @@ render(html`
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
             <span class="mdc-list-item__text">Add logic gate</span>
         </a>
+        <a class="mdc-list-item" href="#" id="openFile" @click=${() => {
+        menus[2].open = true
+    }}>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</i>
+            <span class="mdc-list-item__text">File</span>
+        </a>
         </nav>
     </div>
     </aside>
@@ -86,7 +122,7 @@ render(html`
                     <span class="mdc-list-item__text"> ${val} </span>
                     <span class="material-icons mdc-list-item__meta" @click=${() => manager.delete(val)}> delete </span>
                 </li>`
-            ))))}
+    ))))}
         </ul>
     </div>
 
@@ -96,14 +132,29 @@ render(html`
                 <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.add(val)}>
                     <span class="mdc-list-item__text"> ${val} </span>
                 </li>`
-            ))))}
+    ))))}
+        </ul>
+    </div>
+
+    <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary" id="fileMenu">
+        <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+            ${[...Object.keys(manager.file)].sort().map(key => html`
+                <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.file[key]()}>
+                    <span class="mdc-list-item__text"> ${key} </span>
+                </li>`
+    )}
         </ul>
     </div>
 `, document.body)
 
-const menus =  [new MDCMenu(document.querySelector('#saveMenu')), new MDCMenu(document.querySelector('#gateMenu'))]
+const menus = [
+    new MDCMenu(document.querySelector('#saveMenu')),
+    new MDCMenu(document.querySelector('#gateMenu')),
+    new MDCMenu(document.querySelector('#fileMenu'))
+]
 menus.forEach(menu => menu.hoistMenuToBody())
 menus[0].setAnchorElement(document.querySelector(`#openSimulation`))
 menus[1].setAnchorElement(document.querySelector("#openGates"))
+menus[2].setAnchorElement(document.querySelector("#openFile"))
 
 manager.update()

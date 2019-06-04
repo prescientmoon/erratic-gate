@@ -26,13 +26,13 @@ export class ComponentManager {
     public svgs = new Subject<SVGTemplateResult>()
     public placeholder = new BehaviorSubject("Create simulation")
     public barAlpha = new BehaviorSubject<string>("0");
+    public wireManager = new WireManager()
 
     private temporaryCommnad = ""
     private onTop: Component
     private clicked = false
 
     private screen = new Screen()
-    private wireManager = new WireManager()
     private templateStore = new ComponentTemplateStore()
     private settings = new Settings()
     private standard: {
@@ -53,7 +53,7 @@ export class ComponentManager {
     private palleteEvent = new KeyboardInput("p")
     private shiftEvent = new KeyboardInput("shift")
     private refreshEvent = new KeyboardInput("r")
-    private clearEvent = new KeyboardInput("c")
+    private clearEvent = new KeyboardInput("delete")
     private upEvent = new KeyboardInput("up")
     private downEvent = new KeyboardInput("down")
 
@@ -98,6 +98,17 @@ export class ComponentManager {
 
     public gates = this.templateStore.store.lsChanges
     public saves = this.store.lsChanges
+
+    public file: {
+        [key: string]: () => void
+    } = {
+        clear: () => this.clear(),
+        clean: () => this.smartClear(),
+        save: () => this.save(),
+        refresh: () => this.refresh(),
+        download: () => download(this,[],[]),
+        delete: () => this.delete(this.name)
+    }
 
     constructor() {
         runCounter.increase()
@@ -158,18 +169,18 @@ export class ComponentManager {
                         this.inputMode = "command"
                         this.placeholder.next("Command palette")
                     }
-                    else if (this.clearEvent.value) {
-                        if (this.shiftEvent.value)
-                            this.clear()
-                        else
-                            this.smartClear()
-                    }
                     else if (this.saveEvent.value) {
                         this.save()
                     }
                     else if (this.refreshEvent.value) {
                         this.refresh()
                     }
+                }
+                else if (this.clearEvent.value) {
+                    if (this.shiftEvent.value)
+                        this.clear()
+                    else
+                        this.smartClear()
                 }
             }
         })

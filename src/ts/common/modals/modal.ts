@@ -36,12 +36,16 @@ export const modal = (options: Partial<confirmModalOptions>) => new Promise((res
                     ${content}
                 </div>
                 <footer class="mdc-dialog__actions">
-                    <button type="button" class="mdc-button mdc-dialog__button" id="no-${id}">
-                        <span class="mdc-button__label">${no}</span>
-                    </button>
-                    <button type="button" class="mdc-button mdc-dialog__button" id="yes-${id}">
-                        <span class="mdc-button__label">${yes}</span>
-                    </button>
+                    ${(no !== "") ?
+                        html`<button type="button" class="mdc-button mdc-dialog__button" id="no-${id}">
+                            <span class="mdc-button__label">${no}</span>
+                        </button>` : no
+                    }
+                    ${(yes !== "") ?
+                        html`<button type="button" class="mdc-button mdc-dialog__button" id="yes-${id}">
+                            <span class="mdc-button__label">${yes}</span>
+                        </button>` : yes
+                    }
                 </footer>
             </div>
         </div>

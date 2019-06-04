@@ -104,6 +104,32 @@ export class ComponentTemplateStore {
                 data: "and"
             }
         })
+        this.store.set("or", {
+            inputs: 2,
+            outputs: 1,
+            name: "or",
+            version: "1.0.0",
+            activation: `
+                ctx.outputs[0].value = ctx.inputs[0].value || ctx.inputs[1].value
+            `.trim(),
+            material: {
+                mode: "standard_image",
+                data: "or"
+            }
+        })
+         this.store.set("xor", {
+            inputs: 2,
+            outputs: 1,
+            name: "xor",
+            version: "1.0.0",
+            activation: `
+                ctx.outputs[0].value = (ctx.inputs[0].value || ctx.inputs[1].value) && !(ctx.inputs[0].value && ctx.inputs[1].value)
+            `.trim(),
+            material: {
+                mode: "standard_image",
+                data: "xor"
+            }
+        })
         this.store.set("true", {
             inputs: 0,
             outputs: 1,
@@ -161,7 +187,7 @@ export class ComponentTemplateStore {
             onclick: `
                 ctx.outputs[0].memory.value = !ctx.outputs[0].memory.value
                 if (ctx.outputs[0].memory.value)
-                    ctx.color("#880000")
+                    ctx.color("#550000")
                 else
                     ctx.color("red")
             `

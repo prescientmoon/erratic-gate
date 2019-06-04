@@ -51,6 +51,12 @@ export class WireManager {
         return true
     }
 
+    private remove(target: Wire) {
+        target.dispose()
+        this.wires = this.wires.filter(val => val !== target)
+        this.update.next(true)
+    }
+
     get svg() {
         return this.wires.map(val => {
             const i = val.input.of
@@ -61,6 +67,8 @@ export class WireManager {
                 y1=${subscribe(i.piny(false,i.outputPins.indexOf(val.input)))}
                 y2=${subscribe(o.piny(true,o.inputPins.indexOf(val.output)))}
                 stroke=${subscribe(val.input.svgColor)}
+                stroke-width=10
+                @click=${() => this.remove(val)}
             >
             </line>
         `})

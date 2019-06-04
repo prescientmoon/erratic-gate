@@ -11,7 +11,9 @@ export class Material {
     private static images: {
         [key: string]: string
     } = {
-        and: require("../../../assets/and_gate.jpg")
+        and: require("../../../assets/and_gate.jpg"),
+        or: require("../../../assets/or_gate.png"),
+        xor: require("../../../assets/xor_gate.png")
     }
 
     private static cached = new Map()

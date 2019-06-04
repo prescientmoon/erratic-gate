@@ -11,6 +11,7 @@ import { alertOptions } from "../componentManager/alertOptions";
 import { WireManager } from "../wires";
 import { runCounter } from "./runCounter";
 import { Material } from "./material";
+import { manager } from "../../main";
 
 export class Component {
     private static store = new ComponentTemplateStore()
@@ -76,9 +77,9 @@ export class Component {
             this.subscriptions.push(subscription)
         })
 
-        this.activate()
-
         this.material = new Material(data.material.mode, data.material.data)
+
+        this.activate()
     }
 
     public dispose() {
@@ -110,16 +111,29 @@ export class Component {
     }
 
     handleClick(e: MouseEvent) {
-        const mousePosition = Component.screen.getWorldPosition(e.clientX, e.clientY)
+        console.log(e.button)
 
-        this.mouserDelta = this.position.value.map((value, index) =>
-            mousePosition[index] - value
-        )
-        this.clicked = true
-        this.clickedChanges.next(this.clicked)
+        if (e.button === 0) {
+            const mousePosition = Component.screen.getWorldPosition(e.clientX, e.clientY)
 
-        this.activate(1)
-        this.activate(0)
+            this.mouserDelta = this.position.value.map((value, index) =>
+                mousePosition[index] - value
+            )
+            this.clicked = true
+            this.clickedChanges.next(this.clicked)
+
+            this.activate(1)
+            this.activate(0)
+        }
+
+        else if (e.button === 2){
+            manager.components = manager.components.filter(val => val !== this)
+            manager.wireManager.wires
+                .filter(val => val.input.of === this || val.output.of === this)
+                .forEach(val => val.dispose())
+            manager.wireManager.update.next(true)
+            manager.update()
+        }
     }
 
     handlePinClick(e: MouseEvent, pin: Pin) {

@@ -11,5 +11,7 @@ export class Wire {
     public dispose(){
         this.output.unbind(this.input)
         this.input.pair = null
+        this.input.update()
+        this.output.update()
     }
 }
