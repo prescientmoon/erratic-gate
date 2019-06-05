@@ -2,10 +2,11 @@
 @import "./modal.scss";
 
 $mdc-theme-primary: orange;
-$mdc-theme-secondary: #feeae6;
+$mdc-theme-secondary: white;
 $mdc-theme-on-primary: white;
 $mdc-theme-surface: black;
-$mdc-theme-on-secondary: #442b2d;
+$mdc-theme-on-secondary: white;
+$mdc-theme-text-secondary-on-background: white;
 
 @import "@material/drawer/mdc-drawer.scss";
 @import "@material/list/mdc-list";
@@ -13,6 +14,7 @@ $mdc-theme-on-secondary: #442b2d;
 @import "@material/button/mdc-button";
 @import "@material/menu-surface/mdc-menu-surface";
 @import "@material/menu/mdc-menu";
+@import "@material/textfield/mdc-text-field";
 
 html, body {
     padding: 0;
@@ -29,8 +31,9 @@ svg {
     display: block;
 }
 
-// .modal__btn-primary{
-    // background: orange  !important;
+// .mdc-list-item__secondary-text {
+//     color: rgba(128,128,128,0.5) !important;
+//     margin-bottom: 3px;
 // }
 
 .createBar {

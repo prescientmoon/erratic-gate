@@ -3,8 +3,8 @@ import { WireState } from "../wires/interface";
 
 export interface ManagerState {
     components: ComponentState[]
-    scale: [number,number]
-    position: [number,number]
+    scale: [number, number]
+    position: [number, number]
     wires: WireState
 }
 
@@ -19,4 +19,5 @@ export interface ComponentTemplate {
         mode: materialMode
         data: string
     }
+    editable?: boolean
 }

@@ -65,6 +65,8 @@ export class ComponentTemplateStore {
     }
 
     constructor() {
+        if (this.store.ls().length) return
+
         this.store.set("buffer", {
             inputs: 1,
             outputs: 1,
@@ -141,7 +143,8 @@ export class ComponentTemplateStore {
             material: {
                 mode: "standard_image",
                 data: "xor"
-            }
+            },
+            editable: true
         })
         this.store.set("true", {
             inputs: 0,

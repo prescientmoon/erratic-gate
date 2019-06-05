@@ -55,6 +55,7 @@
         "@material/drawer": "^2.3.0",
         "@material/list": "^2.3.0",
         "@material/menu": "^2.3.0",
+        "@material/textfield": "^2.3.0",
         "@material/theme": "^1.1.0",
         "file-saver": "^2.0.2",
         "lit-html": "^1.0.0",

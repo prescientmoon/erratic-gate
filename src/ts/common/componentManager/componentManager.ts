@@ -17,8 +17,10 @@ import { download } from "./download";
 import { modal } from "../modals";
 import { map } from "rxjs/operators";
 import { persistent } from "../store/persistent";
+import { MDCTextField } from '@material/textfield';
 
 const defaultName = "default"
+
 
 @Singleton
 export class ComponentManager {
@@ -28,12 +30,13 @@ export class ComponentManager {
     public barAlpha = new BehaviorSubject<string>("0");
     public wireManager = new WireManager()
     public onTop: Component
+    public templateStore = new ComponentTemplateStore()
 
     private temporaryCommnad = ""
     private clicked = false
+    private ignoreKeyDowns = false
 
     private screen = new Screen()
-    private templateStore = new ComponentTemplateStore()
     private settings = new Settings()
     private standard: {
         offset: number
@@ -112,6 +115,16 @@ export class ComponentManager {
             refresh: () => this.silentRefresh(true)
         }
 
+    public shortcuts: {
+        [key:string]: string
+    } = {
+        clear: "ctrl delete",
+        clean: "delete",
+        save:"ctrl s",
+        undo: "ctrl z",
+        refresh: "ctrl r"
+    }
+
     constructor() {
         runCounter.increase()
 
@@ -124,7 +137,7 @@ export class ComponentManager {
                 const elem = document.getElementById("nameInput")
                 elem.focus()
             }
-            else {
+            else if (!this.ignoreKeyDowns) {
                 e.preventDefault()
             }
         })
@@ -177,7 +190,7 @@ export class ComponentManager {
                     else if (this.undoEvent.value) {
                         this.refresh()
                     }
-                    else if (this.refreshEvent.value){
+                    else if (this.refreshEvent.value) {
                         this.silentRefresh(true)
                     }
                 }
@@ -198,6 +211,12 @@ export class ComponentManager {
         if (this.saves.value.length === 0)
             this.save()
 
+    }
+
+    public newGate(){
+        this.preInput()
+        this.inputMode = "gate"
+        this.placeholder.next("Gate name")
     }
 
     public prepareNewSimulation() {
@@ -229,11 +248,48 @@ export class ComponentManager {
         const result = await modal({
             title: "Warning",
             content: html`There was already a simulation called ${name},
-are you sure you want to override it?
-All you work will be lost!`
+            are you sure you want to override it?
+            All you work will be lost!`
         })
 
         return result
+    }
+
+    public async edit(name: string) {
+        this.ignoreKeyDowns = true
+        const gate = this.templateStore.store.get(name)
+
+        modal({
+            no: "",
+            yes: "save",
+            title: `Edit ${name}`,
+            content: html`
+                <br>
+                <div class="mdc-text-field mdc-text-field--textarea">
+                <textarea id="codeArea" class="mdc-text-field__input js" rows="8" cols="40">${
+                    gate.activation
+                }</textarea>
+                <div class="mdc-notched-outline">
+                    <div class="mdc-notched-outline__leading"></div>
+                    <div class="mdc-notched-outline__notch">
+                    <label for="textarea" class="mdc-floating-label">Activation function</label>
+                    </div>
+                    <div class="mdc-notched-outline__trailing"></div>
+                </div>
+                </div>
+            `
+        }).then(val => {
+            this.ignoreKeyDowns = false
+            const elem = <HTMLTextAreaElement> document.querySelector("#codeArea")
+            const data = elem.value
+
+            this.templateStore.store.set(name,{
+                ...gate,
+                activation: data
+            })
+        })
+
+        const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
     }
 
     public add(template: string, position?: [number, number]) {
@@ -389,7 +445,7 @@ All you work will be lost!`
         }
     }
 
-    public silentRefresh(verboose = false){
+    public silentRefresh(verboose = false) {
         this.loadState(this.state)
         if (verboose)
             success("Succesfully reloaded all components", "", this.alertOptions)

@@ -119,6 +119,12 @@ render(html`
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</i>
             <span class="mdc-list-item__text">File</span>
         </a>
+        <a class="mdc-list-item" href="#" id="openCustomGates" @click=${() => {
+        menus[3].open = true
+    }}>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">edit</i>
+            <span class="mdc-list-item__text">Edit gates</span>
+        </a>
         </nav>
     </div>
     </aside>
@@ -148,9 +154,29 @@ render(html`
         <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
             ${[...Object.keys(manager.file)].sort().map(key => html`
                 <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.file[key]()}>
-                    <span class="mdc-list-item__text"> ${key} </span>
+                    <span class="mdc-list-item__text">${key}</span> 
+                    ${manager.shortcuts[key] ? html`
+                        <span class="mdc-list-item__meta">&nbsp &nbsp &nbsp ${manager.shortcuts[key]}</span>
+                    ` : ""}
                 </li>`
     )}
+        </ul>
+    </div>
+
+     <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary" id="customGateMenu">
+        <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+           ${subscribe(manager.gates.pipe(map(_ => _
+        .filter(val => manager.templateStore.store.get(val).editable)
+        .map(val => html`
+                <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.edit(val)}>
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">edit</i>
+                    <span class="mdc-list-item__text"> ${val} </span>
+                </li>`
+        ))))}
+            <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.newGate()}>
+                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
+                <span class="mdc-list-item__text"> New gate </span>
+            </li>
         </ul>
     </div>
 `, document.body)
@@ -158,11 +184,13 @@ render(html`
 const menus = [
     new MDCMenu(document.querySelector('#saveMenu')),
     new MDCMenu(document.querySelector('#gateMenu')),
-    new MDCMenu(document.querySelector('#fileMenu'))
+    new MDCMenu(document.querySelector('#fileMenu')),
+    new MDCMenu(document.querySelector('#customGateMenu'))
 ]
 menus.forEach(menu => menu.hoistMenuToBody())
 menus[0].setAnchorElement(document.querySelector(`#openSimulation`))
 menus[1].setAnchorElement(document.querySelector("#openGates"))
 menus[2].setAnchorElement(document.querySelector("#openFile"))
+menus[3].setAnchorElement(document.querySelector("#openCustomGates"))
 
 manager.update()
