@@ -125,6 +125,7 @@ render(html`
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
             <span class="mdc-list-item__text">Add component</span>
         </a>
+        
         </nav>
     </div>
     </aside>
