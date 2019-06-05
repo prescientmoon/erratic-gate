@@ -144,33 +144,7 @@ export class ComponentTemplateStore {
                 mode: "standard_image",
                 data: "xor"
             },
-            editable: true
-        })
-        this.store.set("true", {
-            inputs: 0,
-            outputs: 1,
-            name: "true",
-            version: "1.0.0",
-            activation: `
-                ctx.outputs[0].value = true
-            `.trim(),
-            material: {
-                mode: "color",
-                data: "green"
-            }
-        })
-        this.store.set("false", {
-            inputs: 0,
-            outputs: 1,
-            name: "false",
-            version: "1.0.0",
-            activation: `
-                ctx.outputs[0].value = false
-            `.trim(),
-            material: {
-                mode: "color",
-                data: "yellow"
-            }
+            editable: false
         })
         this.store.set("light", {
             inputs: 1,

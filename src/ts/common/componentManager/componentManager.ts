@@ -4,7 +4,7 @@ import { Subject, BehaviorSubject, fromEvent } from "rxjs";
 import { svg, SVGTemplateResult, html } from "lit-html";
 import { subscribe } from "lit-rx";
 import { Screen } from "../screen.ts";
-import { ManagerState } from "./interfaces";
+import { ManagerState, ComponentTemplate } from "./interfaces";
 import { Store } from "../store";
 import { KeyboardInput } from "@eix/input"
 import { success, error } from "toastr"
@@ -116,14 +116,14 @@ export class ComponentManager {
         }
 
     public shortcuts: {
-        [key:string]: string
+        [key: string]: string
     } = {
-        clear: "ctrl delete",
-        clean: "delete",
-        save:"ctrl s",
-        undo: "ctrl z",
-        refresh: "ctrl r"
-    }
+            clear: "shift delete",
+            clean: "delete",
+            save: "ctrl s",
+            undo: "ctrl z",
+            refresh: "ctrl r"
+        }
 
     constructor() {
         runCounter.increase()
@@ -213,7 +213,26 @@ export class ComponentManager {
 
     }
 
-    public newGate(){
+    private initEmptyGate(name: string) {
+        const obj: ComponentTemplate = {
+            inputs: 1,
+            name,
+            version: "1.0.0",
+            outputs: 1,
+            activation: "",
+            editable: true,
+            material: {
+                mode: "color",
+                data: "blue"
+            }
+        }
+
+        this.templateStore.store.set(name, obj)
+
+        this.edit(name)
+    }
+
+    public newGate() {
         this.preInput()
         this.inputMode = "gate"
         this.placeholder.next("Gate name")
@@ -235,13 +254,16 @@ export class ComponentManager {
         const elem = <HTMLInputElement>document.getElementById("nameInput")
         this.barAlpha.next("0")
 
-        if (this.inputMode == "create") {
+        if (this.inputMode === "create") {
             await this.createEmptySimulation(elem.value)
             success(`Succesfully created simulation ${elem.value}`, "", this.alertOptions)
         }
 
-        else if (this.inputMode == "command")
+        else if (this.inputMode === "command")
             this.eval(elem.value)
+
+        else if (this.inputMode === "gate")
+            this.initEmptyGate(elem.value)
     }
 
     private async handleDuplicateModal(name: string) {
@@ -249,7 +271,7 @@ export class ComponentManager {
             title: "Warning",
             content: html`There was already a simulation called ${name},
             are you sure you want to override it?
-            All you work will be lost!`
+            All your work will be lost!`
         })
 
         return result
@@ -263,33 +285,62 @@ export class ComponentManager {
             no: "",
             yes: "save",
             title: `Edit ${name}`,
-            content: html`
+            content: html`${html`
                 <br>
                 <div class="mdc-text-field mdc-text-field--textarea">
-                <textarea id="codeArea" class="mdc-text-field__input js" rows="8" cols="40">${
-                    gate.activation
+                    <textarea id="codeArea" class="mdc-text-field__input js" rows="8" cols="40">${
+                gate.activation
                 }</textarea>
-                <div class="mdc-notched-outline">
-                    <div class="mdc-notched-outline__leading"></div>
-                    <div class="mdc-notched-outline__notch">
-                    <label for="textarea" class="mdc-floating-label">Activation function</label>
+                    <div class="mdc-notched-outline">
+                        <div class="mdc-notched-outline__leading"></div>
+                        <div class="mdc-notched-outline__notch">
+                        <label for="textarea" class="mdc-floating-label">Activation function</label>
+                        </div>
+                        <div class="mdc-notched-outline__trailing"></div>
                     </div>
-                    <div class="mdc-notched-outline__trailing"></div>
-                </div>
-                </div>
-            `
+                </div><br><br>
+                <div class="mdc-text-field" id="inputCount">
+                    <input type="number" id="my-text-field" class="mdc-text-field__input inputCount-i" value=${gate.inputs}>
+                    <label class="mdc-floating-label" for="my-text-field">Inputs</label>
+                    <div class="mdc-line-ripple"></div>
+                </div><br><br>
+                <div class="mdc-text-field" id="outputCount">
+                    <input type="number" id="my-text-field" class="mdc-text-field__input outputCount-i" value=${gate.outputs}>
+                    <label class="mdc-floating-label" for="my-text-field">Outputs</label>
+                    <div class="mdc-line-ripple"></div>
+                </div><br><br>
+                <div class="mdc-text-field" id="color">
+                    <input type="string" id="my-text-field" class="mdc-text-field__input color-i" value=${gate.material.data}>
+                    <label class="mdc-floating-label" for="my-text-field">Outputs</label>
+                    <div class="mdc-line-ripple"></div>
+                </div><br>
+            `}`
         }).then(val => {
             this.ignoreKeyDowns = false
-            const elem = <HTMLTextAreaElement> document.querySelector("#codeArea")
-            const data = elem.value
+            const elems: (HTMLInputElement | HTMLTextAreaElement)[] = [
+                document.querySelector("#codeArea"),
+                document.querySelector(".inputCount-i"),
+                document.querySelector(".outputCount-i"),
+                document.querySelector(".color-i")
+            ]
+            const data = elems.map(val => val.value)
 
-            this.templateStore.store.set(name,{
+            this.templateStore.store.set(name, {
                 ...gate,
-                activation: data
+                activation: data[0],
+                inputs: Number(data[1]),
+                outputs: Number(data[2]),
+                material:{
+                    mode: "color",
+                    data: data[3]
+                }
             })
         })
 
-        const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
+        new MDCTextField(document.querySelector('.mdc-text-field'));
+        new MDCTextField(document.querySelector('#outputCount'));
+        new MDCTextField(document.querySelector('#inputCount'));
+        new MDCTextField(document.querySelector('#color'));
     }
 
     public add(template: string, position?: [number, number]) {

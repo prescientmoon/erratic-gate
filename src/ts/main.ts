@@ -107,23 +107,23 @@ render(html`
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>
             <span class="mdc-list-item__text">Open simulation</span>
         </a>
-        <a class="mdc-list-item" href="#" id="openGates" @click=${() => {
-        menus[1].open = true
-    }}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
-            <span class="mdc-list-item__text">Add logic gate</span>
-        </a>
         <a class="mdc-list-item" href="#" id="openFile" @click=${() => {
         menus[2].open = true
     }}>
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</i>
-            <span class="mdc-list-item__text">File</span>
+            <span class="mdc-list-item__text">Simulation</span>
         </a>
         <a class="mdc-list-item" href="#" id="openCustomGates" @click=${() => {
         menus[3].open = true
     }}>
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">edit</i>
-            <span class="mdc-list-item__text">Edit gates</span>
+            <span class="mdc-list-item__text">Custom gates</span>
+        </a>
+        <a class="mdc-list-item" href="#" id="openGates" @click=${() => {
+        menus[1].open = true
+    }}>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
+            <span class="mdc-list-item__text">Add component</span>
         </a>
         </nav>
     </div>
@@ -142,9 +142,15 @@ render(html`
 
     <div class="mdc-menu mdc-menu-surface mdc-theme--primary-bg mdc-theme--on-primary" id="gateMenu">
         <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
-            ${subscribe(manager.gates.pipe(map(_ => _.map(val => html`
+            ${subscribe(manager.gates.pipe(map(_ => [..._].sort().map(val => html`
                 <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.add(val)}>
                     <span class="mdc-list-item__text"> ${val} </span>
+                    ${(manager.templateStore.store.get(val).editable ?
+            html`&nbsp &nbsp &nbsp <span class="material-icons mdc-list-item__meta" @click=${
+                () => manager.templateStore.store.delete(val)
+                }> delete </span>` :
+            ""
+        )}
                 </li>`
     ))))}
         </ul>
@@ -175,7 +181,7 @@ render(html`
         ))))}
             <li class= "mdc-list-item" role = "menuitem" @click=${() => manager.newGate()}>
                 <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
-                <span class="mdc-list-item__text"> New gate </span>
+                <span class="mdc-list-item__text"> New custom gate </span>
             </li>
         </ul>
     </div>
