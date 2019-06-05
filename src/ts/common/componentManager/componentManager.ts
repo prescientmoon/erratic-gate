@@ -94,6 +94,10 @@ export class ComponentManager {
             refresh(ctx: ComponentManager) {
                 ctx.refresh()
             },
+            rewind(ctx:ComponentManager){
+                localStorage.clear()
+                success("Succesfully cleared localStorage!","",ctx.alertOptions)
+            },
             ctp: this.templateStore.commands.template,
             settings: this.settings.commands,
             download
