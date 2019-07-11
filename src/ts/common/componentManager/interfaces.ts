@@ -1,5 +1,5 @@
-import { ComponentState, materialMode } from "../component/interfaces";
-import { WireState } from "../wires/interface";
+import { ComponentState, materialMode } from '../component/interfaces'
+import { WireState } from '../wires/interface'
 
 export interface ManagerState {
     components: ComponentState[]
@@ -20,4 +20,6 @@ export interface ComponentTemplate {
         data: string
     }
     editable?: boolean
+    imported?: boolean
+    importCommand?: string
 }

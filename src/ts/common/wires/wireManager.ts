@@ -1,10 +1,11 @@
-import { Singleton } from "@eix/utils";
-import { Pin } from "../pin";
-import { Wire } from "./wire";
-import { svg } from "lit-html";
-import { subscribe } from "lit-rx";
-import { Subject } from "rxjs";
-import { WireStateVal } from "./interface";
+import { Singleton } from '@eix/utils'
+import { Pin } from '../pin'
+import { Wire } from './wire'
+import { svg } from 'lit-html'
+import { subscribe } from 'lit-rx'
+import { Subject, combineLatest } from 'rxjs'
+import { WireStateVal } from './interface'
+import { merge, map } from 'rxjs/operators'
 
 @Singleton
 export class WireManager {
@@ -15,20 +16,19 @@ export class WireManager {
 
     public update = new Subject<boolean>()
 
-    constructor() { }
+    constructor() {}
 
     public add(data: Pin) {
-        if (data.allowWrite) //output
+        if (data.allowWrite)
+            //output
             this.start = data
-        else
-            this.end = data
+        else this.end = data
 
         this.tryResolving()
     }
 
     public dispose() {
-        for (let i of this.wires)
-            i.dispose()
+        for (let i of this.wires) i.dispose()
 
         this.wires = []
     }
@@ -45,8 +45,7 @@ export class WireManager {
     }
 
     private canBind(end: Pin) {
-        if (this.wires.find(val => val.output === end))
-            return false
+        if (this.wires.find(val => val.output === end)) return false
         return true
     }
 
@@ -57,35 +56,60 @@ export class WireManager {
     }
 
     get svg() {
-        return svg`${this.wires.map((val) => {
+        return svg`${this.wires.map(val => {
             const i = val.input.of
             const o = val.output.of
             const inputIndex = i.outputPins.indexOf(val.input)
-            const input = i.piny(false, inputIndex)
-            const output = o.piny(true, o.inputPins.indexOf(val.output))
+            const inputY = i.piny(false, inputIndex)
+            const outputY = o.piny(true, o.inputPins.indexOf(val.output))
+
+            const output = [o.pinx(true, 20), outputY]
+            const input = [i.pinx(false, 20), inputY]
+            const midX = combineLatest(output[0], input[0]).pipe(
+                map(values => {
+                    return (values[0] + values[1]) / 2
+                })
+            )
+
+            const mid1 = [midX, outputY]
+            const mid2 = [midX, inputY]
+
+            const d = combineLatest<number[]>(
+                ...output,
+                ...mid1,
+                ...mid2,
+                ...input
+            ).pipe(
+                map(
+                    points =>
+                        `M ${points.slice(0, 2).join(' ')} C ${points
+                            .slice(2)
+                            .join(' ')}`
+                )
+            )
+
             return svg`
-            <line x2=${subscribe(i.pinx(false, 20))}
-                x1=${subscribe(o.pinx(true, 20))}
-                y2=${subscribe(input)}
-                y1=${subscribe(output)}
+            <path d=${subscribe(d)}  
                 stroke=${subscribe(val.input.svgColor)}
-                stroke-width=10
-                @click=${() => this.remove(val)}
-            >
-            </line>
-        `})}`
+                stroke-width=10 
+                fill="rgba(0,0,0,0)"
+                @click=${() => this.remove(val)} />
+        `
+        })}`
     }
 
     get state() {
-        return this.wires.map((val): WireStateVal => ({
-            from: {
-                owner: val.input.of.id,
-                index: val.input.of.outputPins.indexOf(val.input)
-            },
-            to: {
-                owner: val.output.of.id,
-                index: val.output.of.inputPins.indexOf(val.output)
-            }
-        }))
+        return this.wires.map(
+            (val): WireStateVal => ({
+                from: {
+                    owner: val.input.of.id,
+                    index: val.input.of.outputPins.indexOf(val.input)
+                },
+                to: {
+                    owner: val.output.of.id,
+                    index: val.output.of.inputPins.indexOf(val.output)
+                }
+            })
+        )
     }
 }
