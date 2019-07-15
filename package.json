@@ -40,6 +40,7 @@
     "dependencies": {
         "@eix-js/utils": "0.0.6",
         "deepmerge": "^4.0.0",
+        "line-intersect": "^2.2.1",
         "mainloop.js": "^1.0.4",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",

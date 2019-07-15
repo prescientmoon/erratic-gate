@@ -2,8 +2,15 @@ import { vector2 } from '../../simulation/classes/Transform'
 
 // Basic stuff for arrays
 
-export const add = (first: vector2, second: vector2) =>
-    first.map((value, index) => value + second[index]) as vector2
+// If i don't say vector2 as the type adnotation
+// ts will throw some errors (because this is recursive)
+export const add = (...vectors: vector2[]): vector2 => {
+    const first = vectors[0]
+    const others = vectors.slice(1)
+    const othersSum = others.length > 1 ? add(...others) : others[0]
+
+    return first.map((value, index) => value + othersSum[index]) as vector2
+}
 
 export const invert = (vector: vector2) => vector.map(val => -val) as vector2
 

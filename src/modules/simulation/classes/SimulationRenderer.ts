@@ -5,26 +5,17 @@ import { MouseEventInfo } from '../../core/components/FluidCanvas'
 import { pointInSquare } from '../helpers/pointInSquare'
 import { vector2 } from './Transform'
 import merge from 'deepmerge'
-import { smoothStep } from '../../vector2/helpers/smoothStep'
 import { renderGate } from '../helpers/renderGate'
 import { renderGateShadow } from '../helpers/renderGateShadow'
-import { Gate } from './Gate'
 import { MouseManager } from './MouseManager'
 import { Screen } from '../../core/classes/Screen'
-import {
-    add,
-    invert,
-    ofLength,
-    length,
-    multiply
-} from '../../vector2/helpers/basic'
 
 export interface SimulationRendererOptions {
     shadows: {
         enabled: boolean
         color: string
-        offset: number
-        speed: number
+        lightHeight: number
+        gateHeight: number
     }
     dnd: {
         rotation: number
@@ -35,8 +26,8 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
     shadows: {
         enabled: true,
         color: 'rgba(0,0,0,0.3)',
-        offset: 15,
-        speed: 1
+        gateHeight: 10,
+        lightHeight: 50
     },
     dnd: {
         rotation: Math.PI / 12 // 7.5 degrees
@@ -133,13 +124,22 @@ export class SimulationRenderer {
     public render(ctx: CanvasRenderingContext2D) {
         this.clear(ctx)
 
+        const center = this.screen.center
+
         // render gates
         for (const gate of this.simulation.gates) {
+            renderGate(ctx, gate)
             if (this.options.shadows.enabled) {
-                renderGateShadow(ctx, this.options.shadows.color, gate)
+                renderGateShadow(
+                    ctx,
+                    this.options.shadows.color,
+                    gate,
+                    this.options.shadows.gateHeight,
+                    [center[0], center[1], this.options.shadows.lightHeight]
+                )
             }
 
-            renderGate(ctx, gate)
+            // renderGate(ctx, gate)
         }
     }
 
@@ -152,32 +152,7 @@ export class SimulationRenderer {
         return this.simulation.gates.get(id)
     }
 
-    public getOptimalShadow(gate: Gate) {
-        const center = multiply([this.screen.x, this.screen.y] as vector2, 0.5)
-
-        const difference = add(center, invert(gate.transform.position))
-
-        return add(
-            add(difference, center),
-            ofLength(difference, this.options.shadows.offset)
-        )
-    }
-
-    public getShadowPosition(gate: Gate) {
-        return gate.transform.position.map(
-            (value, index) => value - this.getOptimalShadow(gate)[index]
-        ) as vector2
-    }
-
     public update(delta: number) {
-        for (const gate of this.simulation.gates) {
-            gate.shadow = smoothStep(
-                this.options.shadows.speed,
-                gate.shadow,
-                this.getShadowPosition(gate)
-            )
-        }
-
         const selected = this.getSelected()
 
         if (selected && this.movedSelection) {
@@ -187,6 +162,10 @@ export class SimulationRenderer {
         } else {
             this.mouseManager.update()
         }
+
+        // for (const gate of this.simulation.gates) {
+        //     gate.transform.rotation += 0.01
+        // }
     }
 
     public getSelected() {

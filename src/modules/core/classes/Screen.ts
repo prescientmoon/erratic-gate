@@ -1,6 +1,7 @@
 import { Singleton } from '@eix-js/utils'
 import { Observable, fromEvent, BehaviorSubject } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { multiply } from '../../vector2/helpers/basic'
 
 @Singleton
 export class Screen {
@@ -24,5 +25,9 @@ export class Screen {
 
     public get y() {
         return this.height.value
+    }
+
+    public get center() {
+        return multiply([this.x, this.y], 0.5)
     }
 }
