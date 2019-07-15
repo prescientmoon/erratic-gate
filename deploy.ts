@@ -1,11 +1,9 @@
 const { publish } = require('gh-pages')
 const { exec } = require('child_process')
-const { random } = require('random-emoji')
 
 // const { publish } = require("gh-pages")
 
 const args = process.argv.splice(2)
-const randomEmoji = () => random({ count: 1 })[0].character
 
 const mFlag = (args.indexOf('--message') + 1 || args.indexOf('-m') + 1) - 1
 const message = `${mFlag >= 0 ? args[mFlag + 1] : 'automated update'}`
@@ -23,7 +21,6 @@ const run = (command: string): Promise<string> => {
         })
     })
 }
-
 ;(async () => {
     try {
         if (!args.includes('--skipBuild') && !args.includes('-sb'))

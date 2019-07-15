@@ -1,32 +1,13 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "types/*"
-            ]
-        },
-        "module": "esnext",
-        "target": "esnext",
-        "removeComments": true,
-        "sourceMap": true,
-        "lib": [
-            "es2015",
-            "es2017",
-            "dom"
-        ],
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "jsx": "preserve",
         "noImplicitAny": true,
-        "alwaysStrict": true,
-        "moduleResolution": "Node",
         "experimentalDecorators": true,
-        "esModuleInterop": true
+        "target": "esnext",
+        "strictNullChecks": true
     },
-    "include": [
-        "src/**/*.ts",
-        "deploy.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+    "exclude": ["node_modules"],
+    "include": ["src"]
 }
