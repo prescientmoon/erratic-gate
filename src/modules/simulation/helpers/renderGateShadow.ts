@@ -4,13 +4,13 @@ import { drawPolygon } from './drawPolygon'
 import { vector3, vector2, vector4, vector8 } from '../classes/Transform'
 import { checkIntersection } from 'line-intersect'
 import { reverseArray } from './reverseArray'
-import { length, add, invert } from '../../vector2/helpers/basic'
+import { minVector, maxVector } from '../../vector2/helpers/minmaxVector'
+import { relativeTo } from '../../vector2/helpers/basic'
 
 export const pointRecivesLight = (
     points: vector2[], //this needs to have an even length
     light: vector3,
-    index: number,
-    ctx: CanvasRenderingContext2D
+    index: number
 ) => {
     const point = points[index]
     const oposittePoint = points[(index + points.length / 2) % points.length]
@@ -48,63 +48,65 @@ export const renderGateShadow = (
 
     const points = gate.transform.getPoints()
     const exposedPoints = points.filter((point, index) =>
-        pointRecivesLight(points, light, index, ctx)
+        pointRecivesLight(points, light, index)
     )
 
     let includedPoints = [...points]
 
+    if (exposedPoints.length === 4) {
+        return
+    }
+
     if (exposedPoints.length === 3) {
-        let min = Infinity
-        let current: null | vector2 = null
-
-        for (const point of exposedPoints) {
-            const size = length(
-                add(point, invert(light.slice(0, 2) as vector2))
+        const minimum = minVector(
+            ...exposedPoints.map(point =>
+                relativeTo(point, light.slice(0, 2) as vector2)
             )
+        )
 
-            if (size < min) {
-                min = size
-                current = point
-            }
-        }
+        includedPoints.splice(includedPoints.indexOf(exposedPoints[minimum]), 1)
+    }
 
-        if (current) {
-            includedPoints.splice(includedPoints.indexOf(current), 1)
-        }
+    if (includedPoints.length === 3) {
+        const maximum = maxVector(
+            ...includedPoints.map(point =>
+                relativeTo(point, light.slice(0, 2) as vector2)
+            )
+        )
 
-        if (
-            includedPoints[0][1] < light[1] &&
-            includedPoints[1][1] < light[1] &&
-            !(includedPoints[2][1] > light[1])
-        ) {
+        const otherIndices = [(maximum + 1) % 3, (maximum + 2) % 3]
+        const newIndices = [otherIndices[0], maximum, otherIndices[1]]
+
+        includedPoints = newIndices.map(index => includedPoints[index])
+    }
+
+    let projections = includedPoints.map(point =>
+        // ts doesnt let me do [...point, gateHeight]
+        projectPointOnPlane([point[0], point[1], gateHeight], light)
+    )
+
+    if (exposedPoints.length === 2) {
+        const toProject = includedPoints.filter(
+            point => exposedPoints.indexOf(point) === -1
+        )
+
+        projections = toProject.map(point =>
+            projectPointOnPlane([point[0], point[1], gateHeight], light)
+        )
+
+        includedPoints = reverseArray(exposedPoints)
+
+        const firstIncludedIndex = points.indexOf(toProject[0])
+        const firstExposedPointIndex = points.indexOf(includedPoints[0])
+
+        if ((firstIncludedIndex + 2) % 4 === firstExposedPointIndex % 4) {
             const temporary = includedPoints[0]
             includedPoints[0] = includedPoints[1]
             includedPoints[1] = temporary
         }
     }
 
-    if (exposedPoints.length === 2) {
-        includedPoints = points.filter(
-            point => exposedPoints.indexOf(point) === -1
-        )
-    }
-
-    const projections = includedPoints.map(point =>
-        // ts doesnt let me do [...point, gateHeight]
-        projectPointOnPlane([point[0], point[1], gateHeight], light)
-    )
-
     const polygon = [includedPoints, reverseArray(projections)].flat()
 
     drawPolygon(ctx, polygon)
-
-    ctx.fillStyle = 'red'
-    for (const point of [...includedPoints, ...projections, light]) {
-        ctx.beginPath()
-        ctx.ellipse(point[0], point[1], 10, 10, 0, 0, Math.PI * 2)
-        ctx.fill()
-    }
-
-    ctx.strokeStyle = 'yellow'
-    drawPolygon(ctx, points, false, true)
 }

@@ -128,7 +128,6 @@ export class SimulationRenderer {
 
         // render gates
         for (const gate of this.simulation.gates) {
-            renderGate(ctx, gate)
             if (this.options.shadows.enabled) {
                 renderGateShadow(
                     ctx,
@@ -139,7 +138,7 @@ export class SimulationRenderer {
                 )
             }
 
-            // renderGate(ctx, gate)
+            renderGate(ctx, gate)
         }
     }
 
@@ -162,10 +161,6 @@ export class SimulationRenderer {
         } else {
             this.mouseManager.update()
         }
-
-        // for (const gate of this.simulation.gates) {
-        //     gate.transform.rotation += 0.01
-        // }
     }
 
     public getSelected() {
