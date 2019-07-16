@@ -1,4 +1,4 @@
-import { Transform, vector2 } from './Transform'
+import { Transform, vector2 } from '../../simulation/classes/Transform'
 import { Screen } from '../../core/classes/Screen'
 import { relativeTo } from '../../vector2/helpers/basic'
 

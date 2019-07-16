@@ -1,4 +1,4 @@
-import { vector3, vector2 } from '../classes/Transform'
+import { vector3, vector2 } from '../../simulation/classes/Transform'
 
 export const projectPointOnPlane = (point: vector3, light: vector3) =>
     point.slice(0, 2).map((position, index) => {

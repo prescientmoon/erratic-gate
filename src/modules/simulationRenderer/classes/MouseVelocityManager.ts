@@ -1,9 +1,9 @@
 import { Singleton } from '@eix-js/utils'
 import { MouseSubject } from '../../core/types/MouseSubject'
-import { clamp } from '../helpers/clamp'
+import { clamp } from '../../simulation/helpers/clamp'
 
 @Singleton
-export class MouseManager {
+export class MouseVelocityManager {
     private history: number[] = []
     private total = 0
     private limit = 10

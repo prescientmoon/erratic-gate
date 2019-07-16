@@ -2,8 +2,10 @@ import React, { Component, createRef, Ref, RefObject } from 'react'
 import FluidCanvas, { MouseEventInfo } from './FluidCanvas'
 import loop from 'mainloop.js'
 import { Gate } from '../../simulation/classes/Gate'
-import { SimulationRenderer } from '../../simulation/classes/SimulationRenderer'
+import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { Subject } from 'rxjs'
+import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
+import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
 
 class Canvas extends Component {
     private canvasRef: RefObject<HTMLCanvasElement> = createRef()
@@ -25,9 +27,10 @@ class Canvas extends Component {
         this.renderer.simulation.push(foo, bar)
 
         loop.setDraw(() => {
-            if (this.renderingContext)
-                this.renderer.render(this.renderingContext)
-        }).setUpdate(delta => this.renderer.update(delta))
+            if (this.renderingContext) {
+                renderSimulation(this.renderingContext, this.renderer)
+            }
+        }).setUpdate(delta => updateSimulation(this.renderer, delta))
     }
 
     public componentDidMount() {

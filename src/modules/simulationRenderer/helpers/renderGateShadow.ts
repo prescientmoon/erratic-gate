@@ -1,7 +1,7 @@
-import { Gate } from '../classes/Gate'
+import { Gate } from '../../simulation/classes/Gate'
 import { projectPointOnPlane } from './projectPoint'
 import { drawPolygon } from './drawPolygon'
-import { vector3 } from '../classes/Transform'
+import { vector3 } from '../../simulation/classes/Transform'
 
 export const renderGateShadow = (
     ctx: CanvasRenderingContext2D,

@@ -1,4 +1,4 @@
-import { Transform } from '../classes/Transform'
+import { Transform } from '../../simulation/classes/Transform'
 
 export const drawRotatedSquare = (
     ctx: CanvasRenderingContext2D,

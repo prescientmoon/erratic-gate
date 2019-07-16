@@ -1,5 +1,4 @@
-import { vector2, Transform } from '../classes/Transform'
-import { LruCacheNode } from '@eix-js/utils'
+import { vector2, Transform } from '../../simulation/classes/Transform'
 
 export const pointInSquare = (point: vector2, square: Transform) => {
     return (

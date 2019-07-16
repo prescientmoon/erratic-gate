@@ -1,63 +1,39 @@
 import { Camera } from './Camera'
-import { Simulation } from './Simulation'
+import { Simulation } from '../../simulation/classes/Simulation'
 import { Subject } from 'rxjs'
 import { MouseEventInfo } from '../../core/components/FluidCanvas'
 import { pointInSquare } from '../helpers/pointInSquare'
-import { vector2 } from './Transform'
-import merge from 'deepmerge'
-import { renderGate } from '../helpers/renderGate'
-import { renderGateShadow } from '../helpers/renderGateShadow'
-import { MouseManager } from './MouseManager'
+import { vector2 } from '../../simulation/classes/Transform'
+import { MouseVelocityManager } from './MouseVelocityManager'
 import { Screen } from '../../core/classes/Screen'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
-
-export interface SimulationRendererOptions {
-    shadows: {
-        enabled: boolean
-        color: string
-        lightHeight: number
-        gateHeight: number
-    }
-    dnd: {
-        rotation: number
-    }
-}
-
-export const defaultSimulationRendererOptions: SimulationRendererOptions = {
-    shadows: {
-        enabled: true,
-        color: 'rgba(0,0,0,0.3)',
-        gateHeight: 10,
-        lightHeight: 100
-    },
-    dnd: {
-        rotation: Math.PI / 12 // 7.5 degrees
-    }
-}
+import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
+import { defaultSimulationRendererOptions } from '../constants'
+import merge from 'deepmerge'
 
 export class SimulationRenderer {
-    public camera = new Camera()
     public mouseDownOutput = new Subject<MouseEventInfo>()
     public mouseUpOutput = new Subject<MouseEventInfo>()
     public mouseMoveOutput = new Subject<MouseEventInfo>()
-
-    public selectedGate: number | null = null
-    public lastMousePosition: vector2 = [0, 0]
-    public movedSelection = false
 
     // first bit = dragging
     // second bit = moving around
     private mouseState = 0b00
 
-    private options: SimulationRendererOptions
-    private mouseManager = new MouseManager(this.mouseMoveOutput)
-    private screen = new Screen()
+    private selectedGate: number | null = null
+    private gateSelectionOffset: vector2 = [0, 0]
+
+    public movedSelection = false
+    public options: SimulationRendererOptions
+    public mouseManager = new MouseVelocityManager(this.mouseMoveOutput)
+    public screen = new Screen()
+    public camera = new Camera()
 
     public constructor(
         options: Partial<SimulationRendererOptions> = {},
         public simulation = new Simulation()
     ) {
-        this.options = merge(options, defaultSimulationRendererOptions)
+        this.options = merge(defaultSimulationRendererOptions, options)
 
         this.init()
     }
@@ -80,7 +56,7 @@ export class SimulationRenderer {
                     this.movedSelection = false
 
                     this.selectedGate = id
-                    this.lastMousePosition = worldPosition.map(
+                    this.gateSelectionOffset = worldPosition.map(
                         (position, index) =>
                             position - transform.position[index]
                     ) as vector2
@@ -95,7 +71,7 @@ export class SimulationRenderer {
                 }
             }
 
-            this.lastMousePosition = worldPosition
+            this.gateSelectionOffset = worldPosition
             this.mouseState |= 2
         })
 
@@ -124,8 +100,8 @@ export class SimulationRenderer {
 
                 const transform = gate.data.transform
 
-                transform.x = worldPosition[0] - this.lastMousePosition[0]
-                transform.y = worldPosition[1] - this.lastMousePosition[1]
+                transform.x = worldPosition[0] - this.gateSelectionOffset[0]
+                transform.y = worldPosition[1] - this.gateSelectionOffset[1]
 
                 if (!this.movedSelection) {
                     this.movedSelection = true
@@ -134,7 +110,7 @@ export class SimulationRenderer {
 
             if ((this.mouseState >> 1) & 1) {
                 const offset = invert(
-                    relativeTo(this.lastMousePosition, worldPosition)
+                    relativeTo(this.gateSelectionOffset, worldPosition)
                 )
 
                 this.camera.transform.position = add(
@@ -142,62 +118,15 @@ export class SimulationRenderer {
                     invert(offset)
                 )
 
-                this.lastMousePosition = this.camera.toWordPostition(
+                this.gateSelectionOffset = this.camera.toWordPostition(
                     event.position
                 )
             }
         })
     }
 
-    public render(ctx: CanvasRenderingContext2D) {
-        this.clear(ctx)
-
-        ctx.translate(...this.camera.transform.position)
-
-        const center = relativeTo(
-            this.camera.transform.position,
-            this.screen.center
-        )
-
-        // render gates
-        for (const gate of this.simulation.gates) {
-            if (this.options.shadows.enabled) {
-                renderGateShadow(
-                    ctx,
-                    this.options.shadows.color,
-                    gate,
-                    this.options.shadows.gateHeight,
-                    [center[0], center[1], this.options.shadows.lightHeight]
-                )
-            }
-
-            renderGate(ctx, gate)
-        }
-
-        ctx.translate(...invert(this.camera.transform.position))
-    }
-
-    public clear(ctx: CanvasRenderingContext2D) {
-        ctx.clearRect(0, 0, ...this.camera.transform.scale)
-    }
-
     public getGateById(id: number) {
         return this.simulation.gates.get(id)
-    }
-
-    public update(delta: number) {
-        const selected = this.getSelected()
-
-        if (selected && this.movedSelection) {
-            this.mouseManager.update()
-            selected.transform.rotation =
-                this.mouseManager.getDirection() * this.options.dnd.rotation
-        } else {
-            if (selected) {
-                selected.transform.rotation = 0
-            }
-            this.mouseManager.update()
-        }
     }
 
     public getSelected() {
