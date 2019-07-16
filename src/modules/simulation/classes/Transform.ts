@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs'
 import { allCombinations } from '../helpers/allCombinations'
 import { rotateAroundVector } from '../../vector2/helpers/rotate'
 
@@ -97,5 +96,13 @@ export class Transform {
 
     set y(value: number) {
         this.position = [this.x, value]
+    }
+
+    set width(value: number) {
+        this.scale = [value, this.height]
+    }
+
+    set height(value: number) {
+        this.scale = [this.width, value]
     }
 }

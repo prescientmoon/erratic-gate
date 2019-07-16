@@ -9,6 +9,7 @@ import { renderGate } from '../helpers/renderGate'
 import { renderGateShadow } from '../helpers/renderGateShadow'
 import { MouseManager } from './MouseManager'
 import { Screen } from '../../core/classes/Screen'
+import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 
 export interface SimulationRendererOptions {
     shadows: {
@@ -27,7 +28,7 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
         enabled: true,
         color: 'rgba(0,0,0,0.3)',
         gateHeight: 10,
-        lightHeight: 50
+        lightHeight: 100
     },
     dnd: {
         rotation: Math.PI / 12 // 7.5 degrees
@@ -41,8 +42,12 @@ export class SimulationRenderer {
     public mouseMoveOutput = new Subject<MouseEventInfo>()
 
     public selectedGate: number | null = null
-    public selectOffset: vector2 = [0, 0]
+    public lastMousePosition: vector2 = [0, 0]
     public movedSelection = false
+
+    // first bit = dragging
+    // second bit = moving around
+    private mouseState = 0b00
 
     private options: SimulationRendererOptions
     private mouseManager = new MouseManager(this.mouseMoveOutput)
@@ -71,10 +76,11 @@ export class SimulationRenderer {
                 if (pointInSquare(worldPosition, transform)) {
                     this.mouseManager.clear(worldPosition[0])
 
+                    this.mouseState |= 1
                     this.movedSelection = false
 
                     this.selectedGate = id
-                    this.selectOffset = worldPosition.map(
+                    this.lastMousePosition = worldPosition.map(
                         (position, index) =>
                             position - transform.position[index]
                     ) as vector2
@@ -84,8 +90,13 @@ export class SimulationRenderer {
                     if (gateNode) {
                         return this.simulation.gates.moveOnTop(gateNode)
                     }
+
+                    return
                 }
             }
+
+            this.lastMousePosition = worldPosition
+            this.mouseState |= 2
         })
 
         this.mouseUpOutput.subscribe(event => {
@@ -97,26 +108,43 @@ export class SimulationRenderer {
                 }
 
                 this.selectedGate = null
+                this.mouseState &= 0
             }
+
+            this.mouseState &= 0b00
         })
 
         this.mouseMoveOutput.subscribe(event => {
-            if (this.selectedGate !== null) {
+            const worldPosition = this.camera.toWordPostition(event.position)
+
+            if (this.mouseState & 1 && this.selectedGate !== null) {
                 const gate = this.getGateById(this.selectedGate)
 
                 if (!gate || !gate.data) return
 
                 const transform = gate.data.transform
-                const worldPosition = this.camera.toWordPostition(
-                    event.position
-                )
 
-                transform.x = worldPosition[0] - this.selectOffset[0]
-                transform.y = worldPosition[1] - this.selectOffset[1]
+                transform.x = worldPosition[0] - this.lastMousePosition[0]
+                transform.y = worldPosition[1] - this.lastMousePosition[1]
 
                 if (!this.movedSelection) {
                     this.movedSelection = true
                 }
+            }
+
+            if ((this.mouseState >> 1) & 1) {
+                const offset = invert(
+                    relativeTo(this.lastMousePosition, worldPosition)
+                )
+
+                this.camera.transform.position = add(
+                    this.camera.transform.position,
+                    invert(offset)
+                )
+
+                this.lastMousePosition = this.camera.toWordPostition(
+                    event.position
+                )
             }
         })
     }
@@ -124,7 +152,12 @@ export class SimulationRenderer {
     public render(ctx: CanvasRenderingContext2D) {
         this.clear(ctx)
 
-        const center = this.screen.center
+        ctx.translate(...this.camera.transform.position)
+
+        const center = relativeTo(
+            this.camera.transform.position,
+            this.screen.center
+        )
 
         // render gates
         for (const gate of this.simulation.gates) {
@@ -140,11 +173,12 @@ export class SimulationRenderer {
 
             renderGate(ctx, gate)
         }
+
+        ctx.translate(...invert(this.camera.transform.position))
     }
 
     public clear(ctx: CanvasRenderingContext2D) {
-        const boundingBox = this.camera.transform.getBoundingBox()
-        ctx.clearRect(...boundingBox)
+        ctx.clearRect(0, 0, ...this.camera.transform.scale)
     }
 
     public getGateById(id: number) {
@@ -159,6 +193,9 @@ export class SimulationRenderer {
             selected.transform.rotation =
                 this.mouseManager.getDirection() * this.options.dnd.rotation
         } else {
+            if (selected) {
+                selected.transform.rotation = 0
+            }
             this.mouseManager.update()
         }
     }

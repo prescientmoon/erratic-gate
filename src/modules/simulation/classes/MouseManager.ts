@@ -46,7 +46,10 @@ export class MouseManager {
     }
 
     public getDirection() {
-        return clamp(-1, 1, this.total / this.history.length)
+        if (this.history.length) {
+            return clamp(-1, 1, this.total / this.history.length)
+        }
+        return 0
     }
 
     public update(maybeAgain = true) {

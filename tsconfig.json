@@ -1,7 +1,5 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
-        "paths": { "*": ["types/*"] },
         "moduleResolution": "node",
         "esModuleInterop": true,
         "jsx": "preserve",
