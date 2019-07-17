@@ -1,6 +1,9 @@
 import { GateTemplate } from './types/GateTemplate'
 
 export const DefaultGateTemplate: GateTemplate = {
+    metadata: {
+        name: 'Default template'
+    },
     material: {
         type: 'color',
         value: 'blue'

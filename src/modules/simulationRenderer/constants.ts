@@ -9,5 +9,8 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
         pinRadius: 10,
         pinStrokeColor: '#888888',
         pinStrokeWidth: 3
+    },
+    wires: {
+        temporaryWireColor: `rgba(128,128,128,0.5)`
     }
 }

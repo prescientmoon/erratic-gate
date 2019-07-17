@@ -8,4 +8,7 @@ export interface SimulationRendererOptions {
         pinStrokeColor: string
         pinStrokeWidth: number
     }
+    wires: {
+        temporaryWireColor: string
+    }
 }

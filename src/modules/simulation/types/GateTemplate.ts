@@ -20,4 +20,7 @@ export interface GateTemplate {
         inputs: PinCount
         outputs: PinCount
     }
+    metadata: {
+        name: string
+    }
 }

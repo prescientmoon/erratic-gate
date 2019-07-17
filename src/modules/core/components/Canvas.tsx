@@ -1,9 +1,8 @@
 import React, { Component, createRef, Ref, RefObject } from 'react'
-import FluidCanvas, { MouseEventInfo } from './FluidCanvas'
+import FluidCanvas from './FluidCanvas'
 import loop from 'mainloop.js'
 import { Gate } from '../../simulation/classes/Gate'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
-import { Subject } from 'rxjs'
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
 import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
 

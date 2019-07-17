@@ -17,7 +17,7 @@ export const renderClickedPins = (
     if (pin) {
         const position = getPinPosition(renderer, pin.transform, pin.wrapper)
 
-        ctx.strokeStyle = 'yellow'
+        ctx.strokeStyle = renderer.options.wires.temporaryWireColor
         ctx.lineWidth = renderer.options.gates.pinRadius * 2
         ctx.lineCap = 'round'
 

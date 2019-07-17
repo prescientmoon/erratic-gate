@@ -13,6 +13,7 @@ import merge from 'deepmerge'
 import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
+import { getRendererState } from '../../saving/helpers/getState'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -91,22 +92,23 @@ export class SimulationRenderer {
                             this.options.gates.pinRadius
                         )
                     ) {
-                        if (
-                            (pin.value.type & 0b10) >> 1 &&
-                            this.selectedPins.start === null
-                        ) {
+                        if ((pin.value.type & 0b10) >> 1) {
                             this.selectedPins.start = {
                                 wrapper: pin,
                                 transform
                             }
-                        } else if (
-                            pin.value.type & 1 &&
-                            this.selectedPins.end === null
-                        ) {
+                        } else if (pin.value.type & 1) {
                             this.selectedPins.end = {
                                 wrapper: pin,
                                 transform
                             }
+                        }
+
+                        if (this.selectedPins.start && this.selectedPins.end) {
+                            console.log('Connecting!')
+                            console.log(getRendererState(this))
+                            this.selectedPins.start = null
+                            this.selectedPins.end = null
                         }
                     }
                 }
