@@ -2,7 +2,7 @@ import React, { RefObject, forwardRef, MouseEvent } from 'react'
 import { useObservable } from 'rxjs-hooks'
 import { Screen } from '../classes/Screen'
 import { Subject } from 'rxjs'
-import { vector2 } from '../../simulation/classes/Transform'
+import { vector2 } from '../../../common/math/types/vector2'
 
 const screen = new Screen()
 

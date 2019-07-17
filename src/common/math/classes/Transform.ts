@@ -1,19 +1,5 @@
-import { allCombinations } from '../helpers/allCombinations'
-import { rotateAroundVector } from '../../vector2/helpers/rotate'
-
-export type vector2 = [number, number]
-export type vector3 = [number, number, number]
-export type vector4 = [number, number, number, number]
-export type vector8 = [
-    number,
-    number,
-    number,
-    number,
-    number,
-    number,
-    number,
-    number
-]
+import { allCombinations } from '../../../modules/simulation/helpers/allCombinations'
+import { rotateAroundVector } from '../../../modules/vector2/helpers/rotate'
 
 export class Transform {
     public constructor(
@@ -106,3 +92,17 @@ export class Transform {
         this.scale = [this.width, value]
     }
 }
+
+export type vector2 = [number, number]
+export type vector3 = [number, number, number]
+export type vector4 = [number, number, number, number]
+export type vector8 = [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+]

@@ -15,14 +15,22 @@ class Canvas extends Component {
     public constructor(props: {}) {
         super(props)
 
-        const foo = new Gate('blue')
-        const bar = new Gate('green')
+        const foo = new Gate({
+            material: {
+                value: 'blue'
+            }
+        })
+        const bar = new Gate({
+            material: {
+                value: 'green'
+            }
+        })
 
         foo.transform.position = [100, 100]
-        foo.transform.scale = [70, 70]
+        foo.transform.scale = [100, 100]
 
-        bar.transform.position = [200, 200]
-        bar.transform.scale = [70, 70]
+        bar.transform.position = [400, 200]
+        bar.transform.scale = [100, 100]
 
         this.renderer.simulation.push(foo, bar)
 

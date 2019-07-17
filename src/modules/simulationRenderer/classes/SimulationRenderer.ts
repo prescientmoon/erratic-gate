@@ -2,14 +2,17 @@ import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Subject } from 'rxjs'
 import { MouseEventInfo } from '../../core/components/FluidCanvas'
-import { pointInSquare } from '../helpers/pointInSquare'
-import { vector2 } from '../../simulation/classes/Transform'
+import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
+import { vector2 } from '../../../common/math/types/vector2'
 import { MouseVelocityManager } from './MouseVelocityManager'
 import { Screen } from '../../core/classes/Screen'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
 import { defaultSimulationRendererOptions } from '../constants'
 import merge from 'deepmerge'
+import { getPinPosition } from '../helpers/pinPosition'
+import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
+import { SelectedPins } from '../types/SelectedPins'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -23,11 +26,17 @@ export class SimulationRenderer {
     private selectedGate: number | null = null
     private gateSelectionOffset: vector2 = [0, 0]
 
+    public lastMousePosition: vector2 = [0, 0]
     public movedSelection = false
     public options: SimulationRendererOptions
     public mouseManager = new MouseVelocityManager(this.mouseMoveOutput)
     public screen = new Screen()
     public camera = new Camera()
+
+    public selectedPins: SelectedPins = {
+        start: null,
+        end: null
+    }
 
     public constructor(
         options: Partial<SimulationRendererOptions> = {},
@@ -43,11 +52,13 @@ export class SimulationRenderer {
             const worldPosition = this.camera.toWordPostition(event.position)
             const gates = Array.from(this.simulation.gates)
 
+            this.lastMousePosition = worldPosition
+
             // We need to iterate from the last to the first
             // because if we have 2 overlapping gates,
             // we want to select the one on top
             for (let index = gates.length - 1; index >= 0; index--) {
-                const { transform, id } = gates[index]
+                const { transform, id, pins } = gates[index]
 
                 if (pointInSquare(worldPosition, transform)) {
                     this.mouseManager.clear(worldPosition[0])
@@ -69,9 +80,38 @@ export class SimulationRenderer {
 
                     return
                 }
+
+                for (const pin of pins) {
+                    const position = getPinPosition(this, transform, pin)
+
+                    if (
+                        pointInCircle(
+                            worldPosition,
+                            position,
+                            this.options.gates.pinRadius
+                        )
+                    ) {
+                        if (
+                            (pin.value.type & 0b10) >> 1 &&
+                            this.selectedPins.start === null
+                        ) {
+                            this.selectedPins.start = {
+                                wrapper: pin,
+                                transform
+                            }
+                        } else if (
+                            pin.value.type & 1 &&
+                            this.selectedPins.end === null
+                        ) {
+                            this.selectedPins.end = {
+                                wrapper: pin,
+                                transform
+                            }
+                        }
+                    }
+                }
             }
 
-            this.gateSelectionOffset = worldPosition
             this.mouseState |= 2
         })
 
@@ -110,18 +150,16 @@ export class SimulationRenderer {
 
             if ((this.mouseState >> 1) & 1) {
                 const offset = invert(
-                    relativeTo(this.gateSelectionOffset, worldPosition)
+                    relativeTo(this.lastMousePosition, worldPosition)
                 )
 
                 this.camera.transform.position = add(
                     this.camera.transform.position,
                     invert(offset)
                 )
-
-                this.gateSelectionOffset = this.camera.toWordPostition(
-                    event.position
-                )
             }
+
+            this.lastMousePosition = this.camera.toWordPostition(event.position)
         })
     }
 

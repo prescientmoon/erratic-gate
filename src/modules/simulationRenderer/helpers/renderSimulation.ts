@@ -1,8 +1,8 @@
 import { SimulationRenderer } from '../classes/SimulationRenderer'
-import { relativeTo, invert } from '../../vector2/helpers/basic'
-import { renderGateShadow } from './renderGateShadow'
+import { invert } from '../../vector2/helpers/basic'
 import { renderGate } from './renderGate'
-import { clearCanvas } from './clearCanvas'
+import { clearCanvas } from '../../../common/canvas/helpers/clearCanvas'
+import { renderClickedPins } from './renderClickedPins'
 
 export const renderSimulation = (
     ctx: CanvasRenderingContext2D,
@@ -12,25 +12,12 @@ export const renderSimulation = (
 
     ctx.translate(...renderer.camera.transform.position)
 
-    const center = relativeTo(
-        renderer.camera.transform.position,
-        renderer.screen.center
-    )
-
     // render gates
     for (const gate of renderer.simulation.gates) {
-        if (renderer.options.shadows.enabled) {
-            renderGateShadow(
-                ctx,
-                renderer.options.shadows.color,
-                gate,
-                renderer.options.shadows.gateHeight,
-                [center[0], center[1], renderer.options.shadows.lightHeight]
-            )
-        }
-
-        renderGate(ctx, gate)
+        renderGate(ctx, renderer, gate)
     }
+
+    renderClickedPins(ctx, renderer)
 
     ctx.translate(...invert(renderer.camera.transform.position))
 }

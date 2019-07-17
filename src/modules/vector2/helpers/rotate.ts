@@ -1,4 +1,4 @@
-import { vector2 } from '../../simulation/classes/Transform'
+import { vector2 } from '../../../common/math/types/vector2'
 import { add, invert } from './basic'
 
 const { cos, sin } = Math

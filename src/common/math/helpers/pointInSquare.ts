@@ -1,4 +1,5 @@
-import { vector2, Transform } from '../../simulation/classes/Transform'
+import { Transform } from '../classes/Transform'
+import { vector2 } from '../types/vector2'
 
 export const pointInSquare = (point: vector2, square: Transform) => {
     return (

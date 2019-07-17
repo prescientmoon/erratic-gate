@@ -1,12 +1,20 @@
 import { SubscriptionData } from '../types/SubscriptionData'
 import { BehaviorSubject } from 'rxjs'
 
+/* Types:
+
+First bit = input
+Second bit = output
+
+*/
 export class Pin {
     public state = new BehaviorSubject(false)
     public connectedTo = new Set<Pin>()
 
     private pairs = new Set<Pin>()
     private subscriptions: SubscriptionData<Pin>[] = []
+
+    public constructor(public type = 0b01) {}
 
     public addPair(pin: Pin) {
         this.pairs.add(pin)

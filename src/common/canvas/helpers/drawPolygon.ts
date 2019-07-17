@@ -1,4 +1,4 @@
-import { vector2 } from '../../simulation/classes/Transform'
+import { vector2 } from '../../math/types/vector2'
 
 export const drawPolygon = (
     ctx: CanvasRenderingContext2D,

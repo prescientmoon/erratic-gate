@@ -1,4 +1,4 @@
-import { vector2 } from '../../simulation/classes/Transform'
+import { vector2 } from '../../../common/math/types/vector2'
 
 // TODO: rename
 export const smoothStep = (step: number, current: vector2, target: vector2) => {
