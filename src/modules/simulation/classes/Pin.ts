@@ -1,5 +1,6 @@
 import { SubscriptionData } from '../types/SubscriptionData'
 import { BehaviorSubject } from 'rxjs'
+import { Gate } from './Gate'
 
 /* Types:
 
@@ -9,24 +10,25 @@ Second bit = output
 */
 export class Pin {
     public state = new BehaviorSubject(false)
-    public connectedTo = new Set<Pin>()
+    public pairs = new Set<Pin>()
 
-    private pairs = new Set<Pin>()
     private subscriptions: SubscriptionData<Pin>[] = []
 
-    public constructor(public type = 0b01) {}
+    public constructor(public type = 0b01, public gate: Gate) {}
 
-    public addPair(pin: Pin) {
+    public addPair(pin: Pin, subscribe = false) {
         this.pairs.add(pin)
 
-        const rawSubscription = pin.state.subscribe(state => {
-            this.state.next(state)
-        })
+        if (subscribe) {
+            const rawSubscription = pin.state.subscribe(state => {
+                this.state.next(state)
+            })
 
-        this.subscriptions.push({
-            data: pin,
-            subscription: rawSubscription
-        })
+            this.subscriptions.push({
+                data: pin,
+                subscription: rawSubscription
+            })
+        }
     }
 
     public removePair(pin: Pin) {

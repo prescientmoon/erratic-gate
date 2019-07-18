@@ -14,6 +14,7 @@ import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
 import { getRendererState } from '../../saving/helpers/getState'
+import { Wire } from '../../simulation/classes/Wire'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -104,11 +105,21 @@ export class SimulationRenderer {
                             }
                         }
 
-                        if (this.selectedPins.start && this.selectedPins.end) {
-                            console.log('Connecting!')
-                            console.log(getRendererState(this))
+                        if (
+                            this.selectedPins.start &&
+                            this.selectedPins.end &&
+                            this.selectedPins.end.wrapper.value.pairs.size === 0
+                        ) {
+                            this.simulation.wires.push(
+                                new Wire(
+                                    this.selectedPins.start.wrapper,
+                                    this.selectedPins.end.wrapper
+                                )
+                            )
                             this.selectedPins.start = null
                             this.selectedPins.end = null
+
+                            console.log(getRendererState(this))
                         }
                     }
                 }

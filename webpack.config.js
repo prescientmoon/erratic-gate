@@ -17,18 +17,27 @@ const babelRule = {
     use: 'babel-loader'
 }
 
+const cssAndSass = [
+    isProduction
+        ? MiniCssExtractPlugin.loader
+        : {
+              loader: 'style-loader',
+              options: {
+                  singleton: true
+              }
+          },
+    'css-loader'
+]
+
+const cssRule = {
+    test: /\.css$/,
+    use: cssAndSass
+}
+
 const sassRule = {
     test: /\.scss$/,
     use: [
-        isProduction
-            ? MiniCssExtractPlugin.loader
-            : {
-                  loader: 'style-loader',
-                  options: {
-                      singleton: true
-                  }
-              },
-        { loader: 'css-loader' },
+        ...cssAndSass,
         {
             loader: 'sass-loader',
             options: {
@@ -47,7 +56,7 @@ const baseConfig = {
         publicPath: '/'
     },
     module: {
-        rules: [babelRule, sassRule]
+        rules: [babelRule, sassRule, cssRule]
     },
     resolve: {
         extensions: ['.js', '.ts', '.tsx', '.scss']

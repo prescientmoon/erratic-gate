@@ -1,5 +1,7 @@
 import { vector2 } from '../../../common/math/classes/Transform'
 
+export type simulationMode = 'ic' | 'project'
+
 export interface TransformState {
     position: vector2
     scale: vector2
@@ -16,8 +18,22 @@ export interface CameraState {
     transform: TransformState
 }
 
+export interface WireLimit {
+    id: number
+    index: number
+}
+
+export interface WireState {
+    from: WireLimit
+    to: WireLimit
+    id: number
+}
+
 export interface SimulationState {
     gates: GateState[]
+    wires: WireState[]
+
+    mode: simulationMode
 }
 
 export interface RendererState {

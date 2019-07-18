@@ -1,15 +1,18 @@
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
-import { Gate } from '../../simulation/classes/Gate'
+import { Gate, PinWrapper } from '../../simulation/classes/Gate'
 import {
     GateState,
     TransformState,
     RendererState,
     CameraState,
-    SimulationState
+    SimulationState,
+    WireState,
+    WireLimit
 } from '../types/SimulationSave'
 import { Transform } from '../../../common/math/classes/Transform'
 import { Camera } from '../../simulationRenderer/classes/Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
+import { Wire } from '../../simulation/classes/Wire'
 
 export const getTransformState = (transform: Transform): TransformState => {
     return {
@@ -25,9 +28,26 @@ export const getCameraState = (camera: Camera): CameraState => {
     }
 }
 
+export const getWireLimit = (pin: PinWrapper): WireLimit => {
+    return {
+        id: pin.value.gate.id,
+        index: pin.index
+    }
+}
+
+export const getWireState = (wire: Wire): WireState => {
+    return {
+        from: getWireLimit(wire.start),
+        to: getWireLimit(wire.end),
+        id: wire.id
+    }
+}
+
 export const getSimulationState = (simulation: Simulation): SimulationState => {
     return {
-        gates: Array.from(simulation.gates).map(getGateState)
+        gates: Array.from(simulation.gates).map(getGateState),
+        wires: simulation.wires.map(getWireState),
+        mode: simulation.mode
     }
 }
 

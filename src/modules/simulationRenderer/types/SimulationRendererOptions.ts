@@ -7,8 +7,13 @@ export interface SimulationRendererOptions {
         pinRadius: number
         pinStrokeColor: string
         pinStrokeWidth: number
+        pinFill: {
+            open: string
+            closed: string
+        }
     }
     wires: {
         temporaryWireColor: string
+        curvePointOffset: number
     }
 }

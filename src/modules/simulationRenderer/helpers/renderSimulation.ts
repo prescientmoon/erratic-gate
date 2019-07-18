@@ -3,6 +3,7 @@ import { invert } from '../../vector2/helpers/basic'
 import { renderGate } from './renderGate'
 import { clearCanvas } from '../../../common/canvas/helpers/clearCanvas'
 import { renderClickedPins } from './renderClickedPins'
+import { renderWires } from './renderWires'
 
 export const renderSimulation = (
     ctx: CanvasRenderingContext2D,
@@ -12,7 +13,10 @@ export const renderSimulation = (
 
     ctx.translate(...renderer.camera.transform.position)
 
-    // render gates
+    for (const wire of renderer.simulation.wires) {
+        renderWires(ctx, renderer, wire)
+    }
+
     for (const gate of renderer.simulation.gates) {
         renderGate(ctx, renderer, gate)
     }

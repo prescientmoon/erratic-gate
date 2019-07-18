@@ -1,13 +1,14 @@
 import { Pin } from '../../simulation/classes/Pin'
+import { SimulationRenderer } from '../classes/SimulationRenderer'
 
-export const pinFill = (pin: Pin) => {
+export const pinFill = (renderer: SimulationRenderer, pin: Pin) => {
     let color = 'rgba(0,0,0,0)'
 
-    if (pin.connectedTo.size) {
-        if (pin.state) {
-            color = 'yellow'
+    if (pin.pairs.size) {
+        if (pin.state.value) {
+            color = renderer.options.gates.pinFill.open
         } else {
-            color = 'grey'
+            color = renderer.options.gates.pinFill.closed
         }
     }
 

@@ -23,7 +23,7 @@ export const renderPins = (
     ctx.lineWidth = pinStrokeWidth
 
     for (const pin of gate.pins) {
-        ctx.fillStyle = pinFill(pin.value)
+        ctx.fillStyle = pinFill(renderer, pin.value)
 
         // render little connection
         const start = calculatePinStart(

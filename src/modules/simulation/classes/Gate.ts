@@ -3,6 +3,7 @@ import { Pin } from './Pin'
 import merge from 'deepmerge'
 import { GateTemplate, PinCount } from '../types/GateTemplate'
 import { DefaultGateTemplate } from '../constants'
+import { idStore } from '../stores/idStore'
 
 export interface GatePins {
     inputs: Pin[]
@@ -16,22 +17,30 @@ export interface PinWrapper {
 }
 
 export class Gate {
-    public static lastId = 0
-
     public transform = new Transform()
-    public id = Gate.lastId++
     public _pins: GatePins = {
         inputs: [],
         outputs: []
     }
 
+    public id: number
     public template: GateTemplate
 
-    public constructor(template: DeepPartial<GateTemplate> = {}) {
+    public constructor(template: DeepPartial<GateTemplate> = {}, id?: number) {
         this.template = merge(DefaultGateTemplate, template) as GateTemplate
 
-        this._pins.inputs = Gate.generatePins(this.template.pins.inputs, 1)
-        this._pins.outputs = Gate.generatePins(this.template.pins.outputs, 2)
+        this._pins.inputs = Gate.generatePins(
+            this.template.pins.inputs,
+            1,
+            this
+        )
+        this._pins.outputs = Gate.generatePins(
+            this.template.pins.outputs,
+            2,
+            this
+        )
+
+        this.id = id !== undefined ? id : idStore.generate()
     }
 
     private wrapPins(pins: Pin[]) {
@@ -58,7 +67,9 @@ export class Gate {
         return result
     }
 
-    private static generatePins(options: PinCount, type: number) {
-        return [...Array(options.count)].fill(true).map(() => new Pin(type))
+    private static generatePins(options: PinCount, type: number, gate: Gate) {
+        return [...Array(options.count)]
+            .fill(true)
+            .map(() => new Pin(type, gate))
     }
 }
