@@ -4,6 +4,7 @@ import { SimulationError } from '../../errors/classes/SimulationError'
 
 export class Wire {
     public id: number
+    public active = true
 
     public constructor(
         public start: PinWrapper,
@@ -23,5 +24,7 @@ export class Wire {
     public dispose() {
         this.end.value.removePair(this.start.value)
         this.start.value.removePair(this.end.value)
+
+        this.active = false
     }
 }

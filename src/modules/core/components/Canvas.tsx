@@ -5,33 +5,17 @@ import { Gate } from '../../simulation/classes/Gate'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
 import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
+import { addGate } from '../../simulation/helpers/addGate'
 
 class Canvas extends Component {
     private canvasRef: RefObject<HTMLCanvasElement> = createRef()
     private renderingContext: CanvasRenderingContext2D | null
-    private renderer = new SimulationRenderer()
+    private renderer = new SimulationRenderer(this.canvasRef)
 
     public constructor(props: {}) {
         super(props)
 
-        const foo = new Gate({
-            material: {
-                value: 'blue'
-            }
-        })
-        const bar = new Gate({
-            material: {
-                value: 'green'
-            }
-        })
-
-        foo.transform.position = [100, 100]
-        foo.transform.scale = [100, 100]
-
-        bar.transform.position = [400, 200]
-        bar.transform.scale = [100, 100]
-
-        this.renderer.simulation.push(foo, bar)
+        addGate(this.renderer.simulation, 'not')
 
         loop.setDraw(() => {
             if (this.renderingContext) {
@@ -41,8 +25,10 @@ class Canvas extends Component {
     }
 
     public componentDidMount() {
-        if (this.canvasRef.current)
+        if (this.canvasRef.current) {
             this.renderingContext = this.canvasRef.current.getContext('2d')
+            this.renderer.updateWheelListener()
+        }
 
         loop.start()
     }

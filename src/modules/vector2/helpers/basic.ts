@@ -38,3 +38,5 @@ export const ofLength = (vector: vector2, l: number) => {
 // This returns a vector relative to the other
 export const relativeTo = (vector: vector2, other: vector2) =>
     add(other, invert(vector))
+
+export const inverse = (vector: vector2) => vector.map(a => 1 / a) as vector2

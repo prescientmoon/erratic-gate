@@ -4,6 +4,12 @@ import merge from 'deepmerge'
 import { GateTemplate, PinCount } from '../types/GateTemplate'
 import { DefaultGateTemplate } from '../constants'
 import { idStore } from '../stores/idStore'
+import { Context } from '../../activation/types/Context'
+import { toFunction } from '../../activation/helpers/toFunction'
+import { Subscription, combineLatest } from 'rxjs'
+import { SimulationError } from '../../errors/classes/SimulationError'
+import { throttleTime, debounce, debounceTime } from 'rxjs/operators'
+import { getGateTimePipes } from '../helpers/getGateTimePipes'
 
 export interface GatePins {
     inputs: Pin[]
@@ -16,6 +22,10 @@ export interface PinWrapper {
     value: Pin
 }
 
+export interface GateFunctions {
+    activation: null | ((ctx: Context) => void)
+}
+
 export class Gate {
     public transform = new Transform()
     public _pins: GatePins = {
@@ -26,8 +36,22 @@ export class Gate {
     public id: number
     public template: GateTemplate
 
+    private functions: GateFunctions = {
+        activation: null
+    }
+
+    private subscriptions: Subscription[] = []
+    private memory: Record<string, unknown> = {}
+
     public constructor(template: DeepPartial<GateTemplate> = {}, id?: number) {
         this.template = merge(DefaultGateTemplate, template) as GateTemplate
+
+        this.transform.scale = this.template.shape.scale
+
+        this.functions.activation = toFunction(
+            this.template.code.activation,
+            'context'
+        )
 
         this._pins.inputs = Gate.generatePins(
             this.template.pins.inputs,
@@ -41,6 +65,51 @@ export class Gate {
         )
 
         this.id = id !== undefined ? id : idStore.generate()
+
+        for (const pin of this._pins.inputs) {
+            const pipes = getGateTimePipes(this.template)
+
+            const subscription = pin.state.pipe(...pipes).subscribe(() => {
+                this.update()
+            })
+
+            this.subscriptions.push(subscription)
+        }
+    }
+
+    public dispose() {
+        for (const pin of this.pins) {
+            pin.value.dispose()
+        }
+
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe()
+        }
+    }
+
+    public update() {
+        const context = this.getContext()
+
+        if (!this.functions.activation)
+            throw new SimulationError('Activation function is missing')
+
+        this.functions.activation(context)
+    }
+
+    public getContext(): Context {
+        return {
+            get: (index: number) => {
+                return this._pins.inputs[index].state.value
+            },
+            set: (index: number, state: boolean = false) => {
+                return this._pins.outputs[index].state.next(state)
+            },
+            memory: this.memory
+        }
+    }
+
+    private getInputsStates() {
+        return this._pins.inputs.map(pin => pin.state)
     }
 
     private wrapPins(pins: Pin[]) {

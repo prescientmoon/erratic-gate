@@ -11,6 +11,11 @@ export interface SimulationRendererOptions {
             open: string
             closed: string
         }
+        gateStroke: {
+            active: string
+            normal: string
+            width: number
+        }
     }
     wires: {
         temporaryWireColor: string

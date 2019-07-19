@@ -12,6 +12,11 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
         pinFill: {
             open: 'rgb(255,216,20)',
             closed: 'rgb(90,90,90)'
+        },
+        gateStroke: {
+            active: 'yellow',
+            normal: 'black',
+            width: 4
         }
     },
     wires: {

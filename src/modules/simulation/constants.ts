@@ -20,6 +20,21 @@ export const DefaultGateTemplate: GateTemplate = {
     },
     shape: {
         radius: 10,
-        rounded: true
+        rounded: true,
+        scale: [100, 100]
+    },
+    code: {
+        activation: 'context.set(0,true)',
+        start: '',
+        stop: ''
+    },
+    simulation: {
+        debounce: {
+            enabled: true,
+            time: 1000 / 60
+        },
+        throttle: {
+            enabled: false
+        }
     }
 }

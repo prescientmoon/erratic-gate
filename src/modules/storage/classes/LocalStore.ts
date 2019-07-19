@@ -32,7 +32,7 @@ export class LocalStore<T> {
         }
     }
 
-    public get(key = 'index') {
+    public get(key = 'index'): T | undefined {
         return this.getAll()[key]
     }
 

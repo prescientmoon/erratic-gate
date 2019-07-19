@@ -8,7 +8,5 @@ export const handleErrors = () => {
 
             toast.error(...args)
         }
-
-        console.log(a)
     }
 }

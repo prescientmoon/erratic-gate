@@ -13,7 +13,7 @@ export class GateStorage {
         this.tail.previous = this.head
     }
 
-    private delete(node: GateNode) {
+    public delete(node: GateNode) {
         node.previous.next = node.next
         node.next.previous = node.previous
 

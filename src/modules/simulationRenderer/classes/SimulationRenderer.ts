@@ -1,6 +1,6 @@
 import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
-import { Subject } from 'rxjs'
+import { Subject, fromEvent } from 'rxjs'
 import { MouseEventInfo } from '../../core/components/FluidCanvas'
 import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
 import { vector2 } from '../../../common/math/types/vector2'
@@ -9,25 +9,34 @@ import { Screen } from '../../core/classes/Screen'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
 import { defaultSimulationRendererOptions } from '../constants'
-import merge from 'deepmerge'
 import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
 import { getRendererState } from '../../saving/helpers/getState'
 import { Wire } from '../../simulation/classes/Wire'
+import { KeyBindingMap } from '../../keybindings/types/KeyBindingMap'
+import { save } from '../../saving/helpers/save'
+import { initKeyBindings } from '../../keybindings/helpers/initialiseKeyBindings'
+import { currentStore } from '../../saving/stores/currentStore'
+import { saveStore } from '../../saving/stores/saveStore'
+import { SimulationError } from '../../errors/classes/SimulationError'
+import {
+    fromSimulationState,
+    fromCameraState
+} from '../../saving/helpers/fromState'
+import merge from 'deepmerge'
+import { wireConnectedToGate } from '../helpers/wireConnectedToGate'
+import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
+import { RefObject } from 'react'
+// import { WheelEvent } from 'react'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
     public mouseUpOutput = new Subject<MouseEventInfo>()
     public mouseMoveOutput = new Subject<MouseEventInfo>()
+    public wheelOutput = new Subject<unknown>()
 
-    // first bit = dragging
-    // second bit = moving around
-    private mouseState = 0b00
-
-    private selectedGate: number | null = null
-    private gateSelectionOffset: vector2 = [0, 0]
-
+    public selectedGate: number | null = null
     public lastMousePosition: vector2 = [0, 0]
     public movedSelection = false
     public options: SimulationRendererOptions
@@ -35,12 +44,18 @@ export class SimulationRenderer {
     public screen = new Screen()
     public camera = new Camera()
 
+    // first bit = dragging
+    // second bit = moving around
+    private mouseState = 0b00
+    private gateSelectionOffset: vector2 = [0, 0]
+
     public selectedPins: SelectedPins = {
         start: null,
         end: null
     }
 
     public constructor(
+        public ref: RefObject<HTMLCanvasElement>,
         options: Partial<SimulationRendererOptions> = {},
         public simulation = new Simulation()
     ) {
@@ -93,7 +108,17 @@ export class SimulationRenderer {
                             this.options.gates.pinRadius
                         )
                     ) {
-                        if ((pin.value.type & 0b10) >> 1) {
+                        if (
+                            this.selectedPins.start &&
+                            pin.value === this.selectedPins.start.wrapper.value
+                        ) {
+                            this.selectedPins.start = null
+                        } else if (
+                            this.selectedPins.end &&
+                            pin.value === this.selectedPins.end.wrapper.value
+                        ) {
+                            this.selectedPins.end = null
+                        } else if ((pin.value.type & 0b10) >> 1) {
                             this.selectedPins.start = {
                                 wrapper: pin,
                                 transform
@@ -118,8 +143,6 @@ export class SimulationRenderer {
                             )
                             this.selectedPins.start = null
                             this.selectedPins.end = null
-
-                            console.log(getRendererState(this))
                         }
                     }
                 }
@@ -144,6 +167,8 @@ export class SimulationRenderer {
         })
 
         this.mouseMoveOutput.subscribe(event => {
+            updateMouse(event)
+
             const worldPosition = this.camera.toWordPostition(event.position)
 
             if (this.mouseState & 1 && this.selectedGate !== null) {
@@ -164,7 +189,9 @@ export class SimulationRenderer {
             if ((this.mouseState >> 1) & 1) {
                 const offset = invert(
                     relativeTo(this.lastMousePosition, worldPosition)
-                )
+                ).map(
+                    (value, index) => value * this.camera.transform.scale[index]
+                ) as vector2
 
                 this.camera.transform.position = add(
                     this.camera.transform.position,
@@ -174,6 +201,81 @@ export class SimulationRenderer {
 
             this.lastMousePosition = this.camera.toWordPostition(event.position)
         })
+
+        this.reloadSave()
+        this.initKeyBindings()
+    }
+
+    public updateWheelListener() {
+        if (this.ref.current) {
+            this.ref.current.addEventListener('wheel', event => {
+                event.preventDefault()
+
+                handleScroll(event, this.camera)
+            })
+        }
+    }
+
+    public reloadSave() {
+        try {
+            const current = currentStore.get()
+            const save = saveStore.get(current)
+
+            if (!save) return
+            if (!(save.simulation || save.camera)) return
+
+            this.simulation.dispose()
+            this.simulation = fromSimulationState(save.simulation)
+            this.camera = fromCameraState(save.camera)
+        } catch (e) {
+            throw new Error(
+                `An error occured while loading the save: ${
+                    (e as Error).message
+                }`
+            )
+        }
+    }
+
+    private initKeyBindings() {
+        const bindings: KeyBindingMap = [
+            {
+                keys: ['ctrl', 's'],
+                actions: [() => save(this)]
+            },
+            {
+                keys: ['delete'],
+                actions: [
+                    () => {
+                        const selected = this.getSelected()
+
+                        if (!selected) {
+                            return
+                        }
+
+                        const node = this.simulation.gates.get(selected.id)
+
+                        if (!node) {
+                            return
+                        }
+
+                        for (const wire of this.simulation.wires) {
+                            if (wireConnectedToGate(selected, wire)) {
+                                wire.dispose()
+                            }
+                        }
+
+                        this.simulation.wires = this.simulation.wires.filter(
+                            wire => wire.active
+                        )
+
+                        selected.dispose()
+                        this.simulation.gates.delete(node)
+                    }
+                ]
+            }
+        ]
+
+        initKeyBindings(bindings)
     }
 
     public getGateById(id: number) {

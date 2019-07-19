@@ -1,4 +1,4 @@
-import React, { RefObject, forwardRef, MouseEvent } from 'react'
+import React, { RefObject, forwardRef, MouseEvent, WheelEvent } from 'react'
 import { useObservable } from 'rxjs-hooks'
 import { Screen } from '../classes/Screen'
 import { Subject } from 'rxjs'

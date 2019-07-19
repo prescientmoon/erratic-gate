@@ -21,6 +21,7 @@ export interface CameraState {
 export interface WireLimit {
     id: number
     index: number
+    total: number
 }
 
 export interface WireState {

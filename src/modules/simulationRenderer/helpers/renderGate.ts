@@ -10,8 +10,17 @@ export const renderGate = (
 ) => {
     renderPins(ctx, renderer, gate)
 
+    if (renderer.selectedGate === gate.id) {
+        ctx.strokeStyle = renderer.options.gates.gateStroke.active
+    } else {
+        ctx.strokeStyle = renderer.options.gates.gateStroke.normal
+    }
+
+    ctx.lineWidth = renderer.options.gates.gateStroke.width
+
     if (gate.template.material.type === 'color') {
         ctx.fillStyle = gate.template.material.value
         drawRotatedSquare(ctx, gate.transform, gate.template.shape)
+        ctx.stroke()
     }
 }

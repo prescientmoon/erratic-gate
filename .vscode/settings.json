@@ -1,6 +1,5 @@
 {
-	"eslint.enable": true,
-	"editor.formatOnSave": true,
-	"prettier.eslintIntegration": true,
-	"eslint.validate": ["typescript", "typescriptreact"]
+    "editor.formatOnSave": true,
+    "prettier.eslintIntegration": true,
+    "explorer.autoReveal": false
 }

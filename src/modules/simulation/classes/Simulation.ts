@@ -17,4 +17,10 @@ export class Simulation {
             this.gates.set(gate.id, node)
         }
     }
+
+    public dispose() {
+        for (const gate of this.gates) {
+            gate.dispose()
+        }
+    }
 }

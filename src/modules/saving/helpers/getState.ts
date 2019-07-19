@@ -31,7 +31,8 @@ export const getCameraState = (camera: Camera): CameraState => {
 export const getWireLimit = (pin: PinWrapper): WireLimit => {
     return {
         id: pin.value.gate.id,
-        index: pin.index
+        index: pin.index,
+        total: pin.total
     }
 }
 
