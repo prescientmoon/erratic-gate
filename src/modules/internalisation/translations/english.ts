@@ -8,7 +8,8 @@ export const EnglishTranslation: Translation = {
     sidebar: {
         createSimulation: 'Create simulation',
         logicGates: 'Logic gates',
-        openSimulation: 'Open simulations'
+        openSimulation: 'Open simulations',
+        language: 'Language'
     },
     createSimulation: {
         mode: {

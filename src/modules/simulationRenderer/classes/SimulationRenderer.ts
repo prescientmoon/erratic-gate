@@ -77,6 +77,9 @@ export class SimulationRenderer {
                 const { transform, id, pins } = gates[index]
 
                 if (pointInSquare(worldPosition, transform)) {
+                    // run function
+                    gates[index].onClick()
+
                     this.mouseManager.clear(worldPosition[0])
 
                     this.mouseState |= 1

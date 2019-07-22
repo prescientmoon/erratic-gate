@@ -12,6 +12,7 @@ import Theme from '@material-ui/styles/ThemeProvider'
 import Sidebar from './Sidebar'
 import CreateSimulation from '../../create-simulation/components/CreateSimulation'
 import Input from '../../input/components/Input'
+import LogicGateModal from '../../logic-gates/components/LogicGateModal'
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Sidebar />
                 <CreateSimulation />
                 <Input />
+                <LogicGateModal />
             </Theme>
             <CssBaseline />
             <ToastContainer

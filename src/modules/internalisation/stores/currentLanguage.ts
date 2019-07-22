@@ -1,4 +1,4 @@
-import { supportedLanguages } from '../types/supportedLanguages'
+import { supportedLanguage } from '../types/supportedLanguages'
 import { LocalStore } from '../../storage/classes/LocalStore'
 import currentLanguageSubject from './../subjects/currentLanguageSubject'
 import { SimulationError } from '../../errors/classes/SimulationError'
@@ -7,7 +7,7 @@ import { translations } from '../constants'
 /**
  * Local store containing the current selected language
  */
-export const CurrentLanguageLocalStore = new LocalStore<supportedLanguages>(
+export const CurrentLanguageLocalStore = new LocalStore<supportedLanguage>(
     'language'
 )
 
@@ -22,7 +22,7 @@ currentLanguageSubject.next(CurrentLanguageLocalStore.get() || 'english')
  * The preffered interface for interacting with CurrentLanguageLocalStore
  */
 const CurrentLanguage = {
-    set(name: supportedLanguages) {
+    set(name: supportedLanguage) {
         CurrentLanguageLocalStore.set(name)
         currentLanguageSubject.next(name)
     },

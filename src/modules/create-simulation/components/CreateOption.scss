@@ -1,3 +1,5 @@
+@import '../../core/styles/colors.scss';
+
 #create-options {
     width: 100%;
     display: flex;
@@ -7,7 +9,7 @@
 .create-option {
     @include flex();
 
-    background-color: #444444;
+    background-color: $grey;
     height: 17em;
     width: 17em;
     border-radius: 1em;

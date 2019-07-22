@@ -39,12 +39,12 @@ export interface GateTemplate {
         name: string
     }
     code: {
-        start: string
         activation: string
-        stop: string
+        onClick: string
     }
     simulation: {
         throttle: TimePipe
         debounce: TimePipe
     }
+    info: string[]
 }

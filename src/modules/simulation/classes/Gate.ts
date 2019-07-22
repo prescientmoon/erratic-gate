@@ -22,8 +22,11 @@ export interface PinWrapper {
     value: Pin
 }
 
+export type GateFunction = null | ((ctx: Context) => void)
+
 export interface GateFunctions {
-    activation: null | ((ctx: Context) => void)
+    activation: GateFunction
+    onClick: GateFunction
 }
 
 export class Gate {
@@ -37,7 +40,8 @@ export class Gate {
     public template: GateTemplate
 
     private functions: GateFunctions = {
-        activation: null
+        activation: null,
+        onClick: null
     }
 
     private subscriptions: Subscription[] = []
@@ -50,6 +54,11 @@ export class Gate {
 
         this.functions.activation = toFunction(
             this.template.code.activation,
+            'context'
+        )
+
+        this.functions.onClick = toFunction(
+            this.template.code.onClick,
             'context'
         )
 
@@ -74,6 +83,12 @@ export class Gate {
             })
 
             this.subscriptions.push(subscription)
+        }
+    }
+
+    public onClick() {
+        if (this.functions.onClick) {
+            this.functions.onClick(this.getContext())
         }
     }
 
@@ -104,7 +119,12 @@ export class Gate {
             set: (index: number, state: boolean = false) => {
                 return this._pins.outputs[index].state.next(state)
             },
-            memory: this.memory
+            memory: this.memory,
+            color: (color: string) => {
+                if (this.template.material.type === 'color') {
+                    this.template.material.value = color
+                }
+            }
         }
     }
 

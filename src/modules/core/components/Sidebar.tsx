@@ -5,6 +5,7 @@ import OpenSimulation from './OpenSimulation'
 import CreateSimulationButton from './CreateSimulationButton'
 import LogicGates from './LogicGates'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
+import Language from './Language'
 /**
  * The width of the sidebar
  */
@@ -39,6 +40,11 @@ const useStyles = makeStyles(
             padding: '4px',
             width: sidebarWidth,
             zIndex: sidebarZIndex
+        },
+
+        // This is the class for the main button list
+        list: {
+            flexGrow: 1
         }
     })
 )
@@ -60,11 +66,13 @@ const Sidebar = () => {
                     paper: classes.drawerPaper
                 }}
             >
-                <List component="nav">
+                <List component="nav" className={classes.list}>
                     <CreateSimulationButton />
                     <OpenSimulation />
                     <LogicGates />
                 </List>
+
+                <Language />
             </Drawer>
         </div>
     )

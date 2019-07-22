@@ -8,11 +8,12 @@ export const RomanianTranslation: Translation = {
     sidebar: {
         createSimulation: 'Creează o simulație',
         openSimulation: 'Deschide o simulație',
-        logicGates: 'Porți logice'
+        logicGates: 'Porți logice',
+        language: 'Limba'
     },
     createSimulation: {
         mode: {
-            question: 'Ce fel de simulație vrei să creiezi?',
+            question: 'Ce fel de simulație vrei să creezi?',
             options: {
                 ic: 'Circuit integrat',
                 project: 'Proiect'
@@ -24,7 +25,7 @@ export const RomanianTranslation: Translation = {
     },
     messages: {
         createdSimulation: name =>
-            `Simulația '${name}' a fost creiată cu succes`,
+            `Simulația '${name}' a fost creeată cu succes`,
         switchedToSimulation: name =>
             `Simulația '${name}' a fost deschisă cu succes`,
         savedSimulation: name => `Simulația '${name}' a fost salvată cu succes`

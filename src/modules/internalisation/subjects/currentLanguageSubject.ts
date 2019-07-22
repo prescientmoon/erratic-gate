@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs'
-import { supportedLanguages } from '../types/supportedLanguages'
+import { supportedLanguage } from '../types/supportedLanguages'
 
 /**
  * Subject with the current language
  */
-export default new BehaviorSubject<supportedLanguages>('english')
+export default new BehaviorSubject<supportedLanguage>('english')

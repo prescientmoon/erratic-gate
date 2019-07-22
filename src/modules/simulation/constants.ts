@@ -10,7 +10,7 @@ export const DefaultGateTemplate: GateTemplate = {
     },
     pins: {
         inputs: {
-            count: 2,
+            count: 1,
             variable: false
         },
         outputs: {
@@ -25,8 +25,7 @@ export const DefaultGateTemplate: GateTemplate = {
     },
     code: {
         activation: 'context.set(0,true)',
-        start: '',
-        stop: ''
+        onClick: ''
     },
     simulation: {
         debounce: {
@@ -36,5 +35,6 @@ export const DefaultGateTemplate: GateTemplate = {
         throttle: {
             enabled: false
         }
-    }
+    },
+    info: []
 }
