@@ -1,0 +1,14 @@
+@import '../../core/styles/mixins/flex.scss';
+
+.toast-content-container {
+    @include flex();
+
+    justify-content: space-evenly;
+    flex-direction: row;
+    font-size: 1em;
+    color: white;
+}
+
+.toast-content-container > #toast-content-icon {
+    font-size: 2em;
+}

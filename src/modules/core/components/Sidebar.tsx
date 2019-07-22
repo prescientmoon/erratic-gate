@@ -1,29 +1,31 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import React from 'react'
+import React, { useState } from 'react'
 import Drawer from '@material-ui/core/Drawer'
-import Button from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Icon from '@material-ui/core/Icon'
+import { handleCreating } from '../../create-simulation/helpers/handleCreating'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import OpenSimulation from './OpenSimulation'
 
 const drawerWidth = 240
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            display: 'flex'
+            display: 'flex',
+            zIndex: 5
         },
         drawer: {
             width: drawerWidth,
-            flexShrink: 0
+            flexShrink: 0,
+            zIndex: 5
         },
         drawerPaper: {
             padding: '4px',
             width: drawerWidth,
-            background: `#111111`
-        },
-        drawerHeader: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 8px',
-            ...theme.mixins.toolbar,
-            justifyContent: 'flex-start'
+            background: `#111111`,
+            zIndex: 5
         }
     })
 )
@@ -42,9 +44,19 @@ const Sidebar = () => {
                     paper: classes.drawerPaper
                 }}
             >
-                <Button variant={'contained'} color="primary">
-                    New Simulation
-                </Button>
+                <List component="nav" aria-label="Main mailbox folders">
+                    <ListItem
+                        button
+                        className="contained"
+                        onClick={handleCreating}
+                    >
+                        <ListItemIcon>
+                            <Icon>note_add</Icon>
+                        </ListItemIcon>
+                        <ListItemText>Create simulation</ListItemText>
+                    </ListItem>
+                    <OpenSimulation />
+                </List>
             </Drawer>
         </div>
     )

@@ -6,7 +6,7 @@
         "dev": "webpack-dev-server --open --mode development",
         "build": "cross-env NODE_ENV=production webpack",
         "deploy": "ts-node deploy",
-        "show": "gource -f  --start-date \"2019-07-01 12:00\" --key --hide dirnames,filenames,bloom"
+        "show": "gource -f  --start-date \"2019-07-01 12:00\" --key --hide dirnames,filenames,bloom -s 3"
     },
     "devDependencies": {
         "@babel/core": "^7.5.5",

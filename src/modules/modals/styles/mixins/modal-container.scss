@@ -1,0 +1,17 @@
+@import '../../core/styles/indexes.scss';
+@import '../../core/styles/colors.scss';
+@import '../../core/styles/mixins/flex.scss';
+@import '../../core/styles/mixins/full-screen.scss';
+@import '../../core/styles/mixins/visibility.scss';
+
+@mixin modal-container {
+    @include flex();
+    @include full-screen();
+    @include hidden();
+
+    justify-content: space-evenly;
+    z-index: $modal-index;
+    color: white;
+    background-color: $modal-bg-color;
+    font-family: 'Righteous';
+}

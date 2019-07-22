@@ -10,7 +10,8 @@ import Canvas from './Canvas'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Theme from '@material-ui/styles/ThemeProvider'
 import Sidebar from './Sidebar'
-import QuestionModal from './QuestionModal'
+import CreateSimulation from '../../create-simulation/components/CreateSimulation'
+import Input from '../../input/components/Input'
 
 const App = () => {
     return (
@@ -19,7 +20,8 @@ const App = () => {
                 <CssBaseline />
                 <Canvas />
                 <Sidebar />
-                <QuestionModal />
+                <CreateSimulation />
+                <Input />
             </Theme>
             <CssBaseline />
             <ToastContainer

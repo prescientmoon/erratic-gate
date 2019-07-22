@@ -8,7 +8,10 @@ export class Simulation {
     public gates = new GateStorage()
     public wires: Wire[] = []
 
-    public constructor(public mode: simulationMode = 'project') {}
+    public constructor(
+        public mode: simulationMode = 'project',
+        public name: string
+    ) {}
 
     public push(...gates: Gate[]) {
         for (const gate of gates) {

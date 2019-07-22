@@ -1,0 +1,30 @@
+#create-options {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.create-option {
+    @include flex();
+
+    background-color: #444444;
+    height: 17em;
+    width: 17em;
+    border-radius: 1em;
+}
+
+.create-option > .create-option-icon > * {
+    font-size: 7em;
+}
+
+.create-option > .create-option-name {
+    font-size: 2em;
+}
+
+#ic {
+    font-size: 1.7em;
+}
+
+.create-option:hover {
+    border: 0.3em solid white;
+}

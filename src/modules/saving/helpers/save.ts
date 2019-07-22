@@ -14,7 +14,7 @@ export const save = (renderer: SimulationRenderer) => {
 
         saveStore.set(current, state)
 
-        toast.info(...createToastArguments(`Succesfully saved ${current}`))
+        toast(...createToastArguments(`Succesfully saved ${current}`, 'save'))
     } else {
         throw new SimulationError(
             'Cannot save without knowing the name of the active simulation'

@@ -6,6 +6,7 @@ import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationR
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
 import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
 import { addGate } from '../../simulation/helpers/addGate'
+import { rendererSubject } from '../subjects/rendererSubject'
 
 class Canvas extends Component {
     private canvasRef: RefObject<HTMLCanvasElement> = createRef()
@@ -14,6 +15,8 @@ class Canvas extends Component {
 
     public constructor(props: {}) {
         super(props)
+
+        rendererSubject.next(this.renderer)
 
         addGate(this.renderer.simulation, 'not')
 

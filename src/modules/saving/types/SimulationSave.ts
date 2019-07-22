@@ -35,6 +35,7 @@ export interface SimulationState {
     wires: WireState[]
 
     mode: simulationMode
+    name: string
 }
 
 export interface RendererState {

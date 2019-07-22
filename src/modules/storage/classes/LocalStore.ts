@@ -36,21 +36,18 @@ export class LocalStore<T> {
         return this.getAll()[key]
     }
 
-    public set(key: string | T = 'index', value?: T) {
+    public set(key: string | T, value?: T) {
+        let finalKey = key as string
+        let finalValue = value as T
+
         if (typeof key !== 'string' || value === undefined) {
-            localStorage.setItem(
-                this.name,
-                JSON.stringify({
-                    index: key
-                })
-            )
-        } else {
-            localStorage.setItem(
-                this.name,
-                JSON.stringify({
-                    [key]: value
-                })
-            )
+            finalKey = 'index'
+            finalValue = key as T
         }
+
+        const currentData = this.getAll()
+
+        currentData[finalKey] = finalValue
+        localStorage.setItem(this.name, JSON.stringify(currentData))
     }
 }

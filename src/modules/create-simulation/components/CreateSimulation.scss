@@ -1,0 +1,17 @@
+@import '../../core/styles/mixins/flex.scss';
+@import '../../core/styles/mixins/visibility.scss';
+@import '../../modals/styles/mixins/modal-container.scss';
+@import '../../modals/styles/mixins/modal-title.scss';
+@import './CreateOption.scss';
+
+#create-content {
+    @include modal-container();
+}
+
+.shown#create-content {
+    @include visible();
+}
+
+#create-title {
+    @include modal-title();
+}

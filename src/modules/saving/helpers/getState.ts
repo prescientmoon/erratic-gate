@@ -48,7 +48,8 @@ export const getSimulationState = (simulation: Simulation): SimulationState => {
     return {
         gates: Array.from(simulation.gates).map(getGateState),
         wires: simulation.wires.map(getWireState),
-        mode: simulation.mode
+        mode: simulation.mode,
+        name: simulation.name
     }
 }
 

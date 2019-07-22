@@ -1,6 +1,6 @@
 import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
-import { Subject, fromEvent } from 'rxjs'
+import { Subject } from 'rxjs'
 import { MouseEventInfo } from '../../core/components/FluidCanvas'
 import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
 import { vector2 } from '../../../common/math/types/vector2'
@@ -12,14 +12,12 @@ import { defaultSimulationRendererOptions } from '../constants'
 import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
-import { getRendererState } from '../../saving/helpers/getState'
 import { Wire } from '../../simulation/classes/Wire'
 import { KeyBindingMap } from '../../keybindings/types/KeyBindingMap'
 import { save } from '../../saving/helpers/save'
 import { initKeyBindings } from '../../keybindings/helpers/initialiseKeyBindings'
 import { currentStore } from '../../saving/stores/currentStore'
 import { saveStore } from '../../saving/stores/saveStore'
-import { SimulationError } from '../../errors/classes/SimulationError'
 import {
     fromSimulationState,
     fromCameraState
@@ -28,7 +26,7 @@ import merge from 'deepmerge'
 import { wireConnectedToGate } from '../helpers/wireConnectedToGate'
 import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
 import { RefObject } from 'react'
-// import { WheelEvent } from 'react'
+import { Singleton } from '@eix-js/utils'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -57,7 +55,7 @@ export class SimulationRenderer {
     public constructor(
         public ref: RefObject<HTMLCanvasElement>,
         options: Partial<SimulationRendererOptions> = {},
-        public simulation = new Simulation()
+        public simulation = new Simulation('project', 'default')
     ) {
         this.options = merge(defaultSimulationRendererOptions, options)
 

@@ -1,0 +1,6 @@
+@import '../colors.scss';
+
+.MuiListItem-root.contained {
+    // i spent hours trying to find a better solution
+    background-color: $primary !important;
+}
