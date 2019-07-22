@@ -6,34 +6,26 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Icon from '@material-ui/core/Icon'
 import Typography from '@material-ui/core/Typography'
-import { saveStore } from '../../saving/stores/saveStore'
 import { BehaviorSubject } from 'rxjs'
 import { useObservable } from 'rxjs-hooks'
 import { switchTo } from '../../saving/helpers/switchTo'
 import { SimulationError } from '../../errors/classes/SimulationError'
-import { icons } from '../constants'
+import { templateStore } from '../../saving/stores/templateStore'
 import { useTranslation } from '../../internalisation/helpers/useLanguage'
 
 /**
- * Returns a list with the names of all saved simulations
+ * Subject to make React update the dom when new gates are stored
  */
-const allSimulations = () => {
-    return saveStore.ls()
-}
-
-/**
- * Subject to make React update the dom when new simulations are stored
- */
-const allSimulationSubject = new BehaviorSubject<string[]>([])
+const allGatesSubject = new BehaviorSubject<string[]>([])
 
 /**
  * Triggers a dom update by pushing a new value to the
  * useObservable hook inside the React component.
  *
- * It also has the side effect of sorting the simulation names.
+ * It also has the side effect of sorting the template names.
  */
-const updateSimulationList = () => {
-    allSimulationSubject.next(allSimulations().sort())
+const updateTemplateList = () => {
+    allGatesSubject.next(templateStore.ls().sort())
 }
 
 /**
@@ -41,9 +33,9 @@ const updateSimulationList = () => {
  *
  * @throws SimulationError if the data about a simulation cant be found in localStorage
  */
-const OpenSimulation = () => {
+const LogicGates = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const simulations = useObservable(() => allSimulationSubject, [])
+    const simulations = useObservable(() => allGatesSubject, [])
 
     const translation = useTranslation()
 
@@ -56,16 +48,14 @@ const OpenSimulation = () => {
             <ListItem
                 button
                 onClick={event => {
-                    updateSimulationList()
+                    updateTemplateList()
                     setAnchorEl(event.currentTarget)
                 }}
             >
                 <ListItemIcon>
-                    <Icon>folder_open</Icon>
+                    <Icon>memory</Icon>
                 </ListItemIcon>
-                <ListItemText>
-                    {translation.sidebar.openSimulation}
-                </ListItemText>
+                <ListItemText>{translation.sidebar.logicGates}</ListItemText>
             </ListItem>
 
             <Menu
@@ -75,7 +65,7 @@ const OpenSimulation = () => {
                 onClose={handleClose}
             >
                 {simulations.map((simulationName, index) => {
-                    const simulationData = saveStore.get(simulationName)
+                    const simulationData = templateStore.get(simulationName)
 
                     if (!simulationData) {
                         throw new SimulationError(
@@ -91,15 +81,6 @@ const OpenSimulation = () => {
                                 handleClose()
                             }}
                         >
-                            <ListItemIcon>
-                                <Icon>
-                                    {
-                                        icons.simulationMode[
-                                            simulationData.simulation.mode
-                                        ]
-                                    }
-                                </Icon>
-                            </ListItemIcon>
                             <Typography>{simulationName}</Typography>
                         </MenuItem>
                     )
@@ -109,4 +90,4 @@ const OpenSimulation = () => {
     )
 }
 
-export default OpenSimulation
+export default LogicGates

@@ -4,9 +4,20 @@ import { cloneState } from './cloneState'
 import { saveStore } from '../stores/saveStore'
 import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
+import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 
+/**
+ * Inits a simulation by:
+ * 1) first initialising the place in localstorage
+ * where the simulation will be saved
+ * 2) notifying the used about that
+ *
+ * @param name - the name of the simulation
+ * @param mode - the mode of the simulation
+ */
 export const initSimulation = (name: string, mode: simulationMode) => {
     const state = cloneState(baseSave)
+    const translation = CurrentLanguage.getTranslation()
 
     state.simulation.name = name
     state.simulation.mode = mode
@@ -15,7 +26,7 @@ export const initSimulation = (name: string, mode: simulationMode) => {
 
     toast.success(
         ...createToastArguments(
-            `Successfully created simulation ${name}`,
+            translation.messages.createdSimulation(name),
             'check'
         )
     )

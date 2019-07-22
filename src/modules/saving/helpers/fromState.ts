@@ -1,8 +1,6 @@
-import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { Gate, PinWrapper } from '../../simulation/classes/Gate'
 import {
     TransformState,
-    RendererState,
     CameraState,
     SimulationState
 } from '../types/SimulationSave'
@@ -11,6 +9,10 @@ import { Camera } from '../../simulationRenderer/classes/Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Wire } from '../../simulation/classes/Wire'
 import { templateStore } from '../stores/templateStore'
+
+/**
+ * Contains methods for transforming saved state into the respective class instances
+ */
 
 export const fromTransformState = (state: TransformState): Transform => {
     return new Transform(state.position, state.scale, state.rotation)
@@ -25,7 +27,7 @@ export const fromCameraState = (state: CameraState): Camera => {
 }
 
 export const fromSimulationState = (state: SimulationState): Simulation => {
-    const simulation = new Simulation(state.mode)
+    const simulation = new Simulation(state.mode, state.name)
 
     for (const gateState of state.gates) {
         const gate = new Gate(

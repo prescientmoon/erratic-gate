@@ -14,6 +14,10 @@ import { Camera } from '../../simulationRenderer/classes/Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Wire } from '../../simulation/classes/Wire'
 
+/**
+ * Methods for gettings the savable state from class instances
+ */
+
 export const getTransformState = (transform: Transform): TransformState => {
     return {
         position: transform.position,

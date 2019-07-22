@@ -1,35 +1,51 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import Icon from '@material-ui/core/Icon'
-import { handleCreating } from '../../create-simulation/helpers/handleCreating'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import OpenSimulation from './OpenSimulation'
+import CreateSimulationButton from './CreateSimulationButton'
+import LogicGates from './LogicGates'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
+/**
+ * The width of the sidebar
+ */
+const sidebarWidth = 240
 
-const drawerWidth = 240
-const useStyles = makeStyles((theme: Theme) =>
+/**
+ * The z-index of the sidebar.
+ */
+const sidebarZIndex = 5
+
+/**
+ * The styles for the sidebar component
+ */
+const useStyles = makeStyles(
     createStyles({
+        // This class is applied on the sidebar container
         root: {
             display: 'flex',
-            zIndex: 5
+            zIndex: sidebarZIndex
         },
+
+        // This is the class of the actual sidebar
         drawer: {
-            width: drawerWidth,
-            flexShrink: 0,
-            zIndex: 5
+            width: sidebarWidth,
+            zIndex: sidebarZIndex,
+            flexShrink: 0
         },
+
+        // This is the class for the surface of the sidebar
         drawerPaper: {
-            padding: '4px',
-            width: drawerWidth,
             background: `#111111`,
-            zIndex: 5
+            padding: '4px',
+            width: sidebarWidth,
+            zIndex: sidebarZIndex
         }
     })
 )
 
+/**
+ * The sidebar component
+ */
 const Sidebar = () => {
     const classes = useStyles()
 
@@ -44,18 +60,10 @@ const Sidebar = () => {
                     paper: classes.drawerPaper
                 }}
             >
-                <List component="nav" aria-label="Main mailbox folders">
-                    <ListItem
-                        button
-                        className="contained"
-                        onClick={handleCreating}
-                    >
-                        <ListItemIcon>
-                            <Icon>note_add</Icon>
-                        </ListItemIcon>
-                        <ListItemText>Create simulation</ListItemText>
-                    </ListItem>
+                <List component="nav">
+                    <CreateSimulationButton />
                     <OpenSimulation />
+                    <LogicGates />
                 </List>
             </Drawer>
         </div>

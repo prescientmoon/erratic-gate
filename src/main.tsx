@@ -6,6 +6,8 @@ import { handleErrors } from './modules/errors/helpers/handleErrors'
 import { initKeyBindings } from './modules/keybindings/helpers/initialiseKeyBindings'
 import { initBaseTemplates } from './modules/saving/helpers/initBaseTemplates'
 
+console.clear()
+
 handleErrors()
 initKeyBindings()
 initBaseTemplates()

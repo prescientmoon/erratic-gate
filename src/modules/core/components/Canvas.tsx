@@ -1,11 +1,9 @@
 import React, { Component, createRef, Ref, RefObject } from 'react'
 import FluidCanvas from './FluidCanvas'
 import loop from 'mainloop.js'
-import { Gate } from '../../simulation/classes/Gate'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
 import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
-import { addGate } from '../../simulation/helpers/addGate'
 import { rendererSubject } from '../subjects/rendererSubject'
 
 class Canvas extends Component {
@@ -17,8 +15,6 @@ class Canvas extends Component {
         super(props)
 
         rendererSubject.next(this.renderer)
-
-        addGate(this.renderer.simulation, 'not')
 
         loop.setDraw(() => {
             if (this.renderingContext) {

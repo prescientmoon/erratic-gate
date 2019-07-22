@@ -4,21 +4,19 @@ import { useObservable } from 'rxjs-hooks'
 import { CreateSimulationStore } from '../stores/CreateSimulationStore'
 import { simulationMode } from '../../saving/types/SimulationSave'
 import Icon from '@material-ui/core/Icon'
+import { useTranslation } from '../../internalisation/helpers/useLanguage'
 
 export interface CreateSimulationOption {
     mode: simulationMode
     icon: string
-    name: string
 }
 
 export const createSimulationOptions: CreateSimulationOption[] = [
     {
-        name: 'project',
         mode: 'project',
         icon: 'gamepad'
     },
     {
-        name: 'integrated circuit',
         icon: 'memory',
         mode: 'ic'
     }
@@ -26,6 +24,7 @@ export const createSimulationOptions: CreateSimulationOption[] = [
 
 const CreateSimulation = () => {
     const open = useObservable(() => CreateSimulationStore.data.open, false)
+    const translation = useTranslation()
 
     const closeModal = () => {
         CreateSimulationStore.actions.next('quit')
@@ -38,7 +37,7 @@ const CreateSimulation = () => {
             onClick={closeModal}
         >
             <div id="create-title">
-                What kind of simulation do you want to create?
+                {translation.createSimulation.mode.question}
             </div>
 
             <div id="create-options">
@@ -57,7 +56,11 @@ const CreateSimulation = () => {
                             <Icon>{option.icon}</Icon>
                         </div>
                         <div className="create-option-name" id={option.mode}>
-                            {option.name}
+                            {
+                                translation.createSimulation.mode.options[
+                                    option.mode
+                                ]
+                            }
                         </div>
                     </div>
                 ))}

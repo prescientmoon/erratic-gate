@@ -27,6 +27,7 @@ import { wireConnectedToGate } from '../helpers/wireConnectedToGate'
 import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
 import { RefObject } from 'react'
 import { Singleton } from '@eix-js/utils'
+import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -200,6 +201,8 @@ export class SimulationRenderer {
             this.lastMousePosition = this.camera.toWordPostition(event.position)
         })
 
+        dumpSimulation(this)
+
         this.reloadSave()
         this.initKeyBindings()
     }
@@ -222,7 +225,6 @@ export class SimulationRenderer {
             if (!save) return
             if (!(save.simulation || save.camera)) return
 
-            this.simulation.dispose()
             this.simulation = fromSimulationState(save.simulation)
             this.camera = fromCameraState(save.camera)
         } catch (e) {

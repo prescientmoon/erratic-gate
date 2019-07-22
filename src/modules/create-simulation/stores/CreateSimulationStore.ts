@@ -2,6 +2,7 @@ import { BehaviorSubject, Subject } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { simulationMode } from '../../saving/types/SimulationSave'
 import { InputStore } from '../../input/stores/InputStore'
+import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 
 export type CreateSimulationStoreAction = 'quit' | 'submit'
 
@@ -13,6 +14,8 @@ export const CreateSimulationStore = {
             .pipe(take(1))
             .toPromise()
 
+        const translation = CurrentLanguage.getTranslation()
+
         CreateSimulationStore.close()
 
         if (action === 'quit') {
@@ -20,7 +23,7 @@ export const CreateSimulationStore = {
         }
 
         const name = await InputStore.get(
-            'What do you want your simulation to be called?'
+            translation.createSimulation.name.question
         )
 
         if (!name) {
