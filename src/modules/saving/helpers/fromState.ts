@@ -6,7 +6,7 @@ import {
 } from '../types/SimulationSave'
 import { Transform } from '../../../common/math/classes/Transform'
 import { Camera } from '../../simulationRenderer/classes/Camera'
-import { Simulation } from '../../simulation/classes/Simulation'
+import { Simulation, SimulationEnv } from '../../simulation/classes/Simulation'
 import { Wire } from '../../simulation/classes/Wire'
 import { templateStore } from '../stores/templateStore'
 
@@ -26,8 +26,11 @@ export const fromCameraState = (state: CameraState): Camera => {
     return camera
 }
 
-export const fromSimulationState = (state: SimulationState): Simulation => {
-    const simulation = new Simulation(state.mode, state.name)
+export const fromSimulationState = (
+    state: SimulationState,
+    env: SimulationEnv = 'global'
+): Simulation => {
+    const simulation = new Simulation(state.mode, state.name, env)
 
     for (const gateState of state.gates) {
         const gate = new Gate(
@@ -60,7 +63,7 @@ export const fromSimulationState = (state: SimulationState): Simulation => {
                 value: endGateNode.data._pins.inputs[wireState.to.index]
             }
 
-            const wire = new Wire(start, end, wireState.id)
+            const wire = new Wire(start, end, false, wireState.id)
 
             simulation.wires.push(wire)
         }

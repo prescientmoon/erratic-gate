@@ -1,8 +1,15 @@
 /**
- * Credit: https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+ *
+ * @param ctx The context to draw on
+ * @param x the x of the rect
+ * @param y the y of the rect
+ * @param width the width of the rect
+ * @param height the height of the rect
+ * @param radius the radius of the corners
  */
-export function roundRect(
+export function roundImage(
     ctx: CanvasRenderingContext2D,
+    image: HTMLImageElement,
     x: number = 0,
     y: number = 0,
     width: number = 100,
@@ -20,4 +27,9 @@ export function roundRect(
     ctx.lineTo(x, y + radius)
     ctx.quadraticCurveTo(x, y, x + radius, y)
     ctx.closePath()
+
+    ctx.save()
+    ctx.clip()
+    ctx.drawImage(image, x, y, width, height)
+    ctx.restore()
 }

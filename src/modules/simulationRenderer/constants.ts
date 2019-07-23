@@ -1,4 +1,5 @@
 import { SimulationRendererOptions } from './types/SimulationRendererOptions'
+import { vector2 } from '../../common/math/classes/Transform'
 
 export const defaultSimulationRendererOptions: SimulationRendererOptions = {
     dnd: {
@@ -24,3 +25,5 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
         curvePointOffset: 100
     }
 }
+
+export const imageQuality: vector2 = [100, 100]

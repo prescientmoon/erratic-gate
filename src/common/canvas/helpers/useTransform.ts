@@ -1,6 +1,11 @@
 import { Transform } from '../../math/classes/Transform'
 import { multiply } from '../../../modules/vector2/helpers/basic'
 
+/**
+ *
+ * @param ctx The context to use
+ * @param transform The transform to move relative to
+ */
 export const useTransform = (
     ctx: CanvasRenderingContext2D,
     { position, rotation, scale }: Transform

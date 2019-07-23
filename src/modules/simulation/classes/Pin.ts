@@ -16,8 +16,10 @@ export class Pin {
 
     public constructor(public type = 0b01, public gate: Gate) {}
 
-    public addPair(pin: Pin, subscribe = false) {
-        this.pairs.add(pin)
+    public addPair(pin: Pin, subscribe = false, remember = true) {
+        if (remember) {
+            this.pairs.add(pin)
+        }
 
         if (subscribe) {
             const rawSubscription = pin.state.subscribe(state => {

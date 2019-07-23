@@ -8,7 +8,8 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             name: 'and'
         },
         material: {
-            value: 'green'
+            type: 'image',
+            value: require('../../assets/and_gate')
         },
         code: {
             activation: `context.set(0, context.get(0) && context.get(1))`
@@ -42,7 +43,8 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             name: 'xor'
         },
         material: {
-            value: 'white'
+            type: 'image',
+            value: require('../../assets/xor_gate')
         },
         code: {
             activation: `
@@ -94,6 +96,9 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
                 count: 0
             }
         },
+        integration: {
+            input: true
+        },
         info: ['https://en.wikipedia.org/wiki/Push-button']
     },
     {
@@ -110,6 +115,9 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             activation: `
                 context.color(context.get(0) ? 'yellow' : 'white')
             `
+        },
+        integration: {
+            output: true
         },
         info: ['https://en.wikipedia.org/wiki/Incandescent_light_bulb'],
         pins: {

@@ -115,17 +115,22 @@ export class SimulationRenderer {
                             pin.value === this.selectedPins.start.wrapper.value
                         ) {
                             this.selectedPins.start = null
+                            this.selectedPins.end = null
                         } else if (
                             this.selectedPins.end &&
                             pin.value === this.selectedPins.end.wrapper.value
                         ) {
+                            this.selectedPins.start = null
                             this.selectedPins.end = null
                         } else if ((pin.value.type & 0b10) >> 1) {
                             this.selectedPins.start = {
                                 wrapper: pin,
                                 transform
                             }
-                        } else if (pin.value.type & 1) {
+                        } else if (
+                            pin.value.type & 1 &&
+                            pin.value.pairs.size === 0
+                        ) {
                             this.selectedPins.end = {
                                 wrapper: pin,
                                 transform

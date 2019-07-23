@@ -6,6 +6,7 @@ import { saveStore } from '../stores/saveStore'
 import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
+import { compileIc } from '../../integrated-circuits/helpers/compileIc'
 
 /**
  * Saves the state from a renderer in localStorage,
@@ -24,6 +25,10 @@ export const save = (renderer: SimulationRenderer) => {
         const translation = CurrentLanguage.getTranslation()
 
         saveStore.set(current, state)
+
+        if (state.simulation.mode === 'ic') {
+            compileIc(state.simulation)
+        }
 
         toast(
             ...createToastArguments(

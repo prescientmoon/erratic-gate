@@ -1,33 +1,34 @@
 import { Transform } from '../../math/classes/Transform'
-import { Material, Shape } from '../../../modules/simulation/types/GateTemplate'
+import { Shape } from '../../../modules/simulation/types/GateTemplate'
 import { roundRect } from './drawRoundedSquare'
+import { useTransform } from './useTransform'
 
+/**
+ * Draws a square from a transform
+ *
+ * @param ctx The context to draw on
+ * @param transform -The transform to use
+ * @param shape - The shae object to use
+ */
 export const drawRotatedSquare = (
     ctx: CanvasRenderingContext2D,
-    { position, scale, rotation }: Transform,
+    transform: Transform,
     shape: Shape
 ) => {
     ctx.save()
 
-    ctx.translate(...position)
-    ctx.translate(scale[0] / 2, scale[1] / 2)
+    const relative = useTransform(ctx, transform)
 
-    ctx.rotate(rotation)
+    roundRect(
+        ctx,
+        relative.x,
+        relative.y,
+        relative.width,
+        relative.height,
+        shape.radius ? shape.radius : 0
+    )
 
-    if (shape.rounded) {
-        roundRect(
-            ctx,
-            -scale[0] / 2,
-            -scale[1] / 2,
-            scale[0],
-            scale[1],
-            shape.radius
-        )
-
-        ctx.fill()
-    } else {
-        ctx.fillRect(scale[0] / -2, scale[1] / -2, ...scale)
-    }
+    ctx.fill()
 
     ctx.restore()
 }

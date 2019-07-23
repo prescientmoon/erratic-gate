@@ -10,6 +10,8 @@ import { rendererSubject } from '../../core/subjects/rendererSubject'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { templateStore } from '../../saving/stores/templateStore'
 import { randomItem } from '../../internalisation/helpers/randomItem'
+import { completeTemplate } from '../helpers/completeTemplate'
+import { gateIcons } from '../constants'
 
 /**
  * Subject containing the open state of the modal
@@ -43,12 +45,11 @@ const LogicGateModal = () => {
                     throw new SimulationError(`Renderer not found`)
                 }
 
-                const template =
-                    gate.source === 'base' ? templateStore.get(gate.name) : ''
+                const template = completeTemplate(templateStore.get(gate) || {})
 
-                if (gate.source === 'base' && !template) {
+                if (!template) {
                     throw new SimulationError(
-                        `Template ${gate.name} cannot be found`
+                        `Template ${gate} cannot be found`
                     )
                 }
 
@@ -57,28 +58,27 @@ const LogicGateModal = () => {
                         key={index}
                         className="logic-gate-item"
                         onClick={e => {
-                            addGate(renderer.simulation, gate.name)
+                            addGate(renderer.simulation, gate)
                         }}
                     >
                         <Icon className="lgi-icon logic-gate-item-type">
-                            {gate.source === 'base' ? 'sd_storage' : 'memory'}
+                            {gateIcons[template.tags[0]]}
                         </Icon>
                         <Typography className="logic-gate-item-name">
-                            {gate.name}
+                            {gate}
                         </Typography>
-                        {template && template.info && template.info.length && (
+                        {template.info.length && (
                             <a
                                 target="_blank"
                                 className="logic-gate-item-info"
                                 href={randomItem(template.info)}
+                                onClick={e => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                }}
                             >
                                 <Icon className="lgi-icon">info</Icon>
                             </a>
-                        )}
-                        {gate.source === 'ic' && (
-                            <Icon className="lgi-icon logic-gate-item-delete">
-                                delete
-                            </Icon>
                         )}
                     </div>
                 )

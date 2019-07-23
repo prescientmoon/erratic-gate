@@ -1,15 +1,18 @@
 import { Transform } from '../../../common/math/classes/Transform'
 import { Pin } from './Pin'
-import merge from 'deepmerge'
 import { GateTemplate, PinCount } from '../types/GateTemplate'
-import { DefaultGateTemplate } from '../constants'
 import { idStore } from '../stores/idStore'
-import { Context } from '../../activation/types/Context'
+import { Context, InitialisationContext } from '../../activation/types/Context'
 import { toFunction } from '../../activation/helpers/toFunction'
-import { Subscription, combineLatest } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { SimulationError } from '../../errors/classes/SimulationError'
-import { throttleTime, debounce, debounceTime } from 'rxjs/operators'
 import { getGateTimePipes } from '../helpers/getGateTimePipes'
+import { ImageStore } from '../../simulationRenderer/stores/imageStore'
+import { completeTemplate } from '../../logic-gates/helpers/completeTemplate'
+import { Simulation, SimulationEnv } from './Simulation'
+import { fromSimulationState } from '../../saving/helpers/fromState'
+import { saveStore } from '../../saving/stores/saveStore'
+import { Wire } from './Wire'
 
 export interface GatePins {
     inputs: Pin[]
@@ -47,8 +50,14 @@ export class Gate {
     private subscriptions: Subscription[] = []
     private memory: Record<string, unknown> = {}
 
+    // Related to integration
+    private ghostSimulation: Simulation
+    private ghostWires: Wire[] = []
+    private isIntegrated = false
+    public env: SimulationEnv = 'global'
+
     public constructor(template: DeepPartial<GateTemplate> = {}, id?: number) {
-        this.template = merge(DefaultGateTemplate, template) as GateTemplate
+        this.template = completeTemplate(template)
 
         this.transform.scale = this.template.shape.scale
 
@@ -73,6 +82,10 @@ export class Gate {
             this
         )
 
+        if (this.template.material.type === 'image') {
+            ImageStore.set(this.template.material.value)
+        }
+
         this.id = id !== undefined ? id : idStore.generate()
 
         for (const pin of this._pins.inputs) {
@@ -84,6 +97,81 @@ export class Gate {
 
             this.subscriptions.push(subscription)
         }
+
+        this.init()
+
+        if (this.template.tags.includes('integrated')) {
+            this.isIntegrated = true
+        }
+
+        if (this.isIntegrated) {
+            const state = saveStore.get(this.template.metadata.name)
+
+            if (!state) {
+                throw new SimulationError(
+                    `Cannot run ic ${
+                        this.template.metadata.name
+                    } - save not found`
+                )
+            }
+
+            this.ghostSimulation = fromSimulationState(state.simulation, 'gate')
+
+            const sortByPosition = (x: Gate, y: Gate) =>
+                x.transform.position[1] - y.transform.position[1]
+
+            const gates = Array.from(this.ghostSimulation.gates)
+
+            const inputs = gates
+                .filter(gate => gate.template.integration.input)
+                .sort(sortByPosition)
+                .map(gate => gate.wrapPins(gate._pins.outputs))
+                .flat()
+
+            const outputs = gates
+                .filter(gate => gate.template.integration.output)
+                .sort(sortByPosition)
+                .map(gate => gate.wrapPins(gate._pins.inputs))
+                .flat()
+
+            if (inputs.length !== this._pins.inputs.length) {
+                throw new SimulationError(
+                    `Input count needs to match with the container gate`
+                )
+            }
+
+            if (outputs.length !== this._pins.outputs.length) {
+                throw new SimulationError(
+                    `Output count needs to match with the container gate`
+                )
+            }
+
+            const wrappedInputs = this.wrapPins(this._pins.inputs)
+            const wrappedOutputs = this.wrapPins(this._pins.outputs)
+
+            for (let index = 0; index < inputs.length; index++) {
+                this.ghostWires.push(
+                    new Wire(wrappedInputs[index], inputs[index], true)
+                )
+            }
+
+            for (let index = 0; index < outputs.length; index++) {
+                this.ghostWires.push(
+                    new Wire(outputs[index], wrappedOutputs[index], true)
+                )
+            }
+
+            this.ghostSimulation.wires.push(...this.ghostWires)
+        }
+    }
+
+    private init() {
+        toFunction<[InitialisationContext]>(
+            this.template.code.initialisation,
+            'context'
+        )({
+            memory: this.memory
+        })
     }
 
     public onClick() {
@@ -100,15 +188,22 @@ export class Gate {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe()
         }
+
+        if (this.isIntegrated) {
+            this.ghostSimulation.dispose()
+        }
     }
 
     public update() {
-        const context = this.getContext()
+        if (this.template.tags.includes('integrated')) {
+        } else {
+            const context = this.getContext()
 
-        if (!this.functions.activation)
-            throw new SimulationError('Activation function is missing')
+            if (!this.functions.activation)
+                throw new SimulationError('Activation function is missing')
 
-        this.functions.activation(context)
+            this.functions.activation(context)
+        }
     }
 
     public getContext(): Context {
@@ -124,12 +219,9 @@ export class Gate {
                 if (this.template.material.type === 'color') {
                     this.template.material.value = color
                 }
-            }
+            },
+            enviroment: this.env
         }
-    }
-
-    private getInputsStates() {
-        return this._pins.inputs.map(pin => pin.state)
     }
 
     private wrapPins(pins: Pin[]) {

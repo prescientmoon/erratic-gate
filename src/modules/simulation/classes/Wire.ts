@@ -9,14 +9,20 @@ export class Wire {
     public constructor(
         public start: PinWrapper,
         public end: PinWrapper,
+        ic: boolean = false,
         id?: number
     ) {
-        if (end.value.pairs.size !== 0) {
+        if (!ic && end.value.pairs.size !== 0) {
             throw new SimulationError('An input pin can only have 1 pair')
         }
 
-        end.value.addPair(start.value, true)
-        start.value.addPair(end.value)
+        end.value.addPair(start.value, true, !ic)
+        start.value.addPair(end.value, false, !ic)
+
+        // if (ic) {
+        //     start.value.state.subscribe(console.log)
+        //     end.value.state.subscribe(console.log)
+        // }
 
         this.id = id !== undefined ? id : idStore.generate()
     }

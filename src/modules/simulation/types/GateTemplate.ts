@@ -6,7 +6,7 @@ export interface PinCount {
 }
 
 export interface Material {
-    type: 'color'
+    type: 'color' | 'image'
     value: string
 }
 
@@ -28,6 +28,8 @@ export type TimePipe = Enabled<{
     time: number
 }>
 
+export type GateTag = 'base' | 'imported' | 'integrated'
+
 export interface GateTemplate {
     material: Material
     shape: Shape
@@ -39,6 +41,7 @@ export interface GateTemplate {
         name: string
     }
     code: {
+        initialisation: string
         activation: string
         onClick: string
     }
@@ -46,5 +49,11 @@ export interface GateTemplate {
         throttle: TimePipe
         debounce: TimePipe
     }
+    integration: {
+        allowed: boolean
+        input: boolean
+        output: boolean
+    }
     info: string[]
+    tags: GateTag[]
 }

@@ -17,6 +17,11 @@ const babelRule = {
     use: 'babel-loader'
 }
 
+const fileRule = {
+    test: /\.(png|svg|jpg|gif)$/,
+    use: ['file-loader']
+}
+
 const cssAndSass = [
     isProduction
         ? MiniCssExtractPlugin.loader
@@ -56,10 +61,19 @@ const baseConfig = {
         publicPath: '/'
     },
     module: {
-        rules: [babelRule, sassRule, cssRule]
+        rules: [babelRule, sassRule, cssRule, fileRule]
     },
     resolve: {
-        extensions: ['.js', '.ts', '.tsx', '.scss']
+        extensions: [
+            '.js',
+            '.ts',
+            '.tsx',
+            '.scss',
+            '.png',
+            '.svg',
+            '.jpg',
+            '.gif'
+        ]
     },
     plugins: []
 }

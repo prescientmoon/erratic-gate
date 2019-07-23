@@ -24,8 +24,9 @@ export const DefaultGateTemplate: GateTemplate = {
         scale: [100, 100]
     },
     code: {
-        activation: 'context.set(0,true)',
-        onClick: ''
+        activation: '',
+        onClick: '',
+        initialisation: ''
     },
     simulation: {
         debounce: {
@@ -36,5 +37,11 @@ export const DefaultGateTemplate: GateTemplate = {
             enabled: false
         }
     },
-    info: []
+    integration: {
+        allowed: true,
+        input: false,
+        output: false
+    },
+    info: [],
+    tags: ['base']
 }
