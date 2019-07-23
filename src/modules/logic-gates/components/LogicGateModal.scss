@@ -16,6 +16,8 @@ $item-color: $grey;
     @include modal-container();
 
     justify-content: center;
+    overflow-y: auto;
+    height: 100%;
 }
 
 .visible#logic-gate-modal-container {
@@ -42,7 +44,7 @@ $item-color: $grey;
 }
 
 #logic-gate-modal-container > .logic-gate-item > * {
-    font-size: 3em;
+    font-size: 2.5em;
 }
 
 #logic-gate-modal-container > .logic-gate-item > .logic-gate-item-type {
@@ -59,4 +61,10 @@ $item-color: $grey;
 
 #logic-gate-modal-container > .logic-gate-item > .logic-gate-item-name {
     flex-grow: 1;
+}
+
+#logic-gate-modal-container > .logic-gate-item:first-child {
+    // height: 4em;
+
+    opacity: 0;
 }

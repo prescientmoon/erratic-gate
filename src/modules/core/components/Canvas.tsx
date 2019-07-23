@@ -5,6 +5,7 @@ import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationR
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
 import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
 import { rendererSubject } from '../subjects/rendererSubject'
+import { loadSubject } from '../subjects/loadedSubject'
 
 class Canvas extends Component {
     private canvasRef: RefObject<HTMLCanvasElement> = createRef()
@@ -24,6 +25,8 @@ class Canvas extends Component {
     }
 
     public componentDidMount() {
+        loadSubject.next(true)
+
         if (this.canvasRef.current) {
             this.renderingContext = this.canvasRef.current.getContext('2d')
             this.renderer.updateWheelListener()

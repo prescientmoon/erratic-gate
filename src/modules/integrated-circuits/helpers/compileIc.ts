@@ -5,8 +5,10 @@ import {
     simulationInputCount,
     simulationOutputCount
 } from './simulationIoCount'
-import { InitialisationContext } from '../../activation/types/Context'
 import { templateStore } from '../../saving/stores/templateStore'
+import { toast } from 'react-toastify'
+import { createToastArguments } from '../../toasts/helpers/createToastArguments'
+import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 
 /**
  * Compiles a simulation into a logicGate
@@ -18,6 +20,7 @@ export const compileIc = ({ mode, name, gates }: SimulationState) => {
         throw new SimulationError('Cannot compile project')
     }
 
+    const translation = CurrentLanguage.getTranslation()
     const inputCount = simulationInputCount(gates)
     const outputCount = simulationOutputCount(gates)
 
@@ -37,4 +40,10 @@ export const compileIc = ({ mode, name, gates }: SimulationState) => {
     }
 
     templateStore.set(name, result)
+    toast(
+        ...createToastArguments(
+            translation.messages.compiledIc(name),
+            'markunread_mailbox'
+        )
+    )
 }

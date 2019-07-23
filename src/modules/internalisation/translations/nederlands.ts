@@ -28,6 +28,7 @@ export const DutchTranslation: Translation = {
         createdSimulation: name => `Simulatie '${name}' succesvol gecreerd`,
         switchedToSimulation: name =>
             `Succesvol veranderd naar simulatie '${name}'`,
-        savedSimulation: name => `Simulatie succesvol opgeslagen '${name}'`
+        savedSimulation: name => `Simulatie succesvol opgeslagen '${name}'`,
+        compiledIc: name => `Todo: ${name}`
     }
 }

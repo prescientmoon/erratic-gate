@@ -6,7 +6,8 @@
         "noImplicitAny": true,
         "experimentalDecorators": true,
         "target": "esnext",
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "module": "esnext"
     },
     "exclude": ["node_modules"],
     "include": ["src"]

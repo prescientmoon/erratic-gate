@@ -28,5 +28,6 @@ export interface Translation {
         createdSimulation: NameSentence
         switchedToSimulation: NameSentence
         savedSimulation: NameSentence
+        compiledIc: NameSentence
     }
 }

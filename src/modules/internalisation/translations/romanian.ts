@@ -28,6 +28,7 @@ export const RomanianTranslation: Translation = {
             `Simulația '${name}' a fost creeată cu succes`,
         switchedToSimulation: name =>
             `Simulația '${name}' a fost deschisă cu succes`,
-        savedSimulation: name => `Simulația '${name}' a fost salvată cu succes`
+        savedSimulation: name => `Simulația '${name}' a fost salvată cu succes`,
+        compiledIc: name => `Simulația '${name}' a fost compilată cu succes`
     }
 }

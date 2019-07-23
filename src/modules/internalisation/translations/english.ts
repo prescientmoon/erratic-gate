@@ -27,6 +27,7 @@ export const EnglishTranslation: Translation = {
         createdSimulation: name => `Succesfully created simulation '${name}'`,
         switchedToSimulation: name =>
             `Succesfully switched to simulation '${name}'`,
-        savedSimulation: name => `Succesfully saved simulation '${name}'`
+        savedSimulation: name => `Succesfully saved simulation '${name}'`,
+        compiledIc: name => `Succesfully compiled circuit '${name}'`
     }
 }

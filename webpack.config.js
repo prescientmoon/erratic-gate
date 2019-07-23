@@ -54,7 +54,7 @@ const sassRule = {
 
 const baseConfig = {
     mode: 'none',
-    entry: ['babel-regenerator-runtime', resolve(sourceFolder, 'main')],
+    entry: ['babel-regenerator-runtime', resolve(sourceFolder, 'index')],
     output: {
         filename: 'js/[name].js',
         path: buildFolder,

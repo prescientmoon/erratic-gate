@@ -5,6 +5,7 @@ import { saveStore } from '../stores/saveStore'
 import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
+import { compileIc } from '../../integrated-circuits/helpers/compileIc'
 
 /**
  * Inits a simulation by:
@@ -30,6 +31,10 @@ export const initSimulation = (name: string, mode: simulationMode) => {
             'check'
         )
     )
+
+    if (mode === 'ic') {
+        compileIc(state.simulation)
+    }
 
     return state
 }
