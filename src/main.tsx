@@ -7,6 +7,7 @@ import { initKeyBindings } from './modules/keybindings/helpers/initialiseKeyBind
 import { initBaseTemplates } from './modules/saving/helpers/initBaseTemplates'
 import { loadSubject } from './modules/core/subjects/loadedSubject'
 import { take } from 'rxjs/operators'
+import { logWelcome } from './modules/core/helpers/logWelcome'
 
 export const start = async () => {
     console.clear()
@@ -16,6 +17,7 @@ export const start = async () => {
     handleErrors()
     initKeyBindings()
     initBaseTemplates()
+    logWelcome()
 
     render(<App />, document.getElementById('app'))
 

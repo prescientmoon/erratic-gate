@@ -28,6 +28,8 @@ import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
 import { RefObject } from 'react'
 import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
+import { SimulationError } from '../../errors/classes/SimulationError'
+import { deleteWire } from '../../simulation/helpers/deleteWire'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -113,6 +115,24 @@ export class SimulationRenderer {
                             this.options.gates.pinRadius
                         )
                     ) {
+                        if (pin.value.pairs.size) {
+                            if (pin.value.type & 1) {
+                                const wire = this.simulation.wires.find(
+                                    wire => wire.end.value === pin.value
+                                )
+
+                                if (wire) {
+                                    deleteWire(this.simulation, wire)
+                                } else {
+                                    throw new SimulationError(
+                                        `Cannot find wire to remove`
+                                    )
+                                }
+                            }
+
+                            return
+                        }
+
                         if (
                             this.selectedPins.start &&
                             pin.value === this.selectedPins.start.wrapper.value
@@ -130,21 +150,14 @@ export class SimulationRenderer {
                                 wrapper: pin,
                                 transform
                             }
-                        } else if (
-                            pin.value.type & 1 &&
-                            pin.value.pairs.size === 0
-                        ) {
+                        } else if (pin.value.type & 1) {
                             this.selectedPins.end = {
                                 wrapper: pin,
                                 transform
                             }
                         }
 
-                        if (
-                            this.selectedPins.start &&
-                            this.selectedPins.end &&
-                            this.selectedPins.end.wrapper.value.pairs.size === 0
-                        ) {
+                        if (this.selectedPins.start && this.selectedPins.end) {
                             this.simulation.wires.push(
                                 new Wire(
                                     this.selectedPins.start.wrapper,
@@ -158,7 +171,7 @@ export class SimulationRenderer {
                 }
             }
 
-            this.mouseState |= 2
+            this.mouseState |= 0b10
         })
 
         this.mouseUpOutput.subscribe(event => {

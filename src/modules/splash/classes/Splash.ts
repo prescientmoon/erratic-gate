@@ -4,6 +4,7 @@ import './Splash.scss'
 
 export class Splash {
     private element = querySelector<HTMLDivElement>('.Splash')
+    private email = 'rafaeladriel11@gmail.com'
 
     public fade() {
         this.element.style.transition = '0.3s'
@@ -33,6 +34,13 @@ export class Splash {
         <p>Your browser might not be supported, or your data might be corrupt.
         Press "Clear data" below to reset the simulator and try again.</br>
         </br></br>
+
+        If the problem persists, you can <a class="mail" href="mailto:${
+            this.email
+        }">contact the developer</a>
+
+        </br></br>
+
         We do not support the following browsers:</p>
         <ul>
           <li><span>Opera Mini</span></li>

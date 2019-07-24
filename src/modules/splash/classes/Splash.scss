@@ -26,6 +26,7 @@
 }
 
 .Splash > .error {
+    color: white;
     display: none;
 }
 
@@ -37,7 +38,7 @@
 .Splash > .error > .details {
     padding: 16px;
 
-    background-color: shade(darker);
+    background-color: $grey / 2;
 
     border-radius: 3px;
     margin-bottom: 16px;
@@ -46,9 +47,13 @@
 }
 
 .Splash > .error > .description {
-    color: font-color(normal);
+    color: white;
     margin-bottom: 16px;
     font-size: 14px;
+}
+
+.Splash > .error > .details > a {
+    color: $primary !important;
 }
 
 .Splash.-hasError {
@@ -58,4 +63,8 @@
     > .loading {
         display: none;
     }
+}
+
+.mail {
+    color: $primary * 2;
 }
