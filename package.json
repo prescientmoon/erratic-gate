@@ -6,7 +6,7 @@
         "dev": "webpack-dev-server --open --mode development",
         "build": "cross-env NODE_ENV=production webpack",
         "deploy": "ts-node deploy",
-        "show": "gource -f  --start-date \"2019-07-01 12:00\" --key --hide dirnames,filenames,bloom -s 1"
+        "show": "gource -f  --start-date \"2019-07-01 12:00\" --key --hide dirnames,filenames,bloom -s 0.3"
     },
     "devDependencies": {
         "@babel/core": "^7.5.5",
@@ -51,7 +51,6 @@
         "react-router-dom": "^5.0.1",
         "react-toastify": "^5.3.2",
         "rxjs": "^6.5.2",
-        "rxjs-hooks": "^0.5.1",
-        "terser": "^4.1.2"
+        "rxjs-hooks": "^0.5.1"
     }
 }
