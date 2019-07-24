@@ -1,8 +1,21 @@
-import { keyBindings } from '../constants'
 import { KeyboardInput } from '../classes/KeyboardInput'
-import { KeyBindingMap } from '../types/KeyBindingMap'
+import { KeyBindingMap, KeyBinding } from '../types/KeyBindingMap'
+import { SidebarActions } from '../../simulation-actions/constants'
+import { SidebarAction } from '../../simulation-actions/types/SidebarAction'
+import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 
 export const listeners: Record<string, KeyboardInput> = {}
+
+const keyBindings = Object.values(SidebarActions)
+    .filter(action => action.keybinding)
+    .map(
+        (action): KeyBinding => {
+            return {
+                actions: [action.action],
+                keys: action.keybinding || []
+            }
+        }
+    )
 
 export const initKeyBindings = (bindings: KeyBindingMap = keyBindings) => {
     const allKeys = new Set<string>()
@@ -18,26 +31,54 @@ export const initKeyBindings = (bindings: KeyBindingMap = keyBindings) => {
     }
 
     window.addEventListener('keydown', e => {
-        for (const keyBinding of bindings) {
-            let done = false
+        if (!modalIsOpen()) {
+            const current: {
+                keys: string[]
+                callback: Function
+            }[] = []
 
-            for (const key of keyBinding.keys) {
-                if (!(done || listeners[key].value)) {
-                    done = true
-                    break
+            for (const keyBinding of bindings) {
+                let done = false
+
+                for (const key of keyBinding.keys) {
+                    if (!(done || listeners[key].value)) {
+                        done = true
+                        break
+                    }
                 }
+
+                if (done) {
+                    continue
+                }
+
+                current.push({
+                    keys: keyBinding.keys,
+                    callback: () => {
+                        for (const action of keyBinding.actions) {
+                            action()
+                        }
+                    }
+                })
             }
 
-            if (done) {
-                continue
-            }
+            if (current.length) {
+                let maxIndex = 0
+                let max = current[0].keys.length
 
-            for (const action of keyBinding.actions) {
-                action()
-            }
+                for (let index = 1; index < current.length; index++) {
+                    const element = current[index]
 
-            e.preventDefault()
-            e.stopPropagation()
+                    if (element.keys.length > max) {
+                        max = element.keys.length
+                        maxIndex = index
+                    }
+                }
+
+                current[maxIndex].callback()
+
+                e.preventDefault()
+                e.stopPropagation()
+            }
         }
     })
 }

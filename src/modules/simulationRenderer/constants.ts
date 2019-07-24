@@ -1,5 +1,6 @@
 import { SimulationRendererOptions } from './types/SimulationRendererOptions'
 import { vector2 } from '../../common/math/classes/Transform'
+import { mouseButton } from '../core/types/mouseButton'
 
 export const defaultSimulationRendererOptions: SimulationRendererOptions = {
     dnd: {
@@ -30,3 +31,13 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
 }
 
 export const imageQuality: vector2 = [100, 100]
+
+export const mouseButtons: Record<
+    'zoom' | 'pan' | 'drag' | 'select',
+    mouseButton
+> = {
+    zoom: 1,
+    drag: 0,
+    pan: 0,
+    select: 2
+}

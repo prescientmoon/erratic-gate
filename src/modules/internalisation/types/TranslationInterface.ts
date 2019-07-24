@@ -1,5 +1,6 @@
 import { supportedLanguage } from './supportedLanguages'
 import { simulationMode } from '../../saving/types/SimulationSave'
+import { possibleAction } from '../../simulation-actions/types/possibleAction'
 
 export type SentenceFactory<T extends string[]> = (...names: T) => string
 export type NameSentence = SentenceFactory<[string]>
@@ -13,6 +14,7 @@ export interface Translation {
         createSimulation: string
         openSimulation: string
         logicGates: string
+        simulation: string
         language: string
     }
     createSimulation: {
@@ -29,5 +31,10 @@ export interface Translation {
         switchedToSimulation: NameSentence
         savedSimulation: NameSentence
         compiledIc: NameSentence
+        refreshed: NameSentence
+        cleared: NameSentence
+        cleaned: NameSentence
+        undone: NameSentence
     }
+    actions: Record<possibleAction, string>
 }

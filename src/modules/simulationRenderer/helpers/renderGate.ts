@@ -13,7 +13,7 @@ export const renderGate = (
 ) => {
     renderPins(ctx, renderer, gate)
 
-    if (renderer.selectedGate === gate.id) {
+    if (renderer.selectedGates.has(gate.id)) {
         ctx.strokeStyle = renderer.options.gates.gateStroke.active
     } else {
         ctx.strokeStyle = renderer.options.gates.gateStroke.normal

@@ -1,8 +1,6 @@
 const { publish } = require('gh-pages')
 const { exec } = require('child_process')
 
-// const { publish } = require("gh-pages")
-
 const args = process.argv.splice(2)
 
 const mFlag = (args.indexOf('--message') + 1 || args.indexOf('-m') + 1) - 1

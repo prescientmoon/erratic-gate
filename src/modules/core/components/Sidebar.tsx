@@ -6,6 +6,7 @@ import CreateSimulationButton from './CreateSimulationButton'
 import LogicGates from './LogicGates'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Language from './Language'
+import SimulationActions from '../../simulation-actions/components/SimulationActions'
 /**
  * The width of the sidebar
  */
@@ -70,6 +71,7 @@ const Sidebar = () => {
                     <CreateSimulationButton />
                     <OpenSimulation />
                     <LogicGates />
+                    <SimulationActions />
                 </List>
 
                 <Language />

@@ -3,7 +3,6 @@ import FluidCanvas from './FluidCanvas'
 import loop from 'mainloop.js'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
-import { updateSimulation } from '../../simulationRenderer/helpers/updateSimulation'
 import { rendererSubject } from '../subjects/rendererSubject'
 import { loadSubject } from '../subjects/loadedSubject'
 
@@ -21,7 +20,7 @@ class Canvas extends Component {
             if (this.renderingContext) {
                 renderSimulation(this.renderingContext, this.renderer)
             }
-        }).setUpdate(delta => updateSimulation(this.renderer, delta))
+        })
     }
 
     public componentDidMount() {

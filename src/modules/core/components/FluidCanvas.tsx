@@ -2,14 +2,10 @@ import React, { RefObject, forwardRef, MouseEvent, WheelEvent } from 'react'
 import { useObservable } from 'rxjs-hooks'
 import { Screen } from '../classes/Screen'
 import { Subject } from 'rxjs'
-import { vector2 } from '../../../common/math/types/vector2'
+import { mouseButton } from '../types/mouseButton'
+import { MouseEventInfo } from './MouseEventInfo'
 
 const screen = new Screen()
-
-export interface MouseEventInfo {
-    position: vector2
-    button: number
-}
 
 export interface FluidCanvasProps {
     mouseDownOuput: Subject<MouseEventInfo>
@@ -21,7 +17,7 @@ export const getEventInfo = (
     e: MouseEvent<HTMLCanvasElement>
 ): MouseEventInfo => {
     return {
-        button: e.button,
+        button: e.button as mouseButton,
         position: [e.clientX, e.clientY]
     }
 }

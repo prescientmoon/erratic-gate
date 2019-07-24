@@ -2,7 +2,7 @@ import { Screen } from '../../core/classes/Screen'
 import { clamp } from '../../simulation/helpers/clamp'
 import { Camera } from '../classes/Camera'
 import { vector2 } from '../../../common/math/classes/Transform'
-import { MouseEventInfo } from '../../core/components/FluidCanvas'
+import { MouseEventInfo } from '../../core/components/MouseEventInfo'
 // import { WheelEvent } from 'react'
 
 const screen = new Screen()

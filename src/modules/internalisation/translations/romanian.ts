@@ -9,6 +9,7 @@ export const RomanianTranslation: Translation = {
         createSimulation: 'Creează o simulație',
         openSimulation: 'Deschide o simulație',
         logicGates: 'Porți logice',
+        simulation: 'Simulație',
         language: 'Limba'
     },
     createSimulation: {
@@ -22,6 +23,9 @@ export const RomanianTranslation: Translation = {
         name: {
             question: 'Cum vrei să numești simulația?'
         }
+    },
+    actions: {
+        save: 'Salvează'
     },
     messages: {
         createdSimulation: name =>

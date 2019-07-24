@@ -9,6 +9,7 @@ export const DutchTranslation: Translation = {
         createSimulation: 'Maak simulatie',
         logicGates: 'Logische poorten',
         openSimulation: 'Open simulatie',
+        simulation: 'Todo',
         language: 'Taal'
     },
     createSimulation: {

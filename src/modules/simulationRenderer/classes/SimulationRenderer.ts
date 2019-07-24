@@ -1,20 +1,18 @@
 import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Subject } from 'rxjs'
-import { MouseEventInfo } from '../../core/components/FluidCanvas'
+import { MouseEventInfo } from '../../core/components/MouseEventInfo'
 import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
 import { vector2 } from '../../../common/math/types/vector2'
-import { MouseVelocityManager } from './MouseVelocityManager'
 import { Screen } from '../../core/classes/Screen'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
-import { defaultSimulationRendererOptions } from '../constants'
+import { defaultSimulationRendererOptions, mouseButtons } from '../constants'
 import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
 import { Wire } from '../../simulation/classes/Wire'
 import { KeyBindingMap } from '../../keybindings/types/KeyBindingMap'
-import { save } from '../../saving/helpers/save'
 import { initKeyBindings } from '../../keybindings/helpers/initialiseKeyBindings'
 import { currentStore } from '../../saving/stores/currentStore'
 import { saveStore } from '../../saving/stores/saveStore'
@@ -30,6 +28,9 @@ import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { deleteWire } from '../../simulation/helpers/deleteWire'
+import { RendererState } from '../../saving/types/SimulationSave'
+import { setToArray } from '../../../common/lang/arrays/helpers/setToArray'
+import { Selection } from '../types/Selection'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -37,17 +38,16 @@ export class SimulationRenderer {
     public mouseMoveOutput = new Subject<MouseEventInfo>()
     public wheelOutput = new Subject<unknown>()
 
-    public selectedGate: number | null = null
+    public selectedGates = new Set<Selection>()
     public lastMousePosition: vector2 = [0, 0]
-    public movedSelection = false
     public options: SimulationRendererOptions
-    public mouseManager = new MouseVelocityManager(this.mouseMoveOutput)
     public screen = new Screen()
     public camera = new Camera()
 
     // first bit = dragging
-    // second bit = moving around
-    private mouseState = 0b00
+    // second bit = panning around
+    // third bit = selecting
+    private mouseState = 0b000
     private gateSelectionOffset: vector2 = [0, 0]
 
     // this is used for spawning gates
@@ -81,16 +81,18 @@ export class SimulationRenderer {
             for (let index = gates.length - 1; index >= 0; index--) {
                 const { transform, id, pins } = gates[index]
 
-                if (pointInSquare(worldPosition, transform)) {
-                    // run function
+                if (
+                    event.button === mouseButtons.drag &&
+                    pointInSquare(worldPosition, transform)
+                ) {
                     gates[index].onClick()
 
-                    this.mouseManager.clear(worldPosition[0])
-
                     this.mouseState |= 1
-                    this.movedSelection = false
 
-                    this.selectedGate = id
+                    this.selectedGates.add({
+                        id,
+                        permanent: false
+                    })
                     this.gateSelectionOffset = worldPosition.map(
                         (position, index) =>
                             position - transform.position[index]
@@ -100,9 +102,11 @@ export class SimulationRenderer {
 
                     if (gateNode) {
                         return this.simulation.gates.moveOnTop(gateNode)
+                    } else {
+                        throw new SimulationError(
+                            `Cannot find gate with id ${id}`
+                        )
                     }
-
-                    return
                 }
 
                 for (const pin of pins) {
@@ -145,7 +149,7 @@ export class SimulationRenderer {
                         ) {
                             this.selectedPins.start = null
                             this.selectedPins.end = null
-                        } else if ((pin.value.type & 0b10) >> 1) {
+                        } else if ((pin.value.type & 2) >> 1) {
                             this.selectedPins.start = {
                                 wrapper: pin,
                                 transform
@@ -167,22 +171,31 @@ export class SimulationRenderer {
                             this.selectedPins.start = null
                             this.selectedPins.end = null
                         }
+
+                        return
                     }
                 }
             }
 
-            this.mouseState |= 0b10
+            if (event.button === mouseButtons.pan) {
+                this.mouseState |= 0b10
+            }
         })
 
-        this.mouseUpOutput.subscribe(event => {
-            if (this.selectedGate !== null) {
+        this.mouseUpOutput.subscribe(() => {
+            if (this.selectedGates.size) {
                 const selected = this.getSelected()
 
-                if (selected) {
-                    selected.transform.rotation = 0
+                for (const gate of selected) {
+                    gate.transform.rotation = 0
                 }
 
-                this.selectedGate = null
+                for (const selection of this.selectedGates.values()) {
+                    if (!selection.permanent) {
+                        this.selectedGates.delete(selection)
+                    }
+                }
+
                 this.mouseState &= 0
             }
 
@@ -194,18 +207,12 @@ export class SimulationRenderer {
 
             const worldPosition = this.camera.toWordPostition(event.position)
 
-            if (this.mouseState & 1 && this.selectedGate !== null) {
-                const gate = this.getGateById(this.selectedGate)
+            if (this.mouseState & 1 && this.selectedGates.size) {
+                for (const gate of this.getSelected()) {
+                    const { transform } = gate
 
-                if (!gate || !gate.data) return
-
-                const transform = gate.data.transform
-
-                transform.x = worldPosition[0] - this.gateSelectionOffset[0]
-                transform.y = worldPosition[1] - this.gateSelectionOffset[1]
-
-                if (!this.movedSelection) {
-                    this.movedSelection = true
+                    transform.x = worldPosition[0] - this.gateSelectionOffset[0]
+                    transform.y = worldPosition[1] - this.gateSelectionOffset[1]
                 }
             }
 
@@ -245,6 +252,11 @@ export class SimulationRenderer {
         }
     }
 
+    public loadSave(save: RendererState) {
+        this.simulation = fromSimulationState(save.simulation)
+        this.camera = fromCameraState(save.camera)
+    }
+
     public reloadSave() {
         try {
             const current = currentStore.get()
@@ -253,8 +265,7 @@ export class SimulationRenderer {
             if (!save) return
             if (!(save.simulation || save.camera)) return
 
-            this.simulation = fromSimulationState(save.simulation)
-            this.camera = fromCameraState(save.camera)
+            this.loadSave(save)
         } catch (e) {
             throw new Error(
                 `An error occured while loading the save: ${
@@ -267,37 +278,27 @@ export class SimulationRenderer {
     private initKeyBindings() {
         const bindings: KeyBindingMap = [
             {
-                keys: ['ctrl', 's'],
-                actions: [() => save(this)]
-            },
-            {
                 keys: ['delete'],
                 actions: [
                     () => {
-                        const selected = this.getSelected()
+                        for (const gate of this.getSelected()) {
+                            const node = this.simulation.gates.get(gate.id)
 
-                        if (!selected) {
-                            return
-                        }
+                            if (!node) continue
 
-                        const node = this.simulation.gates.get(selected.id)
-
-                        if (!node) {
-                            return
-                        }
-
-                        for (const wire of this.simulation.wires) {
-                            if (wireConnectedToGate(selected, wire)) {
-                                wire.dispose()
+                            for (const wire of this.simulation.wires) {
+                                if (wireConnectedToGate(gate, wire)) {
+                                    wire.dispose()
+                                }
                             }
+
+                            this.simulation.wires = this.simulation.wires.filter(
+                                wire => wire.active
+                            )
+
+                            gate.dispose()
+                            this.simulation.gates.delete(node)
                         }
-
-                        this.simulation.wires = this.simulation.wires.filter(
-                            wire => wire.active
-                        )
-
-                        selected.dispose()
-                        this.simulation.gates.delete(node)
                     }
                 ]
             }
@@ -310,13 +311,25 @@ export class SimulationRenderer {
         return this.simulation.gates.get(id)
     }
 
+    /**
+     * Gets all selected gates in the simulation
+     *
+     * @throws SimulationError if an id isnt valid
+     * @throws SimulationError if the id doesnt have a data prop
+     */
     public getSelected() {
-        if (this.selectedGate === null) return null
+        return setToArray(this.selectedGates).map(({ id }) => {
+            const gate = this.simulation.gates.get(id)
 
-        const gate = this.getGateById(this.selectedGate)
+            if (!gate) {
+                throw new SimulationError(`Cannot find gate with id ${id}`)
+            } else if (!gate.data) {
+                throw new SimulationError(
+                    `Cannot find data of gate with id ${id}`
+                )
+            }
 
-        if (!gate || !gate.data) return null
-
-        return gate.data
+            return gate.data
+        })
     }
 }
