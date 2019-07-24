@@ -32,7 +32,6 @@ export interface Translation {
         savedSimulation: NameSentence
         compiledIc: NameSentence
         refreshed: NameSentence
-        cleared: NameSentence
         cleaned: NameSentence
         undone: NameSentence
     }

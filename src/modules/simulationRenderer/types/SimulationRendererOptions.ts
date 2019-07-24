@@ -24,4 +24,8 @@ export interface SimulationRendererOptions {
     spawning: {
         spawnOffset: number
     }
+    selecting: {
+        stroke: string
+        fill: string
+    }
 }

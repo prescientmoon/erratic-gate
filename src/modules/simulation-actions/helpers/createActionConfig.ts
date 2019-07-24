@@ -5,7 +5,7 @@ import { createRendererAction } from './createRendererActions'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { getRendererSafely } from '../../logic-gates/helpers/getRendererSafely'
 
-export type ActionConfigFunction = (renderer?: SimulationRenderer) => void
+export type ActionConfigFunction = (renderer: SimulationRenderer) => void
 
 export type ActionConfigCallback =
     | {

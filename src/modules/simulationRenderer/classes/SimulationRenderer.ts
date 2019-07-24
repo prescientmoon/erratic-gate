@@ -2,9 +2,11 @@ import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Subject } from 'rxjs'
 import { MouseEventInfo } from '../../core/components/MouseEventInfo'
-import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
+import {
+    oldPointInSquare,
+    pointInSquare
+} from '../../../common/math/helpers/pointInSquare'
 import { vector2 } from '../../../common/math/types/vector2'
-import { Screen } from '../../core/classes/Screen'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
 import { defaultSimulationRendererOptions, mouseButtons } from '../constants'
@@ -12,8 +14,6 @@ import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
 import { Wire } from '../../simulation/classes/Wire'
-import { KeyBindingMap } from '../../keybindings/types/KeyBindingMap'
-import { initKeyBindings } from '../../keybindings/helpers/initialiseKeyBindings'
 import { currentStore } from '../../saving/stores/currentStore'
 import { saveStore } from '../../saving/stores/saveStore'
 import {
@@ -21,7 +21,6 @@ import {
     fromCameraState
 } from '../../saving/helpers/fromState'
 import merge from 'deepmerge'
-import { wireConnectedToGate } from '../helpers/wireConnectedToGate'
 import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
 import { RefObject } from 'react'
 import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
@@ -30,7 +29,10 @@ import { SimulationError } from '../../errors/classes/SimulationError'
 import { deleteWire } from '../../simulation/helpers/deleteWire'
 import { RendererState } from '../../saving/types/SimulationSave'
 import { setToArray } from '../../../common/lang/arrays/helpers/setToArray'
-import { Selection } from '../types/Selection'
+import { Transform } from '../../../common/math/classes/Transform'
+import { gatesInSelection } from '../helpers/gatesInSelection'
+import { selectionType } from '../types/selectionType'
+import { addIdToSelection } from '../helpers/idIsSelected'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -38,17 +40,22 @@ export class SimulationRenderer {
     public mouseMoveOutput = new Subject<MouseEventInfo>()
     public wheelOutput = new Subject<unknown>()
 
-    public selectedGates = new Set<Selection>()
-    public lastMousePosition: vector2 = [0, 0]
+    public selectedGates: Record<selectionType, Set<number>> = {
+        temporary: new Set<number>(),
+        permanent: new Set<number>()
+    }
+
     public options: SimulationRendererOptions
-    public screen = new Screen()
     public camera = new Camera()
+
+    public selectedArea = new Transform()
 
     // first bit = dragging
     // second bit = panning around
     // third bit = selecting
-    private mouseState = 0b000
-    private gateSelectionOffset: vector2 = [0, 0]
+    public mouseState = 0b000
+
+    public lastMousePosition: vector2 = [0, 0]
 
     // this is used for spawning gates
     public spawnCount = 0
@@ -89,14 +96,7 @@ export class SimulationRenderer {
 
                     this.mouseState |= 1
 
-                    this.selectedGates.add({
-                        id,
-                        permanent: false
-                    })
-                    this.gateSelectionOffset = worldPosition.map(
-                        (position, index) =>
-                            position - transform.position[index]
-                    ) as vector2
+                    addIdToSelection(this, 'temporary', id)
 
                     const gateNode = this.simulation.gates.get(id)
 
@@ -132,9 +132,9 @@ export class SimulationRenderer {
                                         `Cannot find wire to remove`
                                     )
                                 }
-                            }
 
-                            return
+                                return
+                            }
                         }
 
                         if (
@@ -177,29 +177,59 @@ export class SimulationRenderer {
                 }
             }
 
+            if (event.button === mouseButtons.unselect) {
+                this.clearSelection()
+            }
+
             if (event.button === mouseButtons.pan) {
+                // the second bit = pannning
                 this.mouseState |= 0b10
+            } else if (event.button === mouseButtons.select) {
+                this.selectedArea.position = this.lastMousePosition
+                this.selectedArea.scale = [0, 0]
+
+                // the third bit = selecting
+                this.mouseState |= 0b100
             }
         })
 
-        this.mouseUpOutput.subscribe(() => {
-            if (this.selectedGates.size) {
+        this.mouseUpOutput.subscribe(event => {
+            if (event.button === mouseButtons.drag) {
                 const selected = this.getSelected()
 
                 for (const gate of selected) {
                     gate.transform.rotation = 0
                 }
 
-                for (const selection of this.selectedGates.values()) {
-                    if (!selection.permanent) {
-                        this.selectedGates.delete(selection)
-                    }
-                }
+                this.selectedGates.temporary.clear()
 
-                this.mouseState &= 0
+                // turn first 2 bits to 0
+                this.mouseState &= 1 << 2
+
+                // for debugging
+                if ((this.mouseState >> 1) & 1 || this.mouseState & 1) {
+                    throw new SimulationError(
+                        'First 2 bits of mouseState need to be set to 0'
+                    )
+                }
             }
 
-            this.mouseState &= 0b00
+            if (
+                event.button === mouseButtons.select &&
+                (this.mouseState >> 2) & 1
+            ) {
+                // turn the third bit to 0
+                this.mouseState &= (1 << 2) - 1
+
+                const selectedGates = gatesInSelection(
+                    this.selectedArea,
+                    Array.from(this.simulation.gates)
+                )
+
+                for (const { id } of selectedGates) {
+                    addIdToSelection(this, 'permanent', id)
+                }
+            }
         })
 
         this.mouseMoveOutput.subscribe(event => {
@@ -207,22 +237,22 @@ export class SimulationRenderer {
 
             const worldPosition = this.camera.toWordPostition(event.position)
 
-            if (this.mouseState & 1 && this.selectedGates.size) {
+            const offset = invert(
+                relativeTo(this.lastMousePosition, worldPosition)
+            ).map(
+                (value, index) => value * this.camera.transform.scale[index]
+            ) as vector2
+
+            if (this.mouseState & 1) {
                 for (const gate of this.getSelected()) {
                     const { transform } = gate
 
-                    transform.x = worldPosition[0] - this.gateSelectionOffset[0]
-                    transform.y = worldPosition[1] - this.gateSelectionOffset[1]
+                    transform.x -= offset[0]
+                    transform.y -= offset[1]
                 }
             }
 
             if ((this.mouseState >> 1) & 1) {
-                const offset = invert(
-                    relativeTo(this.lastMousePosition, worldPosition)
-                ).map(
-                    (value, index) => value * this.camera.transform.scale[index]
-                ) as vector2
-
                 this.camera.transform.position = add(
                     this.camera.transform.position,
                     invert(offset)
@@ -231,13 +261,17 @@ export class SimulationRenderer {
                 this.spawnCount = 0
             }
 
+            if ((this.mouseState >> 2) & 1) {
+                this.selectedArea.scale = relativeTo(
+                    this.selectedArea.position,
+                    this.camera.toWordPostition(event.position)
+                )
+            }
+
             this.lastMousePosition = this.camera.toWordPostition(event.position)
         })
 
-        dumpSimulation(this)
-
         this.reloadSave()
-        this.initKeyBindings()
     }
 
     public updateWheelListener() {
@@ -259,6 +293,8 @@ export class SimulationRenderer {
 
     public reloadSave() {
         try {
+            dumpSimulation(this)
+
             const current = currentStore.get()
             const save = saveStore.get(current)
 
@@ -275,42 +311,6 @@ export class SimulationRenderer {
         }
     }
 
-    private initKeyBindings() {
-        const bindings: KeyBindingMap = [
-            {
-                keys: ['delete'],
-                actions: [
-                    () => {
-                        for (const gate of this.getSelected()) {
-                            const node = this.simulation.gates.get(gate.id)
-
-                            if (!node) continue
-
-                            for (const wire of this.simulation.wires) {
-                                if (wireConnectedToGate(gate, wire)) {
-                                    wire.dispose()
-                                }
-                            }
-
-                            this.simulation.wires = this.simulation.wires.filter(
-                                wire => wire.active
-                            )
-
-                            gate.dispose()
-                            this.simulation.gates.delete(node)
-                        }
-                    }
-                ]
-            }
-        ]
-
-        initKeyBindings(bindings)
-    }
-
-    public getGateById(id: number) {
-        return this.simulation.gates.get(id)
-    }
-
     /**
      * Gets all selected gates in the simulation
      *
@@ -318,7 +318,7 @@ export class SimulationRenderer {
      * @throws SimulationError if the id doesnt have a data prop
      */
     public getSelected() {
-        return setToArray(this.selectedGates).map(({ id }) => {
+        return setToArray(this.allSelectedIds()).map(id => {
             const gate = this.simulation.gates.get(id)
 
             if (!gate) {
@@ -331,5 +331,23 @@ export class SimulationRenderer {
 
             return gate.data
         })
+    }
+
+    /**
+     * helper to merge the temporary and permanent selection
+     */
+    public allSelectedIds() {
+        return new Set([
+            ...setToArray(this.selectedGates.permanent),
+            ...setToArray(this.selectedGates.temporary)
+        ])
+    }
+
+    /**
+     * Helper to clear all selected sets
+     */
+    public clearSelection() {
+        this.selectedGates.permanent.clear()
+        this.selectedGates.temporary.clear()
     }
 }

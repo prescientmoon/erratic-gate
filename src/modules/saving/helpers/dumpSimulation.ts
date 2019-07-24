@@ -8,7 +8,7 @@ import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationR
 export const dumpSimulation = (renderer: SimulationRenderer) => {
     renderer.simulation.dispose()
     renderer.lastMousePosition = [0, 0]
-    renderer.selectedGates = new Set()
+    renderer.clearSelection()
     renderer.selectedPins = {
         end: null,
         start: null

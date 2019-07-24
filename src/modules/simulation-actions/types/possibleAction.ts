@@ -1,4 +1,10 @@
 /**
  * Type repressenting al lpossible actions
  */
-export type possibleAction = 'save' | 'clear' | 'clean' | 'refresh' | 'undo'
+export type possibleAction =
+    | 'save'
+    | 'clean'
+    | 'refresh'
+    | 'undo'
+    | 'select all'
+    | 'delete selection'

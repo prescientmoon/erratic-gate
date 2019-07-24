@@ -9,7 +9,9 @@ export class Transform {
     ) {}
 
     public getBoundingBox() {
-        return [...this.position, ...this.scale] as vector4
+        const result = [...this.position, ...this.scale] as vector4
+
+        return result
     }
 
     public getPoints() {
@@ -21,18 +23,7 @@ export class Transform {
             this.y + this.width * combination[1]
         ])
 
-        const pointsInTheRightOrder = [
-            points[0],
-            points[1],
-            points[3],
-            points[2]
-        ] as vector2[]
-
-        const result = pointsInTheRightOrder.map(point =>
-            rotateAroundVector(point, this.center, this.rotation)
-        ) as vector2[]
-
-        return result
+        return points as vector2[]
     }
 
     public getEdges() {
@@ -64,12 +55,20 @@ export class Transform {
         return this.scale[1]
     }
 
+    get minX() {
+        return Math.min(this.x, this.x + this.width)
+    }
+
     get maxX() {
-        return this.x + this.width
+        return Math.max(this.x, this.x + this.width)
+    }
+
+    get minY() {
+        return Math.min(this.y, this.y + this.height)
     }
 
     get maxY() {
-        return this.y + this.height
+        return Math.max(this.y, this.y + this.height)
     }
 
     get center() {

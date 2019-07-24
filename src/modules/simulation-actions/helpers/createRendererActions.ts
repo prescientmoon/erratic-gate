@@ -10,12 +10,10 @@ import { Translation } from '../../internalisation/types/TranslationInterface'
 /**
  * Map used to get the correct message from any action name
  */
-export const actionToMessageMap: Record<
-    possibleAction,
-    keyof Translation['messages']
+export const actionToMessageMap: Partial<
+    Record<possibleAction, keyof Translation['messages']>
 > = {
     clean: 'cleaned',
-    clear: 'cleared',
     refresh: 'refreshed',
     undo: 'undone',
     save: 'savedSimulation'
@@ -30,12 +28,14 @@ export const createRendererAction = (
 
     callback(renderer)
 
-    toast(
-        ...createToastArguments(
-            translation.messages[actionToMessageMap[action]](
-                renderer.simulation.name
-            ),
-            actionIcons[action]
+    const messageName = actionToMessageMap[action]
+
+    if (messageName) {
+        toast(
+            ...createToastArguments(
+                translation.messages[messageName](renderer.simulation.name),
+                actionIcons[action]
+            )
         )
-    )
+    }
 }

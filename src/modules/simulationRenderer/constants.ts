@@ -27,17 +27,22 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
     },
     spawning: {
         spawnOffset: 30
+    },
+    selecting: {
+        fill: 'rgba(128,128,128,0.3)',
+        stroke: `rgba(128,128,128,0.7)`
     }
 }
 
 export const imageQuality: vector2 = [100, 100]
 
 export const mouseButtons: Record<
-    'zoom' | 'pan' | 'drag' | 'select',
+    'zoom' | 'pan' | 'drag' | 'select' | 'unselect',
     mouseButton
 > = {
     zoom: 1,
-    drag: 0,
-    pan: 0,
-    select: 2
+    drag: 2,
+    pan: 2,
+    select: 0,
+    unselect: 0
 }

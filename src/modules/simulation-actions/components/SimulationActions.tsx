@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Icon from '@material-ui/core/Icon'
 import { useTranslation } from '../../internalisation/helpers/useLanguage'
 import { SidebarActions } from '../constants'
+import { possibleAction } from '../types/possibleAction'
 
 /**
  * Component wich contains the sidebar 'Simulation' button
@@ -49,7 +50,11 @@ const SimulationActions = () => {
                                 </ListItemIcon>
 
                                 <ListItemText
-                                    primary={name}
+                                    primary={
+                                        translation.actions[
+                                            name as possibleAction
+                                        ]
+                                    }
                                     secondary={(keybinding || []).join(' + ')}
                                 />
                             </MenuItem>

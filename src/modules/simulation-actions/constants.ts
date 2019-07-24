@@ -4,14 +4,16 @@ import { save } from '../saving/helpers/save'
 import { refresh } from './helpers/refresh'
 import { undo } from './helpers/undo'
 import { createActionConfig } from './helpers/createActionConfig'
-import { clear } from './helpers/clear'
+import { selectAll } from './helpers/selectAll'
+import { deleteSelection } from './helpers/deleteSelection'
 
 export const actionIcons: Record<possibleAction, string> = {
-    clean: 'layers_clear',
-    clear: 'clear',
+    clean: 'clear',
     refresh: 'refresh',
     save: 'save',
-    undo: 'undo'
+    undo: 'undo',
+    'select all': 'select_all',
+    'delete selection': 'delete'
 }
 
 /**
@@ -34,19 +36,14 @@ export const SidebarActions: Record<possibleAction, SidebarAction> = {
         ['ctrl', 'z']
     ),
     ...createActionConfig(
-        'clear',
-        {
-            run: clear
-        },
-        ['ctrl', 'delete']
-    ),
-    ...createActionConfig(
         'clean',
         {
             run: () => {
                 console.log('Cleaning')
             }
         },
-        ['ctrl', 'shift', 'delete']
-    )
+        ['ctrl', 'delete']
+    ),
+    ...createActionConfig('select all', selectAll, ['ctrl', 'a']),
+    ...createActionConfig('delete selection', deleteSelection, ['delete'])
 }

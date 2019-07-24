@@ -1,11 +1,9 @@
 import React, { RefObject, forwardRef, MouseEvent, WheelEvent } from 'react'
 import { useObservable } from 'rxjs-hooks'
-import { Screen } from '../classes/Screen'
 import { Subject } from 'rxjs'
 import { mouseButton } from '../types/mouseButton'
 import { MouseEventInfo } from './MouseEventInfo'
-
-const screen = new Screen()
+import { width, height } from '../../screen/helpers/Screen'
 
 export interface FluidCanvasProps {
     mouseDownOuput: Subject<MouseEventInfo>
@@ -30,14 +28,14 @@ export const mouseEventHandler = (output: Subject<MouseEventInfo>) => (
 
 const FluidCanvas = forwardRef(
     (props: FluidCanvasProps, ref: RefObject<HTMLCanvasElement>) => {
-        const width = useObservable(() => screen.width, 0)
-        const height = useObservable(() => screen.height, 0)
+        const currentWidth = useObservable(() => width, 0)
+        const currentHeight = useObservable(() => height, 0)
 
         return (
             <canvas
                 ref={ref}
-                width={width}
-                height={height}
+                width={currentWidth}
+                height={currentHeight}
                 onMouseDown={mouseEventHandler(props.mouseDownOuput)}
                 onMouseUp={mouseEventHandler(props.mouseUpOutput)}
                 onMouseMove={mouseEventHandler(props.mouseMoveOutput)}

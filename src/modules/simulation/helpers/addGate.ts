@@ -1,11 +1,11 @@
 import { templateStore } from '../../saving/stores/templateStore'
 import { SimulationError } from '../../errors/classes/SimulationError'
-import { Simulation } from '../classes/Simulation'
 import { Gate } from '../classes/Gate'
 import { add, relativeTo, multiply } from '../../vector2/helpers/basic'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { DefaultGateTemplate } from '../constants'
 import { vector2 } from '../../../common/math/classes/Transform'
+import { Screen } from '../../screen/helpers/Screen'
 
 export const addGate = (renderer: SimulationRenderer, templateName: string) => {
     const template = templateStore.get(templateName)
@@ -22,7 +22,7 @@ export const addGate = (renderer: SimulationRenderer, templateName: string) => {
 
     const origin = relativeTo(
         multiply(gateScale, 0.5),
-        relativeTo(renderer.camera.transform.position, renderer.screen.center)
+        relativeTo(renderer.camera.transform.position, Screen.center)
     )
 
     const scalarOffset = renderer.options.spawning.spawnOffset

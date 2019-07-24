@@ -5,6 +5,8 @@ import { useTransform } from '../../../common/canvas/helpers/useTransform'
 import { roundRect } from '../../../common/canvas/helpers/drawRoundedSquare'
 import { roundImage } from '../../../common/canvas/helpers/drawRoundedImage'
 import { ImageStore } from '../stores/imageStore'
+import { gatesInSelection } from './gatesInSelection'
+import { idIsSelected } from './idIsSelected'
 
 export const renderGate = (
     ctx: CanvasRenderingContext2D,
@@ -13,7 +15,11 @@ export const renderGate = (
 ) => {
     renderPins(ctx, renderer, gate)
 
-    if (renderer.selectedGates.has(gate.id)) {
+    if (
+        ((renderer.mouseState >> 2) & 1 &&
+            gatesInSelection(renderer.selectedArea, [gate]).length) ||
+        idIsSelected(renderer, gate.id)
+    ) {
         ctx.strokeStyle = renderer.options.gates.gateStroke.active
     } else {
         ctx.strokeStyle = renderer.options.gates.gateStroke.normal

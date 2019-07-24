@@ -26,7 +26,8 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             name: 'or'
         },
         material: {
-            value: 'yellow'
+            type: 'image',
+            value: require('../../assets/or_gate.png')
         },
         code: {
             activation: `context.set(0, context.get(0) || context.get(1))`
@@ -37,6 +38,24 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             }
         },
         info: ['https://en.wikipedia.org/wiki/OR_gate']
+    },
+    {
+        metadata: {
+            name: 'nor'
+        },
+        material: {
+            type: 'image',
+            value: require('../../assets/nor_gate.png')
+        },
+        code: {
+            activation: `context.set(0, !(context.get(0) || context.get(1)))`
+        },
+        pins: {
+            inputs: {
+                count: 2
+            }
+        },
+        info: ['https://en.wikipedia.org/wiki/NOR_gate']
     },
     {
         metadata: {

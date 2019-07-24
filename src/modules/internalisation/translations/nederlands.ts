@@ -12,6 +12,14 @@ export const DutchTranslation: Translation = {
         simulation: 'Todo',
         language: 'Taal'
     },
+    actions: {
+        'delete selection': 'Todo',
+        'select all': 'Todo',
+        clean: 'Todo',
+        refresh: 'Todo',
+        save: 'Todo',
+        undo: 'Todo'
+    },
     createSimulation: {
         mode: {
             question: 'Wat voor simulatie wil je maken?',
@@ -30,6 +38,9 @@ export const DutchTranslation: Translation = {
         switchedToSimulation: name =>
             `Succesvol veranderd naar simulatie '${name}'`,
         savedSimulation: name => `Simulatie succesvol opgeslagen '${name}'`,
-        compiledIc: name => `Todo: ${name}`
+        compiledIc: name => `Todo: ${name}`,
+        cleaned: name => `Todo ${name}`,
+        refreshed: name => `Todo ${name}`,
+        undone: name => `Todo ${name}`
     }
 }

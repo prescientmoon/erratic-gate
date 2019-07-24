@@ -1,9 +1,4 @@
-import { Screen } from '../../../modules/core/classes/Screen'
-
-/**
- * A screen instance used for the canvas clearing
- */
-const screen = new Screen()
+import { Screen } from '../../../modules/screen/helpers/Screen'
 
 /**
  * Clears the used portion of the canvas
@@ -11,5 +6,5 @@ const screen = new Screen()
  * @param ctx the context to clear
  */
 export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
-    ctx.clearRect(0, 0, screen.x, screen.y)
+    ctx.clearRect(0, 0, Screen.width, Screen.height)
 }

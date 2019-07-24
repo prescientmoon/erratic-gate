@@ -25,7 +25,12 @@ export const RomanianTranslation: Translation = {
         }
     },
     actions: {
-        save: 'Salvează'
+        save: 'Salvează',
+        'delete selection': 'Șterge selecția',
+        'select all': 'Selectează totul',
+        clean: 'Curăță',
+        refresh: 'Reîncarcă',
+        undo: 'Întoarce'
     },
     messages: {
         createdSimulation: name =>
@@ -33,6 +38,9 @@ export const RomanianTranslation: Translation = {
         switchedToSimulation: name =>
             `Simulația '${name}' a fost deschisă cu succes`,
         savedSimulation: name => `Simulația '${name}' a fost salvată cu succes`,
-        compiledIc: name => `Simulația '${name}' a fost compilată cu succes`
+        compiledIc: name => `Simulația '${name}' a fost compilată cu succes`,
+        cleaned: name => `Simulația '${name}' a fost curățată cu succes`,
+        refreshed: name => `Simulația '${name}' a fost reîncărcată cu succes`,
+        undone: name => `Acțiunea a fost întoarsă`
     }
 }

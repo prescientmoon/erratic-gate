@@ -4,7 +4,7 @@ import { renderGate } from './renderGate'
 import { clearCanvas } from '../../../common/canvas/helpers/clearCanvas'
 import { renderClickedPins } from './renderClickedPins'
 import { renderWires } from './renderWires'
-import { vector2 } from '../../../common/math/classes/Transform'
+import { renderSelectedArea } from './renderSelectedArea'
 
 export const renderSimulation = (
     ctx: CanvasRenderingContext2D,
@@ -26,6 +26,7 @@ export const renderSimulation = (
     }
 
     renderClickedPins(ctx, renderer)
+    renderSelectedArea(ctx, renderer)
 
     ctx.scale(...inverse(transform.scale))
     ctx.translate(...invert(transform.position))
