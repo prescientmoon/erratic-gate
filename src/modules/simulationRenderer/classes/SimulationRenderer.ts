@@ -9,7 +9,11 @@ import {
 import { vector2 } from '../../../common/math/types/vector2'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
-import { defaultSimulationRendererOptions, mouseButtons } from '../constants'
+import {
+    defaultSimulationRendererOptions,
+    mouseButtons,
+    shiftInput
+} from '../constants'
 import { getPinPosition } from '../helpers/pinPosition'
 import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
 import { SelectedPins } from '../types/SelectedPins'
@@ -177,7 +181,7 @@ export class SimulationRenderer {
                 }
             }
 
-            if (event.button === mouseButtons.unselect) {
+            if (!shiftInput.value && event.button === mouseButtons.unselect) {
                 this.clearSelection()
             }
 

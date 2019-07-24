@@ -1,6 +1,7 @@
 import { SimulationRendererOptions } from './types/SimulationRendererOptions'
 import { vector2 } from '../../common/math/classes/Transform'
 import { mouseButton } from '../core/types/mouseButton'
+import { KeyboardInput } from '../keybindings/classes/KeyboardInput'
 
 export const defaultSimulationRendererOptions: SimulationRendererOptions = {
     dnd: {
@@ -46,3 +47,5 @@ export const mouseButtons: Record<
     select: 0,
     unselect: 0
 }
+
+export const shiftInput = new KeyboardInput('shift')
