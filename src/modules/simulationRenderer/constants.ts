@@ -23,6 +23,9 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
     wires: {
         temporaryWireColor: `rgba(128,128,128,0.5)`,
         curvePointOffset: 100
+    },
+    spawning: {
+        spawnOffset: 30
     }
 }
 

@@ -26,8 +26,8 @@ import merge from 'deepmerge'
 import { wireConnectedToGate } from '../helpers/wireConnectedToGate'
 import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
 import { RefObject } from 'react'
-import { Singleton } from '@eix-js/utils'
 import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
+import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -47,6 +47,9 @@ export class SimulationRenderer {
     // second bit = moving around
     private mouseState = 0b00
     private gateSelectionOffset: vector2 = [0, 0]
+
+    // this is used for spawning gates
+    public spawnCount = 0
 
     public selectedPins: SelectedPins = {
         start: null,
@@ -204,6 +207,8 @@ export class SimulationRenderer {
                     this.camera.transform.position,
                     invert(offset)
                 )
+
+                this.spawnCount = 0
             }
 
             this.lastMousePosition = this.camera.toWordPostition(event.position)
@@ -218,9 +223,11 @@ export class SimulationRenderer {
     public updateWheelListener() {
         if (this.ref.current) {
             this.ref.current.addEventListener('wheel', event => {
-                event.preventDefault()
+                if (!modalIsOpen()) {
+                    event.preventDefault()
 
-                handleScroll(event, this.camera)
+                    handleScroll(event, this.camera)
+                }
             })
         }
     }

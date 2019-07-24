@@ -54,7 +54,7 @@ const LogicGateModal = () => {
                             key={index}
                             className="logic-gate-item"
                             onClick={() => {
-                                addGate(renderer.simulation, name)
+                                addGate(renderer, name)
                             }}
                         >
                             <Icon className="lgi-icon logic-gate-item-type">
@@ -70,7 +70,7 @@ const LogicGateModal = () => {
                                     href={randomItem(template.info)}
                                     onClick={e => {
                                         e.stopPropagation()
-                                        e.preventDefault()
+                                        // e.preventDefault()
                                     }}
                                 >
                                     <Icon className="lgi-icon">info</Icon>

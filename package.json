@@ -47,6 +47,7 @@
         "keycode": "^2.2.0",
         "mainloop.js": "^1.0.4",
         "react": "^16.8.6",
+        "react-custom-scrollbars": "^4.2.1",
         "react-dom": "^16.8.6",
         "react-router-dom": "^5.0.1",
         "react-toastify": "^5.3.2",

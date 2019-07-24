@@ -21,4 +21,7 @@ export interface SimulationRendererOptions {
         temporaryWireColor: string
         curvePointOffset: number
     }
+    spawning: {
+        spawnOffset: number
+    }
 }

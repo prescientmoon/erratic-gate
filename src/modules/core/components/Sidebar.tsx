@@ -9,7 +9,7 @@ import Language from './Language'
 /**
  * The width of the sidebar
  */
-const sidebarWidth = 240
+export const sidebarWidth = 240
 
 /**
  * The z-index of the sidebar.
