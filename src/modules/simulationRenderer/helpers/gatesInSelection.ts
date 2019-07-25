@@ -13,6 +13,10 @@ export const gatesInSelection = (
     gates: Gate[] = []
 ) => {
     return gates.filter(({ transform }) => {
+        if (aabbCollisionDetection(transform, selectedArea)) {
+            return true
+        }
+
         for (const point of transform.getPoints()) {
             if (pointInSquare(point, selectedArea)) {
                 return true

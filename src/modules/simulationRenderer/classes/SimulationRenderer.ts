@@ -2,10 +2,7 @@ import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Subject } from 'rxjs'
 import { MouseEventInfo } from '../../core/components/MouseEventInfo'
-import {
-    oldPointInSquare,
-    pointInSquare
-} from '../../../common/math/helpers/pointInSquare'
+import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
 import { vector2 } from '../../../common/math/types/vector2'
 import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
@@ -232,6 +229,16 @@ export class SimulationRenderer {
 
                 for (const { id } of selectedGates) {
                     addIdToSelection(this, 'permanent', id)
+
+                    const node = this.simulation.gates.get(id)
+
+                    if (node) {
+                        this.simulation.gates.moveOnTop(node)
+                    } else {
+                        throw new SimulationError(
+                            `Cannot find node in gate storage with id ${id}`
+                        )
+                    }
                 }
             }
         })

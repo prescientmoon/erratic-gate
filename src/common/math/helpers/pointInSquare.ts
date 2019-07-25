@@ -9,15 +9,3 @@ export const pointInSquare = (point: vector2, square: Transform) => {
         point[1] <= square.maxY
     )
 }
-
-/**
- * The old version of pontInSquare
- */
-export const oldPointInSquare = (point: vector2, square: Transform) => {
-    return (
-        point[0] >= square.x &&
-        point[0] <= square.x + square.width &&
-        point[1] >= square.y &&
-        point[1] <= square.y + square.height
-    )
-}
