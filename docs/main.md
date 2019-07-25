@@ -4,10 +4,10 @@
 
 There are 3 ways to get the simulator up and running:
 
-1. Using the version hosted on github-pages:
+1. Using [the version hosted on heroku](https://logic-gate-simulator.herokuapp.com/):
 
 This is by far the fastest solution - everything you need to do is open
-[the github-pages url](https://mateiadrielrafael.github.io/logicGateSimulator/)
+[the github-pages url](https://logic-gate-simulator.herokuapp.com/)
 
 2. Using a development server:
 
