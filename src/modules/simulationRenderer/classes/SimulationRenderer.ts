@@ -33,7 +33,7 @@ import { setToArray } from '../../../common/lang/arrays/helpers/setToArray'
 import { Transform } from '../../../common/math/classes/Transform'
 import { gatesInSelection } from '../helpers/gatesInSelection'
 import { selectionType } from '../types/selectionType'
-import { addIdToSelection } from '../helpers/idIsSelected'
+import { addIdToSelection, idIsSelected } from '../helpers/idIsSelected'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -97,7 +97,10 @@ export class SimulationRenderer {
 
                     this.mouseState |= 1
 
-                    addIdToSelection(this, 'temporary', id)
+                    if (!idIsSelected(this, id)) {
+                        this.clearSelection()
+                        addIdToSelection(this, 'temporary', id)
+                    }
 
                     const gateNode = this.simulation.gates.get(id)
 
