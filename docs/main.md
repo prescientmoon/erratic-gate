@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-ess of creating a full adder.
 
 ## Running the simulator
 
