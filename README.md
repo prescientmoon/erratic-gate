@@ -2,10 +2,16 @@
 
 This is a logic gate simulator made for infoeducatie 2019.
 
+Many thanks to [Canara](http://canana.xyz/) for the logo!
+
 ## Getting started
 
 Check out the [demo](https://mateiadrielrafael.github.io/logicGateSimulator/)
 Or read the [docs](./docs/main.md) (work in progess)
+
+I've also made a [trello board](https://trello.com/b/LW3XSnGN/logic-gate-simulator) and a [discord-serber]()
+
+// TODO: make the server
 
 ## Features
 

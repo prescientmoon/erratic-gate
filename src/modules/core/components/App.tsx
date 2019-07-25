@@ -13,10 +13,14 @@ import Sidebar from './Sidebar'
 import CreateSimulation from '../../create-simulation/components/CreateSimulation'
 import Input from '../../input/components/Input'
 import LogicGateModal from '../../logic-gates/components/LogicGateModal'
+import Head from './Head'
 
 const App = () => {
     return (
         <>
+            <Head />
+            <CssBaseline />
+
             <Theme theme={muiTheme}>
                 <CssBaseline />
                 <Canvas />
@@ -25,7 +29,7 @@ const App = () => {
                 <Input />
                 <LogicGateModal />
             </Theme>
-            <CssBaseline />
+
             <ToastContainer
                 position="top-left"
                 autoClose={5000}

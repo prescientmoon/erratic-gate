@@ -14,7 +14,7 @@ export const updateMouse = (e: MouseEventInfo) => {
 }
 
 export const handleScroll = (e: WheelEvent, camera: Camera) => {
-    const sign = e.deltaY / Math.abs(e.deltaY)
+    const sign = -e.deltaY / Math.abs(e.deltaY)
     const zoom = scrollStep ** sign
 
     const mouseFraction = Screen.scale.map(

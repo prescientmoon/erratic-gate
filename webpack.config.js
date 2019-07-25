@@ -18,7 +18,7 @@ const babelRule = {
 }
 
 const fileRule = {
-    test: /\.(png|svg|jpg|gif)$/,
+    test: /\.(png|svg|jpg|gif|ico)$/,
     use: ['file-loader']
 }
 
@@ -74,8 +74,7 @@ const baseConfig = {
             '.jpg',
             '.gif'
         ]
-    },
-    plugins: []
+    }
 }
 
 const devConfig = {
@@ -84,6 +83,8 @@ const devConfig = {
         new HtmlWebpackPlugin({
             template: htmlTemplateFile,
             chunksSortMode: 'dependency'
+            // favicon: faviconPath,
+            // inject: true
         })
     ],
     devtool: 'inline-source-map',
@@ -118,6 +119,7 @@ const prodConfig = {
                 minifyURLs: true
             },
             inject: true
+            // favicon: faviconPath
         }),
         new HtmlWebpackInlineSourcePlugin()
     ],
