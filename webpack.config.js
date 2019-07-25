@@ -4,6 +4,7 @@ const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 const webpackMerge = require('webpack-merge')
+const nodeExternals = require('webpack-node-externals')
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -52,6 +53,27 @@ const sassRule = {
     ]
 }
 
+const serverConfig = {
+    mode: 'production',
+    target: 'node',
+    externals: [nodeExternals()],
+    module: {
+        rules: [babelRule]
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.json']
+    },
+    entry: [resolve(sourceFolder, 'server')],
+    output: {
+        filename: 'server.js',
+        path: buildFolder,
+        publicPath: '/'
+    },
+    node: {
+        __dirname: false
+    }
+}
+
 const baseConfig = {
     mode: 'none',
     entry: ['babel-regenerator-runtime', resolve(sourceFolder, 'index')],
@@ -83,8 +105,6 @@ const devConfig = {
         new HtmlWebpackPlugin({
             template: htmlTemplateFile,
             chunksSortMode: 'dependency'
-            // favicon: faviconPath,
-            // inject: true
         })
     ],
     devtool: 'inline-source-map',
@@ -129,7 +149,10 @@ const prodConfig = {
 function getFinalConfig() {
     if (process.env.NODE_ENV === 'production') {
         console.info('Running production config')
-        return webpackMerge(baseConfig, prodConfig)
+        return [webpackMerge(baseConfig, prodConfig), serverConfig]
+    } else if (process.env.NODE_ENV === 'server') {
+        console.info('Running server config')
+        return [serverConfig]
     }
 
     console.info('Running development config')
