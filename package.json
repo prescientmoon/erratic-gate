@@ -7,7 +7,7 @@
         "build": "cross-env NODE_ENV=production webpack",
         "deploy": "ts-node deploy",
         "show": "gource -f  --start-date \"2019-07-01 12:00\" --key --hide dirnames,filenames,bloom -s 0.3",
-        "start": "npm run build && cd dist && nano-server"
+        "start": "cd dist && nano-server"
     },
     "devDependencies": {
         "@babel/core": "^7.5.5",
