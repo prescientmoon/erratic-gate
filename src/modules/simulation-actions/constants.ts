@@ -6,6 +6,7 @@ import { undo } from './helpers/undo'
 import { createActionConfig } from './helpers/createActionConfig'
 import { selectAll } from './helpers/selectAll'
 import { deleteSelection } from './helpers/deleteSelection'
+import { cleanRenderer } from './helpers/clean'
 
 export const actionIcons: Record<possibleAction, string> = {
     clean: 'clear',
@@ -38,9 +39,7 @@ export const SidebarActions: Record<possibleAction, SidebarAction> = {
     ...createActionConfig(
         'clean',
         {
-            run: () => {
-                console.log('Cleaning')
-            }
+            run: cleanRenderer
         },
         ['ctrl', 'delete']
     ),
