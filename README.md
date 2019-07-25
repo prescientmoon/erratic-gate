@@ -1,20 +1,35 @@
-# logicGateSimulator2
+# Logic gate simulator
 
-a better version of my logic gate simulator
+This is a logic gate simulator made for infoeducatie 2019.
+
+## Getting started
 
 Check out the [demo](https://mateiadrielrafael.github.io/logicGateSimulator/)
 Or read the [docs](./docs/main.md) (work in progess)
 
-To run locally clone this repo, and then run: `npm install`
-to install all dependenices, `npm run dev` to start the development server or `npm run build` to bundle it.
+## Features
 
-This project wouldnt have been possible without the follownig libraries:
+-   Simple & intuitive UI
+-   Multiple simulations support
+-   Integrated circuits
+-   Multiple language support: Romanian, English, German, Dutch, Spanish & more in the future
 
--   [typescript](https://github.com/microsoft/TypeScript) and [sass](https://github.com/sass/sass)
--   [lit-html](https://github.com/Polymer/lit-html) , [lit-rx](https://github.com/Dabolus/lit-rx) and [rxjs](https://github.com/ReactiveX/rxjs)
--   [material components for the web](https://github.com/material-components/material-components-web)
--   [webpack](https://github.com/webpack/webpack)
--   [gh-pages](https://github.com/tschaub/gh-pages)
--   [eix-js](https://github.com/eix-js)
+## Playing with the source
 
-I used lit-html, lit-rx and rxjs mainly for the rendering, MCW for the styling, webpack for bundling, gh-pages for deploying and eix-js (a game engine me and a friend are working on) for input handling and common decorators.
+To run locally clone this repo, and then install all dependencies by rrunning:
+
+```sh
+npm install
+```
+
+Start the development server by running:
+
+```sh
+npm run dev
+```
+
+Or bundle the source with:
+
+```sh
+npm run build
+```
