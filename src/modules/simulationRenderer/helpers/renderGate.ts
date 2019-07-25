@@ -16,7 +16,7 @@ export const renderGate = (
     renderPins(ctx, renderer, gate)
 
     if (
-        ((renderer.mouseState >> 2) & 1 &&
+        (renderer.mouseState >> 2 &&
             gatesInSelection(renderer.selectedArea, [gate]).length) ||
         idIsSelected(renderer, gate.id)
     ) {
@@ -28,6 +28,7 @@ export const renderGate = (
     ctx.lineWidth = renderer.options.gates.gateStroke.width
 
     ctx.save()
+
     const r = useTransform(ctx, gate.transform)
     const renderingParameters = [
         r.x,
@@ -47,13 +48,12 @@ export const renderGate = (
 
     roundRect(ctx, ...renderingParameters)
 
-    ctx.stroke()
-
     if (gate.template.material.type === 'color') {
         ctx.fillStyle = gate.template.material.value
 
         ctx.fill()
     }
 
+    ctx.stroke()
     ctx.restore()
 }
