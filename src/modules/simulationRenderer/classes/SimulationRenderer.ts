@@ -253,7 +253,9 @@ export class SimulationRenderer {
 
             const offset = invert(
                 relativeTo(this.lastMousePosition, worldPosition)
-            ).map(
+            )
+
+            const scaledOffset = offset.map(
                 (value, index) => value * this.camera.transform.scale[index]
             ) as vector2
 
@@ -269,7 +271,7 @@ export class SimulationRenderer {
             if ((this.mouseState >> 1) & 1) {
                 this.camera.transform.position = add(
                     this.camera.transform.position,
-                    invert(offset)
+                    invert(scaledOffset)
                 )
 
                 this.spawnCount = 0

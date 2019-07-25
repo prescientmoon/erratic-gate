@@ -8,3 +8,4 @@ export type possibleAction =
     | 'undo'
     | 'select all'
     | 'delete selection'
+    | 'delete simulation'

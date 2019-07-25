@@ -13,6 +13,8 @@ import { switchTo } from '../../saving/helpers/switchTo'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { icons } from '../constants'
 import { useTranslation } from '../../internalisation/helpers/useLanguage'
+import { getTemplateSafely } from '../../logic-gates/helpers/getTemplateSafely'
+import { getRendererSafely } from '../../logic-gates/helpers/getRendererSafely'
 
 /**
  * Returns a list with the names of all saved simulations
@@ -74,36 +76,44 @@ const OpenSimulation = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {simulations.map((simulationName, index) => {
-                    const simulationData = saveStore.get(simulationName)
-
-                    if (!simulationData) {
-                        throw new SimulationError(
-                            `Cannot get data for simulation ${simulationName}`
-                        )
-                    }
-
-                    return (
-                        <MenuItem
-                            key={index}
-                            onClick={() => {
-                                switchTo(simulationName)
-                                handleClose()
-                            }}
-                        >
-                            <ListItemIcon>
-                                <Icon>
-                                    {
-                                        icons.simulationMode[
-                                            simulationData.simulation.mode
-                                        ]
-                                    }
-                                </Icon>
-                            </ListItemIcon>
-                            <Typography>{simulationName}</Typography>
-                        </MenuItem>
+                {simulations
+                    .filter(
+                        name =>
+                            simulations.length < 2 ||
+                            name !== getRendererSafely().simulation.name
                     )
-                })}
+                    .map((simulationName, index) => {
+                        const simulationData = saveStore.get(simulationName)
+
+                        if (!simulationData) {
+                            throw new SimulationError(
+                                `Cannot get data for simulation ${simulationName}`
+                            )
+                        }
+
+                        return (
+                            <MenuItem
+                                key={index}
+                                onClick={() => {
+                                    switchTo(simulationName)
+                                    handleClose()
+                                }}
+                            >
+                                <ListItemIcon>
+                                    <Icon>
+                                        {
+                                            icons.simulationMode[
+                                                simulationData.simulation.mode
+                                            ]
+                                        }
+                                    </Icon>
+                                </ListItemIcon>
+                                <Typography style={{ flexGrow: 1 }}>
+                                    {simulationName}
+                                </Typography>
+                            </MenuItem>
+                        )
+                    })}
             </Menu>
         </>
     )

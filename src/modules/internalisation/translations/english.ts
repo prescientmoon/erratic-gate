@@ -30,7 +30,8 @@ export const EnglishTranslation: Translation = {
         refresh: 'Refresh',
         undo: 'Undo',
         'select all': 'Select all',
-        'delete selection': 'Delete selection'
+        'delete selection': 'Delete selection',
+        'delete simulation': 'Delete simulation'
     },
     messages: {
         createdSimulation: name => `Succesfully created simulation '${name}'`,
@@ -40,6 +41,7 @@ export const EnglishTranslation: Translation = {
         compiledIc: name => `Succesfully compiled circuit '${name}'`,
         cleaned: name => `Succesfully cleaned simulation '${name}'`,
         refreshed: name => `Succesfully refreshed simulation '${name}'`,
-        undone: name => `Succesfully undone simulation '${name}'`
+        undone: name => `Succesfully undone simulation '${name}'`,
+        deletedSimulation: name => `Succesfully deleted simulation '${name}'`
     }
 }

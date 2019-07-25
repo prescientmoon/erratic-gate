@@ -18,7 +18,8 @@ export const DutchTranslation: Translation = {
         clean: 'Todo',
         refresh: 'Todo',
         save: 'Todo',
-        undo: 'Todo'
+        undo: 'Todo',
+        'delete simulation': `Todo`
     },
     createSimulation: {
         mode: {
@@ -38,9 +39,10 @@ export const DutchTranslation: Translation = {
         switchedToSimulation: name =>
             `Succesvol veranderd naar simulatie '${name}'`,
         savedSimulation: name => `Simulatie succesvol opgeslagen '${name}'`,
-        compiledIc: name => `Todo: ${name}`,
-        cleaned: name => `Todo ${name}`,
-        refreshed: name => `Todo ${name}`,
-        undone: name => `Todo ${name}`
+        compiledIc: name => `IC gecompileerd: ${name}`,
+        cleaned: name => `${name} gewist`,
+        refreshed: name => `${name} ververst`,
+        undone: name => `${name} ongedaan gemaakt`,
+        deletedSimulation: name => `Todo`
     }
 }

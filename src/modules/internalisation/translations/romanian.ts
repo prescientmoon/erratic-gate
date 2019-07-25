@@ -30,7 +30,8 @@ export const RomanianTranslation: Translation = {
         'select all': 'Selectează totul',
         clean: 'Curăță',
         refresh: 'Reîncarcă',
-        undo: 'Întoarce'
+        undo: 'Întoarce',
+        'delete simulation': 'Șterge simulația'
     },
     messages: {
         createdSimulation: name =>
@@ -41,6 +42,8 @@ export const RomanianTranslation: Translation = {
         compiledIc: name => `Simulația '${name}' a fost compilată cu succes`,
         cleaned: name => `Simulația '${name}' a fost curățată cu succes`,
         refreshed: name => `Simulația '${name}' a fost reîncărcată cu succes`,
-        undone: name => `Acțiunea a fost întoarsă`
+        undone: name => `Acțiunea a fost întoarsă`,
+        deletedSimulation: name =>
+            `Simulația '${name}' a fost ștearsă cu succes`
     }
 }

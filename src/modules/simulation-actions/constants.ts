@@ -7,6 +7,7 @@ import { createActionConfig } from './helpers/createActionConfig'
 import { selectAll } from './helpers/selectAll'
 import { deleteSelection } from './helpers/deleteSelection'
 import { cleanRenderer } from './helpers/clean'
+import { deleteSimulation } from './helpers/deleteSimulation'
 
 export const actionIcons: Record<possibleAction, string> = {
     clean: 'clear',
@@ -14,7 +15,8 @@ export const actionIcons: Record<possibleAction, string> = {
     save: 'save',
     undo: 'undo',
     'select all': 'select_all',
-    'delete selection': 'delete'
+    'delete selection': 'delete',
+    'delete simulation': 'delete_forever'
 }
 
 /**
@@ -42,6 +44,13 @@ export const SidebarActions: Record<possibleAction, SidebarAction> = {
             run: cleanRenderer
         },
         ['ctrl', 'delete']
+    ),
+    ...createActionConfig(
+        'delete simulation',
+        {
+            run: deleteSimulation
+        },
+        ['ctrl', 'shift', 'delete']
     ),
     ...createActionConfig('select all', selectAll, ['ctrl', 'a']),
     ...createActionConfig('delete selection', deleteSelection, ['delete'])

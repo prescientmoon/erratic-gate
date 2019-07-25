@@ -50,4 +50,12 @@ export class LocalStore<T> {
         currentData[finalKey] = finalValue
         localStorage.setItem(this.name, JSON.stringify(currentData))
     }
+
+    public delete(key = 'index') {
+        const all = this.getAll()
+
+        delete all[key]
+
+        localStorage.setItem(this.name, JSON.stringify(all))
+    }
 }

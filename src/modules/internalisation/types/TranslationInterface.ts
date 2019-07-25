@@ -34,6 +34,7 @@ export interface Translation {
         refreshed: NameSentence
         cleaned: NameSentence
         undone: NameSentence
+        deletedSimulation: NameSentence
     }
     actions: Record<possibleAction, string>
 }
