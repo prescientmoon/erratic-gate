@@ -9,20 +9,30 @@ import { templateStore } from '../../saving/stores/templateStore'
 import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
+import { fromSimulationState } from '../../saving/helpers/fromState'
+import { cleanSimulation } from '../../simulation-actions/helpers/clean'
+import { getSimulationState } from '../../saving/helpers/getState'
 
 /**
  * Compiles a simulation into a logicGate
  *
  * @param simulaton The simulation to compile
  */
-export const compileIc = ({ mode, name, gates }: SimulationState) => {
+export const compileIc = (state: SimulationState) => {
+    const { mode, name, gates } = state
+
     if (mode === 'project') {
         throw new SimulationError('Cannot compile project')
     }
 
     const translation = CurrentLanguage.getTranslation()
-    const inputCount = simulationInputCount(gates)
-    const outputCount = simulationOutputCount(gates)
+
+    const simulation = fromSimulationState(state)
+    cleanSimulation(simulation)
+    const cleanState = getSimulationState(simulation)
+
+    const inputCount = simulationInputCount(cleanState.gates)
+    const outputCount = simulationOutputCount(cleanState.gates)
 
     const result: DeepPartial<GateTemplate> = {
         metadata: {

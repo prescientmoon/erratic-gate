@@ -318,9 +318,7 @@ export class SimulationRenderer {
             this.loadSave(save)
         } catch (e) {
             throw new Error(
-                `An error occured while loading the save: ${
-                    (e as Error).message
-                }`
+                `An error occured while loading the save: ${e as Error}`
             )
         }
     }

@@ -13,6 +13,7 @@ import { Simulation, SimulationEnv } from './Simulation'
 import { fromSimulationState } from '../../saving/helpers/fromState'
 import { saveStore } from '../../saving/stores/saveStore'
 import { Wire } from './Wire'
+import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 
 export interface GatePins {
     inputs: Pin[]
@@ -116,6 +117,7 @@ export class Gate {
             }
 
             this.ghostSimulation = fromSimulationState(state.simulation, 'gate')
+            cleanSimulation(this.ghostSimulation)
 
             const sortByPosition = (x: Gate, y: Gate) =>
                 x.transform.position[1] - y.transform.position[1]
@@ -136,13 +138,17 @@ export class Gate {
 
             if (inputs.length !== this._pins.inputs.length) {
                 throw new SimulationError(
-                    `Input count needs to match with the container gate`
+                    `Input count needs to match with the container gate: ${
+                        inputs.length
+                    } !== ${this._pins.inputs.length}`
                 )
             }
 
             if (outputs.length !== this._pins.outputs.length) {
                 throw new SimulationError(
-                    `Output count needs to match with the container gate`
+                    `Output count needs to match with the container gate: ${
+                        outputs.length
+                    } !== ${this._pins.outputs.length}`
                 )
             }
 
