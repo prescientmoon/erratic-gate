@@ -2,7 +2,7 @@
 
 This is a logic gate simulator made for infoeducatie 2019.
 
-Many thanks to [Canara](http://canana.xyz/) for the logo!
+Many thanks to [Canana](http://canana.xyz/) for the logo!
 
 ## Getting started
 

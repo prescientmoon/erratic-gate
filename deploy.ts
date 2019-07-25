@@ -21,11 +21,16 @@ const run = (command: string): Promise<string> => {
 }
 ;(async () => {
     try {
-        if (!args.includes('--skipBuild') && !args.includes('-sb'))
+        if (!args.includes('--skipBuild') && !args.includes('-sb')) {
             await run('npm run build')
-        await run('git add .')
-        await run(`git commit -m " ${message}  "`)
-        await run('git push origin master')
+        }
+
+        if (!args.includes('--skipGit') && !args.includes('-sg')) {
+            await run('git add .')
+            await run(`git commit -m " ${message}  "`)
+            await run('git push origin master')
+        }
+
         await new Promise((res, rej) => {
             console.log('🏃  Updating github pages')
             //@ts-ignore
