@@ -6,7 +6,7 @@ Many thanks to [Canana](http://canana.xyz/) for the logo!
 
 ## Getting started
 
-Check out the [demo](https://mateiadrielrafael.github.io/logicGateSimulator/)
+Check out the [demo](https://logic-gate-simulator.herokuapp.com/)
 Or read the [docs](./docs/main.md) (work in progess)
 
 I've also made a [trello board](https://trello.com/b/LW3XSnGN/logic-gate-simulator) and a [discord-serber]()
