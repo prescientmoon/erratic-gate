@@ -9,7 +9,7 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
         },
         material: {
             type: 'image',
-            value: require('../../assets/and_gate')
+            fill: require('../../assets/and')
         },
         code: {
             activation: `context.set(0, context.get(0) && context.get(1))`
@@ -23,11 +23,29 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
     },
     {
         metadata: {
+            name: 'nand'
+        },
+        material: {
+            type: 'image',
+            fill: require('../../assets/nand')
+        },
+        code: {
+            activation: `context.set(0, !context.get(0) || !context.get(1))`
+        },
+        pins: {
+            inputs: {
+                count: 2
+            }
+        },
+        info: ['https://en.wikipedia.org/wiki/NAND_gate']
+    },
+    {
+        metadata: {
             name: 'or'
         },
         material: {
             type: 'image',
-            value: require('../../assets/or_gate.png')
+            fill: require('../../assets/or')
         },
         code: {
             activation: `context.set(0, context.get(0) || context.get(1))`
@@ -45,7 +63,7 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
         },
         material: {
             type: 'image',
-            value: require('../../assets/nor_gate.png')
+            fill: require('../../assets/nor')
         },
         code: {
             activation: `context.set(0, !(context.get(0) || context.get(1)))`
@@ -63,7 +81,7 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
         },
         material: {
             type: 'image',
-            value: require('../../assets/xor_gate')
+            fill: require('../../assets/xor')
         },
         code: {
             activation: `
@@ -82,10 +100,34 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
     },
     {
         metadata: {
+            name: 'xnor'
+        },
+        material: {
+            type: 'image',
+            fill: require('../../assets/xnor')
+        },
+        code: {
+            activation: `
+            const a = context.get(0)
+            const b = context.get(1)
+            const c = (a && b) || !(a || b)
+            
+            context.set(0, c)`
+        },
+        info: ['https://en.wikipedia.org/wiki/XNOR_gate'],
+        pins: {
+            inputs: {
+                count: 2
+            }
+        }
+    },
+    {
+        metadata: {
             name: 'not'
         },
         material: {
-            value: 'red'
+            type: 'image',
+            fill: require('../../assets/not')
         },
         code: {
             activation: `context.set(0, !context.get(0))`
@@ -97,7 +139,14 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             name: 'button'
         },
         material: {
-            value: 'red'
+            fill: '#D32F2E',
+            stroke: {
+                normal: '#AB8C31',
+                active: '#7EF813'
+            },
+            colors: {
+                pressed: '#7D1313'
+            }
         },
         code: {
             onClick: `
@@ -105,7 +154,7 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
                 const state = !old
 
                 context.set(0, state)    
-                context.color(old ? 'red' : '#550000')
+                context.color(old ? context.colors.main : context.colors.pressed)
 
                 context.memory.state = state
             `
@@ -128,11 +177,19 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
             radius: 50
         },
         material: {
-            value: 'white'
+            fill: '#1C1C1C',
+            stroke: {
+                normal: '#3C3C3C'
+            },
+            colors: {
+                active: '#C6FF00'
+            }
         },
         code: {
             activation: `
-                context.color(context.get(0) ? 'yellow' : 'white')
+                const { main, active } = context.colors
+
+                context.color(context.get(0) ? active : main)
             `
         },
         integration: {

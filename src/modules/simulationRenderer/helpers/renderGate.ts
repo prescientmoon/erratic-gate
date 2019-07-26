@@ -13,16 +13,19 @@ export const renderGate = (
     renderer: SimulationRenderer,
     gate: Gate
 ) => {
-    renderPins(ctx, renderer, gate)
+    const { active, normal } = gate.template.material.stroke
 
-    if (
+    const selected =
         (renderer.mouseState >> 2 &&
-            gatesInSelection(renderer.selectedArea, [gate]).length) ||
+            !!gatesInSelection(renderer.selectedArea, [gate]).length) ||
         idIsSelected(renderer, gate.id)
-    ) {
-        ctx.strokeStyle = renderer.options.gates.gateStroke.active
+
+    renderPins(ctx, renderer, gate, selected)
+
+    if (selected) {
+        ctx.strokeStyle = active
     } else {
-        ctx.strokeStyle = renderer.options.gates.gateStroke.normal
+        ctx.strokeStyle = normal
     }
 
     ctx.lineWidth = renderer.options.gates.gateStroke.width
@@ -41,7 +44,7 @@ export const renderGate = (
     if (gate.template.material.type === 'image') {
         roundImage(
             ctx,
-            ImageStore.get(gate.template.material.value),
+            ImageStore.get(gate.template.material.fill),
             ...renderingParameters
         )
     }
@@ -49,7 +52,7 @@ export const renderGate = (
     roundRect(ctx, ...renderingParameters)
 
     if (gate.template.material.type === 'color') {
-        ctx.fillStyle = gate.template.material.value
+        ctx.fillStyle = gate.template.material.fill
 
         ctx.fill()
     }

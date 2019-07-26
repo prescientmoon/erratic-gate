@@ -7,20 +7,25 @@ import { pinFill } from './pinFill'
 export const renderPins = (
     ctx: CanvasRenderingContext2D,
     renderer: SimulationRenderer,
-    gate: Gate
+    gate: Gate,
+    selected: boolean
 ) => {
     ctx.save()
 
     const {
         connectionLength,
         pinRadius,
-        pinStrokeColor,
         pinStrokeWidth
     } = renderer.options.gates
     const relativeTransform = useTransform(ctx, gate.transform)
 
-    ctx.strokeStyle = pinStrokeColor
     ctx.lineWidth = pinStrokeWidth
+
+    if (selected) {
+        ctx.strokeStyle = gate.template.material.stroke.active
+    } else {
+        ctx.strokeStyle = renderer.options.gates.pinStrokeColor
+    }
 
     for (const pin of gate.pins) {
         ctx.fillStyle = pinFill(renderer, pin.value)

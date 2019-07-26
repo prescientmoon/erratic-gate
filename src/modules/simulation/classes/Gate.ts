@@ -62,6 +62,10 @@ export class Gate {
 
         this.transform.scale = this.template.shape.scale
 
+        if (this.template.material.type === 'color') {
+            this.template.material.colors.main = this.template.material.fill
+        }
+
         this.functions.activation = toFunction(
             this.template.code.activation,
             'context'
@@ -84,7 +88,7 @@ export class Gate {
         )
 
         if (this.template.material.type === 'image') {
-            ImageStore.set(this.template.material.value)
+            ImageStore.set(this.template.material.fill)
         }
 
         this.id = id !== undefined ? id : idStore.generate()
@@ -223,10 +227,13 @@ export class Gate {
             memory: this.memory,
             color: (color: string) => {
                 if (this.template.material.type === 'color') {
-                    this.template.material.value = color
+                    this.template.material.fill = color
                 }
             },
-            enviroment: this.env
+            enviroment: this.env,
+            colors: {
+                ...this.template.material.colors
+            }
         }
     }
 

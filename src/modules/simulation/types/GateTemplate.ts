@@ -7,7 +7,12 @@ export interface PinCount {
 
 export interface Material {
     type: 'color' | 'image'
-    value: string
+    fill: string
+    stroke: {
+        active: string
+        normal: string
+    }
+    colors: Record<string, string>
 }
 
 export interface Shape {

@@ -8,6 +8,7 @@ export interface Context {
     set: (index: number, state: boolean) => void
     color: (color: string) => void
     enviroment: SimulationEnv
+    colors: Record<string, string>
 }
 
 export interface InitialisationContext {

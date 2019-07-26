@@ -6,7 +6,12 @@ export const DefaultGateTemplate: GateTemplate = {
     },
     material: {
         type: 'color',
-        value: 'blue'
+        fill: 'blue',
+        stroke: {
+            active: '#76FF02',
+            normal: '#3FC4FF'
+        },
+        colors: {}
     },
     pins: {
         inputs: {

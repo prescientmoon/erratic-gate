@@ -53,8 +53,10 @@ const LogicGateModal = () => {
                         <div
                             key={index}
                             className="logic-gate-item"
-                            onClick={() => {
+                            onClick={e => {
                                 addGate(renderer, name)
+
+                                e.stopPropagation()
                             }}
                         >
                             <Icon className="lgi-icon logic-gate-item-type">
