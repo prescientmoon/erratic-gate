@@ -3,6 +3,6 @@ import { deleteGate } from '../../simulationRenderer/helpers/deleteGate'
 
 export const deleteSelection = (renderer: SimulationRenderer) => {
     for (const gate of renderer.getSelected()) {
-        deleteGate(renderer.simulation, gate)
+        deleteGate(renderer.simulation, gate, renderer)
     }
 }
