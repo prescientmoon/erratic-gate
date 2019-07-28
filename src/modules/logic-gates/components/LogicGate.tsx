@@ -4,19 +4,31 @@ import { GateTemplate } from '../../simulation/types/GateTemplate'
 import GateInfo from './GateInfo'
 import GateSettings from './GateSettings'
 import AddGate from './AddGate'
+import { addGateFromTemplate } from '../helpers/addGateFromTemplate'
+import { repeat } from '../../vector2/helpers/repeat'
 
 export interface LogicGateProps {
     template: GateTemplate
 }
 
+const gradientSmoothness = 10
+
 const LogicGate = ({ template }: LogicGateProps) => {
+    const { fill } = template.material
+
     const gatePreview =
         template.material.type === 'image' ? (
-            <img src={template.material.fill} alt={template.metadata.name} />
+            <img src={fill} alt={template.metadata.name} />
         ) : (
             <div
                 style={{
-                    backgroundColor: template.material.fill
+                    backgroundColor: fill,
+                    backgroundImage: `linear-gradient(-60deg,${[
+                        ...Object.values(template.material.colors)
+                            .map(color => repeat(color, gradientSmoothness))
+                            .flat(),
+                        ...repeat(fill, gradientSmoothness)
+                    ].join(',')})`
                 }}
             />
         )
@@ -27,7 +39,12 @@ const LogicGate = ({ template }: LogicGateProps) => {
     return (
         <div className="gate">
             <section>
-                <div className="gate-preview">{gatePreview}</div>
+                <div
+                    className="gate-preview"
+                    onClick={() => addGateFromTemplate(template)}
+                >
+                    {gatePreview}
+                </div>
             </section>
             <section>
                 <div className="gate-name">{name}</div>

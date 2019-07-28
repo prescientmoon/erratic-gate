@@ -9,3 +9,7 @@ export type possibleAction =
     | 'select all'
     | 'delete selection'
     | 'delete simulation'
+    | 'copy'
+    | 'paste'
+    | 'duplicate'
+    | 'cut'

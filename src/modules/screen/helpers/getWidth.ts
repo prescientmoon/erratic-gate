@@ -1,4 +1,4 @@
-import { sidebarWidth } from '../../core/components/Sidebar'
+import { sidebarWidth } from '../../core/constants'
 
 /**
  * Helper to get the width of the canvas

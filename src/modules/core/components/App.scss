@@ -12,5 +12,7 @@ body {
 
 .page {
     @include page-width();
+
     background-color: $bg;
+    overflow-y: auto;
 }

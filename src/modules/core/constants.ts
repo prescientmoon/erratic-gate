@@ -26,3 +26,8 @@ export const icons: IconInterface = {
         ic: 'memory'
     }
 }
+
+/**
+ * The width of the sidebar
+ */
+export const sidebarWidth = 240

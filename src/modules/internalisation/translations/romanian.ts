@@ -32,7 +32,11 @@ export const RomanianTranslation: Translation = {
         clean: 'Curăță',
         refresh: 'Reîncarcă',
         undo: 'Întoarce',
-        'delete simulation': 'Șterge simulația'
+        'delete simulation': 'Șterge simulația',
+        copy: 'Copiază',
+        paste: 'Lipește',
+        cut: 'Taie',
+        duplicate: 'Clonează'
     },
     messages: {
         createdSimulation: name =>

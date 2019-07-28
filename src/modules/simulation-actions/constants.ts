@@ -8,12 +8,19 @@ import { selectAll } from './helpers/selectAll'
 import { deleteSelection } from './helpers/deleteSelection'
 import { cleanRenderer } from './helpers/clean'
 import { deleteSimulation } from './helpers/deleteSimulation'
+import { copy, cut } from './helpers/copy'
+import { paste } from './helpers/paste'
+import { duplicate } from './helpers/duplicate'
 
 export const actionIcons: Record<possibleAction, string> = {
     clean: 'clear',
     refresh: 'refresh',
     save: 'save',
     undo: 'undo',
+    copy: 'file_copy',
+    cut: 'file_copy',
+    paste: 'unarchive',
+    duplicate: 'view_module',
     'select all': 'select_all',
     'delete selection': 'delete',
     'delete simulation': 'delete_forever'
@@ -52,6 +59,10 @@ export const SidebarActions: Record<possibleAction, SidebarAction> = {
         },
         ['ctrl', 'shift', 'delete']
     ),
+    ...createActionConfig('cut', cut, ['ctrl', 'x']),
+    ...createActionConfig('paste', paste, ['ctrl', 'v']),
+    ...createActionConfig('duplicate', duplicate, ['ctrl', 'd']),
+    ...createActionConfig('copy', copy, ['ctrl', 'c']),
     ...createActionConfig('select all', selectAll, ['ctrl', 'a']),
     ...createActionConfig('delete selection', deleteSelection, ['delete'])
 }

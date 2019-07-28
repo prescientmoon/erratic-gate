@@ -30,6 +30,10 @@ export const EnglishTranslation: Translation = {
         clean: 'Clean',
         refresh: 'Refresh',
         undo: 'Undo',
+        paste: 'Paste',
+        copy: 'Copy',
+        duplicate: 'Duplicate',
+        cut: 'Cut',
         'select all': 'Select all',
         'delete selection': 'Delete selection',
         'delete simulation': 'Delete simulation'

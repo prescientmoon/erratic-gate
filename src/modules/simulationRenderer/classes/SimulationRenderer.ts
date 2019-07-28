@@ -28,12 +28,13 @@ import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { deleteWire } from '../../simulation/helpers/deleteWire'
-import { RendererState } from '../../saving/types/SimulationSave'
+import { RendererState, WireState } from '../../saving/types/SimulationSave'
 import { setToArray } from '../../../common/lang/arrays/helpers/setToArray'
 import { Transform } from '../../../common/math/classes/Transform'
 import { gatesInSelection } from '../helpers/gatesInSelection'
 import { selectionType } from '../types/selectionType'
 import { addIdToSelection, idIsSelected } from '../helpers/idIsSelected'
+import { GateInitter } from '../types/GateInitter'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -50,6 +51,8 @@ export class SimulationRenderer {
     public camera = new Camera()
 
     public selectedArea = new Transform()
+    public clipboard: GateInitter[] = []
+    public wireClipboard: WireState[] = []
 
     // first bit = dragging
     // second bit = panning around
@@ -81,8 +84,6 @@ export class SimulationRenderer {
             const gates = Array.from(this.simulation.gates)
 
             this.lastMousePosition = worldPosition
-
-            console.log('click')
 
             // We need to iterate from the last to the first
             // because if we have 2 overlapping gates,
@@ -294,7 +295,7 @@ export class SimulationRenderer {
     public updateWheelListener(ref: RefObject<HTMLCanvasElement>) {
         if (ref.current) {
             ref.current.addEventListener('wheel', event => {
-                if (!modalIsOpen()) {
+                if (!modalIsOpen() && location.pathname === '/') {
                     event.preventDefault()
 
                     handleScroll(event, this.camera)

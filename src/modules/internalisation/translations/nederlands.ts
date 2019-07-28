@@ -20,7 +20,11 @@ export const DutchTranslation: Translation = {
         refresh: 'Todo',
         save: 'Todo',
         undo: 'Todo',
-        'delete simulation': `Todo`
+        'delete simulation': `Todo`,
+        copy: 'Todo',
+        cut: 'Todo',
+        duplicate: 'Todo',
+        paste: 'Todo'
     },
     createSimulation: {
         mode: {
@@ -44,6 +48,7 @@ export const DutchTranslation: Translation = {
         cleaned: name => `${name} gewist`,
         refreshed: name => `${name} ververst`,
         undone: name => `${name} ongedaan gemaakt`,
-        deletedSimulation: name => `Todo`
+        deletedSimulation: name => `Todo`,
+        addedGate: name => 'Todo'
     }
 }

@@ -2,6 +2,7 @@ import { Transform } from '../../../common/math/classes/Transform'
 import { BehaviorSubject, fromEvent } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { getWidth } from '../helpers/getWidth'
+import { sidebarWidth } from '../../core/constants'
 
 const width = new BehaviorSubject(getWidth())
 const height = new BehaviorSubject(window.innerHeight)

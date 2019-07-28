@@ -9,10 +9,7 @@ import Language from './Language'
 import SimulationActions from '../../simulation-actions/components/SimulationActions'
 import { Route, Switch } from 'react-router'
 import BackToSimulation from './BackToSimulation'
-/**
- * The width of the sidebar
- */
-export const sidebarWidth = 240
+import { sidebarWidth } from '../constants'
 
 /**
  * The z-index of the sidebar.

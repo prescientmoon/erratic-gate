@@ -9,10 +9,20 @@ import { Screen } from '../../screen/helpers/Screen'
 import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
+import { GateInitter } from '../../simulationRenderer/types/GateInitter'
 
-export const addGate = (renderer: SimulationRenderer, templateName: string) => {
+/**
+ * Adds a gate to a renderer
+ *
+ * @param renderer The renderer to add the gate to
+ * @param templateName The name of the template to add
+ */
+export const addGate = (
+    renderer: SimulationRenderer,
+    templateName: string,
+    log = true
+) => {
     const template = templateStore.get(templateName)
-    const translation = CurrentLanguage.getTranslation()
 
     if (!template)
         throw new SimulationError(`Cannot find template ${templateName}`)
@@ -37,10 +47,38 @@ export const addGate = (renderer: SimulationRenderer, templateName: string) => {
     renderer.simulation.push(gate)
     renderer.spawnCount++
 
-    toast(
-        ...createToastArguments(
-            translation.messages.addedGate(templateName),
-            'add_circle_outline'
+    if (log) {
+        const translation = CurrentLanguage.getTranslation()
+
+        toast(
+            ...createToastArguments(
+                translation.messages.addedGate(templateName),
+                'add_circle_outline'
+            )
         )
-    )
+    }
+
+    return gate.id
+}
+
+/**
+ * Adds a gate to a renderer and sets its position
+ *
+ * @param renderer The renderer to add the gate to
+ * @param initter The initter to use
+ */
+export const instantiateGateInitter = (
+    renderer: SimulationRenderer,
+    initter: GateInitter,
+    log = true
+) => {
+    const id = addGate(renderer, initter.name, log)
+
+    const gate = renderer.simulation.gates.get(id)
+
+    if (gate && gate.data) {
+        gate.data.transform.position = initter.position
+    }
+
+    return id
 }
