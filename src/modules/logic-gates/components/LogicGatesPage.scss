@@ -1,0 +1,34 @@
+@import '../../core/styles/colors.scss';
+@import '../../core/styles/mixins/flex.scss';
+
+#gates-page {
+    color: white;
+}
+
+.gate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    grid-auto-rows: 1fr;
+}
+
+.gate-grid::before {
+    content: '';
+    width: 0;
+    padding-bottom: 100%;
+    grid-row: 1 / 1;
+    grid-column: 1 / 1;
+}
+
+.gate-grid > *:first-child {
+    grid-row: 1 / 1;
+    grid-column: 1 / 1;
+}
+
+.gate-grid > * {
+    @include flex();
+
+    justify-content: start;
+    margin: 0.3em;
+    background-color: $grey;
+    height: 20em;
+}

@@ -6,18 +6,25 @@ import { handleErrors } from './modules/errors/helpers/handleErrors'
 import { initKeyBindings } from './modules/keybindings/helpers/initialiseKeyBindings'
 import { initBaseTemplates } from './modules/saving/helpers/initBaseTemplates'
 import { loadSubject } from './modules/core/subjects/loadedSubject'
-import { take } from 'rxjs/operators'
+import { take, filter } from 'rxjs/operators'
 import { logWelcome } from './modules/core/helpers/logWelcome'
+import { initRenderer } from './modules/simulationRenderer/helpers/initRenderer'
+import { updateLogicGateList } from './modules/logic-gates/subjects/LogicGateList'
 
 export const start = async () => {
-    console.clear()
-
-    const result = loadSubject.pipe(take(1)).toPromise()
+    const result = loadSubject
+        .pipe(
+            filter(a => a),
+            take(1)
+        )
+        .toPromise()
 
     handleErrors()
+    initRenderer()
     initKeyBindings()
     initBaseTemplates()
     logWelcome()
+    updateLogicGateList()
 
     render(<App />, document.getElementById('app'))
 

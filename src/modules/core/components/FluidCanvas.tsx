@@ -33,6 +33,7 @@ const FluidCanvas = forwardRef(
 
         return (
             <canvas
+                className="page"
                 ref={ref}
                 width={currentWidth}
                 height={currentHeight}

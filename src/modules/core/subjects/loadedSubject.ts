@@ -1,3 +1,3 @@
-import { Subject } from 'rxjs'
+import { BehaviorSubject } from 'rxjs'
 
-export const loadSubject = new Subject<true>()
+export const loadSubject = new BehaviorSubject(false)

@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 const webpackMerge = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -71,7 +72,15 @@ const serverConfig = {
     },
     node: {
         __dirname: false
-    }
+    },
+    plugins: [
+        new CopyPlugin([
+            {
+                from: resolve(sourceFolder, 'public'),
+                to: buildFolder
+            }
+        ])
+    ]
 }
 
 const baseConfig = {

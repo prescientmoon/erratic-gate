@@ -10,7 +10,8 @@ export const EnglishTranslation: Translation = {
         logicGates: 'Logic gates',
         openSimulation: 'Open simulations',
         simulation: 'Simulation',
-        language: 'Language'
+        language: 'Language',
+        backToSimulation: 'Back to simulation'
     },
     createSimulation: {
         mode: {
@@ -42,6 +43,7 @@ export const EnglishTranslation: Translation = {
         cleaned: name => `Succesfully cleaned simulation '${name}'`,
         refreshed: name => `Succesfully refreshed simulation '${name}'`,
         undone: name => `Succesfully undone simulation '${name}'`,
-        deletedSimulation: name => `Succesfully deleted simulation '${name}'`
+        deletedSimulation: name => `Succesfully deleted simulation '${name}'`,
+        addedGate: name => `Succesfully added gate '${name}'`
     }
 }

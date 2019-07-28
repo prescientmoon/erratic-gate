@@ -1,4 +1,6 @@
 @import '../styles/global-styles/global-styles.scss';
+@import '../../core/styles/mixins/full-screen.scss';
+@import '../styles/colors.scss';
 
 html,
 body {
@@ -8,7 +10,7 @@ body {
     overflow: hidden;
 }
 
-canvas {
-    background-color: #222222;
-    z-index: -1;
+.page {
+    @include page-width();
+    background-color: $bg;
 }

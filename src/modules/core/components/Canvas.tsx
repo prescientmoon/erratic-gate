@@ -1,34 +1,30 @@
-import React, { Component, createRef, Ref, RefObject } from 'react'
+import React, { Component, createRef, RefObject } from 'react'
 import FluidCanvas from './FluidCanvas'
 import loop from 'mainloop.js'
-import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { renderSimulation } from '../../simulationRenderer/helpers/renderSimulation'
+import { getRendererSafely } from '../../logic-gates/helpers/getRendererSafely'
+import { Subscription } from 'rxjs'
 import { rendererSubject } from '../subjects/rendererSubject'
-import { loadSubject } from '../subjects/loadedSubject'
+import { filter } from 'rxjs/operators'
 
 class Canvas extends Component {
     private canvasRef: RefObject<HTMLCanvasElement> = createRef()
     private renderingContext: CanvasRenderingContext2D | null
-    private renderer = new SimulationRenderer(this.canvasRef)
 
     public constructor(props: {}) {
         super(props)
 
-        rendererSubject.next(this.renderer)
-
         loop.setDraw(() => {
             if (this.renderingContext) {
-                renderSimulation(this.renderingContext, this.renderer)
+                renderSimulation(this.renderingContext, getRendererSafely())
             }
         })
     }
 
     public componentDidMount() {
-        loadSubject.next(true)
-
         if (this.canvasRef.current) {
             this.renderingContext = this.canvasRef.current.getContext('2d')
-            this.renderer.updateWheelListener()
+            getRendererSafely().updateWheelListener(this.canvasRef)
         }
 
         loop.start()
@@ -39,12 +35,14 @@ class Canvas extends Component {
     }
 
     public render() {
+        const renderer = getRendererSafely()
+
         return (
             <FluidCanvas
                 ref={this.canvasRef}
-                mouseDownOuput={this.renderer.mouseDownOutput}
-                mouseUpOutput={this.renderer.mouseUpOutput}
-                mouseMoveOutput={this.renderer.mouseMoveOutput}
+                mouseDownOuput={renderer.mouseDownOutput}
+                mouseUpOutput={renderer.mouseUpOutput}
+                mouseMoveOutput={renderer.mouseMoveOutput}
             />
         )
     }

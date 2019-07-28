@@ -67,7 +67,6 @@ export class SimulationRenderer {
     }
 
     public constructor(
-        public ref: RefObject<HTMLCanvasElement>,
         options: Partial<SimulationRendererOptions> = {},
         public simulation = new Simulation('project', 'default')
     ) {
@@ -82,6 +81,8 @@ export class SimulationRenderer {
             const gates = Array.from(this.simulation.gates)
 
             this.lastMousePosition = worldPosition
+
+            console.log('click')
 
             // We need to iterate from the last to the first
             // because if we have 2 overlapping gates,
@@ -290,9 +291,9 @@ export class SimulationRenderer {
         this.reloadSave()
     }
 
-    public updateWheelListener() {
-        if (this.ref.current) {
-            this.ref.current.addEventListener('wheel', event => {
+    public updateWheelListener(ref: RefObject<HTMLCanvasElement>) {
+        if (ref.current) {
+            ref.current.addEventListener('wheel', event => {
                 if (!modalIsOpen()) {
                     event.preventDefault()
 

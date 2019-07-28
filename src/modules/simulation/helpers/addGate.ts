@@ -6,9 +6,13 @@ import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationR
 import { DefaultGateTemplate } from '../constants'
 import { vector2 } from '../../../common/math/classes/Transform'
 import { Screen } from '../../screen/helpers/Screen'
+import { toast } from 'react-toastify'
+import { createToastArguments } from '../../toasts/helpers/createToastArguments'
+import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 
 export const addGate = (renderer: SimulationRenderer, templateName: string) => {
     const template = templateStore.get(templateName)
+    const translation = CurrentLanguage.getTranslation()
 
     if (!template)
         throw new SimulationError(`Cannot find template ${templateName}`)
@@ -32,4 +36,11 @@ export const addGate = (renderer: SimulationRenderer, templateName: string) => {
 
     renderer.simulation.push(gate)
     renderer.spawnCount++
+
+    toast(
+        ...createToastArguments(
+            translation.messages.addedGate(templateName),
+            'add_circle_outline'
+        )
+    )
 }

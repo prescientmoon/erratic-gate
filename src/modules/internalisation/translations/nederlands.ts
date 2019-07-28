@@ -10,7 +10,8 @@ export const DutchTranslation: Translation = {
         logicGates: 'Logische poorten',
         openSimulation: 'Open simulatie',
         simulation: 'Todo',
-        language: 'Taal'
+        language: 'Taal',
+        backToSimulation: 'Todo'
     },
     actions: {
         'delete selection': 'Todo',

@@ -10,7 +10,8 @@ export const RomanianTranslation: Translation = {
         openSimulation: 'Deschide o simulație',
         logicGates: 'Porți logice',
         simulation: 'Simulație',
-        language: 'Limba'
+        language: 'Limba',
+        backToSimulation: 'Înapoi la simulație'
     },
     createSimulation: {
         mode: {
@@ -44,6 +45,7 @@ export const RomanianTranslation: Translation = {
         refreshed: name => `Simulația '${name}' a fost reîncărcată cu succes`,
         undone: name => `Acțiunea a fost întoarsă`,
         deletedSimulation: name =>
-            `Simulația '${name}' a fost ștearsă cu succes`
+            `Simulația '${name}' a fost ștearsă cu succes`,
+        addedGate: name => `Componentul '${name}' a fost adăugat cu succes`
     }
 }

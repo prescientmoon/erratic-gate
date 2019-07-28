@@ -1,0 +1,31 @@
+@import '../../core/styles/mixins/flex.scss';
+
+$gate-margin: 1em;
+
+.gate > section > .gate-preview > * {
+    width: 100%;
+}
+
+.gate > section > .gate-preview > * {
+    display: block;
+    height: 10em;
+    width: 10em;
+
+    margin: $gate-margin;
+}
+
+.gate > section > .gate-name {
+    width: 100%;
+    text-align: center;
+}
+
+.gate > section > .gate-icons {
+    @include flex();
+
+    width: calc(100% - 2 * #{$gate-margin});
+    height: 100%;
+    margin: $gate-margin;
+
+    flex-direction: row;
+    justify-content: space-evenly;
+}

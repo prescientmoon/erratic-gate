@@ -7,6 +7,8 @@ import LogicGates from './LogicGates'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Language from './Language'
 import SimulationActions from '../../simulation-actions/components/SimulationActions'
+import { Route, Switch } from 'react-router'
+import BackToSimulation from './BackToSimulation'
 /**
  * The width of the sidebar
  */
@@ -56,11 +58,21 @@ const useStyles = makeStyles(
 const Sidebar = () => {
     const classes = useStyles()
 
+    const rootSidebarContent = () => {
+        return (
+            <>
+                <CreateSimulationButton />
+                <OpenSimulation />
+                <LogicGates />
+                <SimulationActions />
+            </>
+        )
+    }
     return (
         <div className={classes.root}>
             <Drawer
                 className={classes.drawer}
-                variant="persistent"
+                variant={'persistent'}
                 anchor="right"
                 open={true}
                 classes={{
@@ -68,10 +80,10 @@ const Sidebar = () => {
                 }}
             >
                 <List component="nav" className={classes.list}>
-                    <CreateSimulationButton />
-                    <OpenSimulation />
-                    <LogicGates />
-                    <SimulationActions />
+                    <Switch>
+                        <Route path="/" exact component={rootSidebarContent} />
+                        <Route path="*" component={BackToSimulation} />
+                    </Switch>
                 </List>
 
                 <Language />

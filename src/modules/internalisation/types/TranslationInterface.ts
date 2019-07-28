@@ -16,6 +16,7 @@ export interface Translation {
         logicGates: string
         simulation: string
         language: string
+        backToSimulation: string
     }
     createSimulation: {
         mode: {
@@ -35,6 +36,7 @@ export interface Translation {
         cleaned: NameSentence
         undone: NameSentence
         deletedSimulation: NameSentence
+        addedGate: NameSentence
     }
     actions: Record<possibleAction, string>
 }

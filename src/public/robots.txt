@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /server.js
+Disallow: /js
+Disallow: /css

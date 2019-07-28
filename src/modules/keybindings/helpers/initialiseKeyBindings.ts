@@ -31,7 +31,7 @@ export const initKeyBindings = (bindings: KeyBindingMap = keyBindings) => {
     }
 
     window.addEventListener('keydown', e => {
-        if (!modalIsOpen()) {
+        if (!modalIsOpen() && location.pathname === '/') {
             const current: {
                 keys: string[]
                 callback: Function

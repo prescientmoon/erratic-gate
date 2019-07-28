@@ -4,7 +4,7 @@ import React from 'react'
 const title = 'Logic gate simulator'
 const description = 'A logic gate simulator made for infoeducatie 2019'
 const url = 'https://logic-gate-simulator.herokuapp.com/'
-const thumbail = require('../../../assets/thumbail.png')
+const thumbail = require('../../../assets/favicon.ico')
 
 const Head = () => {
     return (
@@ -33,6 +33,11 @@ const Head = () => {
             <meta property="og:description" content={description} />
             <meta property="og:image" content={`${url}${thumbail}`} />
             <meta property="og:url" content={url} />
+
+            <meta
+                name="Description"
+                content="A logic gate simulator made for infoeducatie 2019"
+            />
 
             <link rel="icon" href={require('../../../assets/favicon.ico')} />
         </Helmet>
