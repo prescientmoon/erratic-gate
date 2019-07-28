@@ -365,4 +365,12 @@ export class SimulationRenderer {
         this.selectedGates.permanent.clear()
         this.selectedGates.temporary.clear()
     }
+
+    /**
+     * Clears the selected pins of the renderer
+     */
+    public clearPinSelection() {
+        this.selectedPins.end = null
+        this.selectedPins.start = null
+    }
 }
