@@ -34,7 +34,7 @@ const allSimulationSubject = new BehaviorSubject<string[]>([])
  *
  * It also has the side effect of sorting the simulation names.
  */
-const updateSimulationList = () => {
+export const updateSimulationList = () => {
     allSimulationSubject.next(allSimulations().sort())
 }
 

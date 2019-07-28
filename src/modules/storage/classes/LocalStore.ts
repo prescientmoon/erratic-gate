@@ -53,9 +53,12 @@ export class LocalStore<T> {
 
     public delete(key = 'index') {
         const all = this.getAll()
+        const last = all[key]
 
         delete all[key]
 
         localStorage.setItem(this.name, JSON.stringify(all))
+
+        return last
     }
 }

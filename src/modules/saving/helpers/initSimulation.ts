@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 import { compileIc } from '../../integrated-circuits/helpers/compileIc'
+import { updateLogicGateList } from '../../logic-gates/subjects/LogicGateList'
 
 /**
  * Inits a simulation by:
@@ -34,6 +35,7 @@ export const initSimulation = (name: string, mode: simulationMode) => {
 
     if (mode === 'ic') {
         compileIc(state.simulation)
+        updateLogicGateList()
     }
 
     return state

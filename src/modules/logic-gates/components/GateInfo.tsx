@@ -1,7 +1,7 @@
 import React from 'react'
 import Icon from '@material-ui/core/Icon'
 import IconButton from '@material-ui/core/IconButton'
-import { LogicGateProps } from './LogicGate'
+import { LogicGateProps } from '../types/LogicGateProps'
 import { randomItem } from '../../internalisation/helpers/randomItem'
 
 const GateInfo = ({ template }: LogicGateProps) => {
