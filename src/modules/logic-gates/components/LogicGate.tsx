@@ -28,9 +28,9 @@ const LogicGate = ({ template }: LogicGateProps) => {
             <section>
                 <div className="gate-icons">
                     <GateInfo template={template} />
-                    <GateSettings template={template} />
+                    {/* <GateSettings template={template} /> */}
                     <AddGate template={template} />
-                    {/* <DeleteGateIcon template={template} /> */}
+                    <DeleteGateIcon template={template} />
                 </div>
             </section>
         </div>
