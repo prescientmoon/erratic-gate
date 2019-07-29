@@ -35,7 +35,8 @@ export const fromSimulationState = (
     for (const gateState of state.gates) {
         const gate = new Gate(
             templateStore.get(gateState.template),
-            gateState.id
+            gateState.id,
+            gateState.props
         )
         gate.transform = fromTransformState(gateState.transform)
 

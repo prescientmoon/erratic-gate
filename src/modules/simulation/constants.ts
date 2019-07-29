@@ -51,6 +51,7 @@ export const DefaultGateTemplate: GateTemplate = {
     info: [],
     tags: ['base'],
     properties: {
-        enabled: false
+        enabled: false,
+        data: []
     }
 }

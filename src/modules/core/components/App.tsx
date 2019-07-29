@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { ToastContainer } from 'react-toastify'
 import { theme as muiTheme } from '../constants'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import React, { useEffect } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -15,6 +15,7 @@ import Head from './Head'
 import Root from './Root'
 import LogicGatePage from '../../logic-gates/components/LogicGatesPage'
 import { loadSubject } from '../subjects/loadedSubject'
+import { CustomRouter } from './CustomRouter'
 
 const App = () => {
     useEffect(() => {
@@ -27,12 +28,12 @@ const App = () => {
             <CssBaseline />
 
             <Theme theme={muiTheme}>
-                <Router>
+                <CustomRouter>
                     <Sidebar />
 
                     <Route path="/" component={Root} exact />
                     <Route path="/gates" component={LogicGatePage} />
-                </Router>
+                </CustomRouter>
             </Theme>
 
             <ToastContainer

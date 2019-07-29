@@ -37,15 +37,13 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
 
 export const imageQuality: vector2 = [100, 100]
 
-export const mouseButtons: Record<
-    'zoom' | 'pan' | 'drag' | 'select' | 'unselect',
-    mouseButton
-> = {
+export const mouseButtons = {
     zoom: 1,
     drag: 0,
     pan: 2,
     select: 0,
-    unselect: 0
+    unselect: 0,
+    properties: 2
 }
 
 export const shiftInput = new KeyboardInput('shift')

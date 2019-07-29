@@ -118,7 +118,7 @@ export class Gate {
     /**
      * The props used by the activation function (the same as memory but presists)
      */
-    public props: Record<string, unknown> = {}
+    public props: Record<string, string | number | boolean> = {}
 
     /**
      * The main logic gate class
@@ -129,7 +129,7 @@ export class Gate {
     public constructor(
         template: DeepPartial<GateTemplate> = {},
         id?: number,
-        props: Record<string, unknown> = {}
+        props: Record<string, string> = {}
     ) {
         this.template = completeTemplate(template)
 
@@ -259,16 +259,24 @@ export class Gate {
     /**
      * Assign the props passed to the gate and mere them with the base ones
      */
-    private assignProps(props: Record<string, unknown>) {
+    private assignProps(props: Record<string, string>) {
+        let shouldUpdate = false
+
         if (this.template.properties.enabled) {
-            for (const prop in this.template.properties) {
-                if (prop !== 'enabled') {
-                    this.props[prop] =
-                        props[prop] !== undefined
-                            ? props[prop]
-                            : this.template.properties[prop].base
+            for (const { base, name, needsUpdate } of this.template.properties
+                .data) {
+                this.props[name] = props.hasOwnProperty(name)
+                    ? props[name]
+                    : base
+
+                if (!shouldUpdate && needsUpdate) {
+                    shouldUpdate = true
                 }
             }
+        }
+
+        if (shouldUpdate) {
+            this.update()
         }
     }
 
@@ -335,13 +343,22 @@ export class Gate {
             set: (index: number, state: boolean = false) => {
                 return this._pins.outputs[index].state.next(state)
             },
-            memory: this.memory,
             color: (color: string) => {
                 if (this.template.material.type === 'color') {
                     this.template.material.fill = color
                 }
             },
+            getProperty: (name: string) => {
+                return this.props[name]
+            },
+            setProperty: (name: string, value: string | number | boolean) => {
+                this.props[name] = value
+            },
+            update: () => {
+                this.update()
+            },
             enviroment: this.env,
+            memory: this.memory,
             colors: {
                 ...this.template.material.colors
             }

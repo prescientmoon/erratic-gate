@@ -35,6 +35,10 @@ import { gatesInSelection } from '../helpers/gatesInSelection'
 import { selectionType } from '../types/selectionType'
 import { addIdToSelection, idIsSelected } from '../helpers/idIsSelected'
 import { GateInitter } from '../types/GateInitter'
+import {
+    open as propsAreOpen,
+    id as propsModalId
+} from '../../logic-gates/subjects/LogicGatePropsSubjects'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -89,29 +93,34 @@ export class SimulationRenderer {
             // because if we have 2 overlapping gates,
             // we want to select the one on top
             for (let index = gates.length - 1; index >= 0; index--) {
-                const { transform, id, pins } = gates[index]
+                const { transform, id, pins, template } = gates[index]
 
-                if (
-                    event.button === mouseButtons.drag &&
-                    pointInSquare(worldPosition, transform)
-                ) {
-                    gates[index].onClick()
+                if (pointInSquare(worldPosition, transform)) {
+                    if (event.button === mouseButtons.drag) {
+                        gates[index].onClick()
 
-                    this.mouseState |= 1
+                        this.mouseState |= 1
 
-                    if (!idIsSelected(this, id)) {
-                        this.clearSelection()
-                        addIdToSelection(this, 'temporary', id)
-                    }
+                        if (!idIsSelected(this, id)) {
+                            this.clearSelection()
+                            addIdToSelection(this, 'temporary', id)
+                        }
 
-                    const gateNode = this.simulation.gates.get(id)
+                        const gateNode = this.simulation.gates.get(id)
 
-                    if (gateNode) {
-                        return this.simulation.gates.moveOnTop(gateNode)
-                    } else {
-                        throw new SimulationError(
-                            `Cannot find gate with id ${id}`
-                        )
+                        if (gateNode) {
+                            return this.simulation.gates.moveOnTop(gateNode)
+                        } else {
+                            throw new SimulationError(
+                                `Cannot find gate with id ${id}`
+                            )
+                        }
+                    } else if (
+                        event.button === mouseButtons.properties &&
+                        template.properties.enabled
+                    ) {
+                        propsModalId.next(id)
+                        return propsAreOpen.next(true)
                     }
                 }
 
@@ -313,21 +322,15 @@ export class SimulationRenderer {
     }
 
     public reloadSave() {
-        try {
-            dumpSimulation(this)
+        dumpSimulation(this)
 
-            const current = currentStore.get()
-            const save = saveStore.get(current)
+        const current = currentStore.get()
+        const save = saveStore.get(current)
 
-            if (!save) return
-            if (!(save.simulation || save.camera)) return
+        if (!save) return
+        if (!(save.simulation || save.camera)) return
 
-            this.loadSave(save)
-        } catch (e) {
-            throw new Error(
-                `An error occured while loading the save: ${e as Error}`
-            )
-        }
+        this.loadSave(save)
     }
 
     /**
