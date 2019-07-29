@@ -23,6 +23,15 @@ export const length = (vector: vector2) =>
 export const multiply = (vector: vector2, scalar: number) =>
     vector.map(val => val * scalar) as vector2
 
+/**
+ * Multiplies 2 vectors
+ *
+ * @param vector The first vector to multiply
+ * @param other The second vector to multiply
+ */
+export const multiplyVectors = (vector: vector2, other: vector2) =>
+    vector.map((position, index) => position * other[index]) as vector2
+
 // This makese the length of the vector 1
 export const normalise = (vector: vector2) => {
     const size = length(vector)
@@ -35,8 +44,22 @@ export const ofLength = (vector: vector2, l: number) => {
     return multiply(vector, l / length(vector))
 }
 
-// This returns a vector relative to the other
+/**
+ * Moves a vector relative to another
+ *
+ * @param vector The vector t move relative to something
+ * @param other The vector for the first one to be mvoed relative to
+ */
 export const relativeTo = (vector: vector2, other: vector2) =>
     add(other, invert(vector))
+
+/**
+ * Subtracts a vector from another
+ *
+ * @param vector Hhe vector to substruact from
+ * @param other The vector to subtract
+ */
+export const substract = (vector: vector2, other: vector2) =>
+    relativeTo(other, vector)
 
 export const inverse = (vector: vector2) => vector.map(a => 1 / a) as vector2

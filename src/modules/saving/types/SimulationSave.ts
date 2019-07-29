@@ -12,6 +12,7 @@ export interface GateState {
     transform: TransformState
     id: number
     template: string
+    props: Record<string, unknown>
 }
 
 export interface CameraState {

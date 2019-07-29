@@ -243,6 +243,49 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
                 count: 3
             }
         }
+    },
+    {
+        metadata: {
+            name: 'Sequential delayer'
+        },
+        material: {
+            type: 'image',
+            fill: require('../../assets/sequential')
+        },
+        code: {
+            activation: `
+                const i = context.get(0)
+                return new Promise((res, rej) => {
+                    setTimeout(() => {
+                        res()
+                    },1000)
+                }).then(() => {
+                    context.set(0,i)
+                })
+            `,
+            async: true
+        }
+    },
+    {
+        metadata: {
+            name: 'Parallel delayer'
+        },
+        material: {
+            type: 'image',
+            fill: require('../../assets/parallel')
+        },
+        code: {
+            activation: `
+                const i = context.get(0)
+                return new Promise((res, rej) => {
+                    setTimeout(() => {
+                        res()
+                    },1000)
+                }).then(() => {
+                    context.set(0,i)
+                })
+            `
+        }
     }
 ]
 

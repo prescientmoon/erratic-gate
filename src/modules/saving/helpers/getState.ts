@@ -61,7 +61,8 @@ export const getGateState = (gate: Gate): GateState => {
     return {
         id: gate.id,
         template: gate.template.metadata.name,
-        transform: getTransformState(gate.transform)
+        transform: getTransformState(gate.transform),
+        props: gate.props
     }
 }
 

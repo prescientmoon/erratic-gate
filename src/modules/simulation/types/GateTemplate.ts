@@ -1,8 +1,15 @@
 import { vector2 } from '../../../common/math/classes/Transform'
+import { InputHTMLAttributes } from 'react'
 
 export interface PinCount {
     variable: boolean
     count: number
+}
+
+export interface Property<T> {
+    type: HTMLInputElement['type']
+    encode: (value: string) => T
+    base: T
 }
 
 export interface Material {
@@ -46,6 +53,7 @@ export interface GateTemplate {
         name: string
     }
     code: {
+        async: boolean
         initialisation: string
         activation: string
         onClick: string
@@ -61,4 +69,5 @@ export interface GateTemplate {
     }
     info: string[]
     tags: GateTag[]
+    properties: Enabled<Record<Exclude<string, 'enabled'>, Property<unknown>>>
 }

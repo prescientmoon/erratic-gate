@@ -42,7 +42,7 @@ export const mouseButtons: Record<
     mouseButton
 > = {
     zoom: 1,
-    drag: 2,
+    drag: 0,
     pan: 2,
     select: 0,
     unselect: 0

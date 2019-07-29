@@ -22,7 +22,7 @@ import {
     fromCameraState
 } from '../../saving/helpers/fromState'
 import merge from 'deepmerge'
-import { updateMouse, handleScroll } from '../helpers/scaleCanvas'
+import { handleScroll } from '../helpers/scaleCanvas'
 import { RefObject } from 'react'
 import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
@@ -55,7 +55,7 @@ export class SimulationRenderer {
     public wireClipboard: WireState[] = []
 
     // first bit = dragging
-    // second bit = panning around
+    // second bit = panning
     // third bit = selecting
     public mouseState = 0b000
 
@@ -200,7 +200,7 @@ export class SimulationRenderer {
         })
 
         this.mouseUpOutput.subscribe(event => {
-            if (event.button === mouseButtons.drag) {
+            if (event.button === mouseButtons.drag && this.mouseState & 1) {
                 const selected = this.getSelected()
 
                 for (const gate of selected) {
@@ -209,8 +209,8 @@ export class SimulationRenderer {
 
                 this.selectedGates.temporary.clear()
 
-                // turn first 2 bits to 0
-                this.mouseState &= 1 << 2
+                // turn first bit to 0
+                this.mouseState &= 6
 
                 // for debugging
                 if ((this.mouseState >> 1) & 1 || this.mouseState & 1) {
@@ -221,11 +221,16 @@ export class SimulationRenderer {
             }
 
             if (
-                event.button === mouseButtons.select &&
-                (this.mouseState >> 2) & 1
+                event.button === mouseButtons.pan &&
+                (this.mouseState >> 1) & 1
             ) {
+                // turn second bit to 0
+                this.mouseState &= 5
+            }
+
+            if (event.button === mouseButtons.select && this.mouseState >> 2) {
                 // turn the third bit to 0
-                this.mouseState &= (1 << 2) - 1
+                this.mouseState &= 3
 
                 const selectedGates = gatesInSelection(
                     this.selectedArea,
@@ -249,8 +254,6 @@ export class SimulationRenderer {
         })
 
         this.mouseMoveOutput.subscribe(event => {
-            updateMouse(event)
-
             const worldPosition = this.camera.toWordPostition(event.position)
 
             const offset = invert(

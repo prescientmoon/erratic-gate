@@ -14,50 +14,123 @@ import { fromSimulationState } from '../../saving/helpers/fromState'
 import { saveStore } from '../../saving/stores/saveStore'
 import { Wire } from './Wire'
 import { cleanSimulation } from '../../simulation-actions/helpers/clean'
+import { ExecutionQueue } from '../../activation/classes/ExecutionQueue'
 
+/**
+ * The interface for the pins of a gate
+ */
 export interface GatePins {
     inputs: Pin[]
     outputs: Pin[]
 }
 
+/**
+ * Wrapper around a pin so it can be rendered at the right place
+ */
 export interface PinWrapper {
     total: number
     index: number
     value: Pin
 }
 
+/**
+ * A function wich can be run with an activation context
+ */
 export type GateFunction = null | ((ctx: Context) => void)
 
+/**
+ * All functions a gate must remember
+ */
 export interface GateFunctions {
     activation: GateFunction
     onClick: GateFunction
 }
 
 export class Gate {
+    /**
+     * The transform of the gate
+     */
     public transform = new Transform()
+
+    /**
+     * The object holding all the pins the gate curently has
+     */
     public _pins: GatePins = {
         inputs: [],
         outputs: []
     }
 
+    /**
+     * The id of the gate
+     */
     public id: number
+
+    /**
+     * The template the gate needs to follow
+     */
     public template: GateTemplate
 
+    /**
+     * All the functions created from the template strings
+     */
     private functions: GateFunctions = {
         activation: null,
         onClick: null
     }
 
+    /**
+     * Used only if the gate is async
+     */
+    private executionQueue = new ExecutionQueue<void>()
+
+    /**
+     * All rxjs subscriptions the gate created
+     * (if they are not manually cleared it can lead to memory leaks)
+     */
     private subscriptions: Subscription[] = []
+
+    /**
+     * The state the activation functions have aces to
+     */
     private memory: Record<string, unknown> = {}
 
-    // Related to integration
+    /**
+     * The inner simulaton used by integrated circuits
+     */
     private ghostSimulation: Simulation
+
+    /**
+     * The wires connecting the outer simulation to the inner one
+     */
     private ghostWires: Wire[] = []
+
+    /**
+     * Boolean keeping track if the component is an ic
+     */
     private isIntegrated = false
+
+    /**
+     * Used to know if the component runs in the global scope (rendered)
+     * or insie an integrated circuit
+     */
     public env: SimulationEnv = 'global'
 
-    public constructor(template: DeepPartial<GateTemplate> = {}, id?: number) {
+    /**
+     * The props used by the activation function (the same as memory but presists)
+     */
+    public props: Record<string, unknown> = {}
+
+    /**
+     * The main logic gate class
+     *
+     * @param template The template the gate needs to follow
+     * @param id The id of the gate
+     */
+    public constructor(
+        template: DeepPartial<GateTemplate> = {},
+        id?: number,
+        props: Record<string, unknown> = {}
+    ) {
         this.template = completeTemplate(template)
 
         this.transform.scale = this.template.shape.scale
@@ -97,7 +170,13 @@ export class Gate {
             const pipes = getGateTimePipes(this.template)
 
             const subscription = pin.state.pipe(...pipes).subscribe(() => {
-                this.update()
+                if (this.template.code.async) {
+                    this.executionQueue.push(async () => {
+                        return await this.update()
+                    })
+                } else {
+                    this.update()
+                }
             })
 
             this.subscriptions.push(subscription)
@@ -173,8 +252,29 @@ export class Gate {
 
             this.ghostSimulation.wires.push(...this.ghostWires)
         }
+
+        this.assignProps(props)
     }
 
+    /**
+     * Assign the props passed to the gate and mere them with the base ones
+     */
+    private assignProps(props: Record<string, unknown>) {
+        if (this.template.properties.enabled) {
+            for (const prop in this.template.properties) {
+                if (prop !== 'enabled') {
+                    this.props[prop] =
+                        props[prop] !== undefined
+                            ? props[prop]
+                            : this.template.properties[prop].base
+                }
+            }
+        }
+    }
+
+    /**
+     * Runs the init function from the template
+     */
     private init() {
         toFunction<[InitialisationContext]>(
             this.template.code.initialisation,
@@ -184,12 +284,18 @@ export class Gate {
         })
     }
 
+    /**
+     * Runs the onClick function from the template
+     */
     public onClick() {
         if (this.functions.onClick) {
             this.functions.onClick(this.getContext())
         }
     }
 
+    /**
+     * Clears subscriptions to prevent memory leaks
+     */
     public dispose() {
         for (const pin of this.pins) {
             pin.value.dispose()
@@ -204,18 +310,23 @@ export class Gate {
         }
     }
 
+    /**
+     * Runs the activation function from the template
+     */
     public update() {
-        if (this.template.tags.includes('integrated')) {
-        } else {
+        if (!this.template.tags.includes('integrated')) {
             const context = this.getContext()
 
             if (!this.functions.activation)
                 throw new SimulationError('Activation function is missing')
 
-            this.functions.activation(context)
+            return this.functions.activation(context)
         }
     }
 
+    /**
+     * Generates the activation context
+     */
     public getContext(): Context {
         return {
             get: (index: number) => {
@@ -237,7 +348,11 @@ export class Gate {
         }
     }
 
-    private wrapPins(pins: Pin[]) {
+    /**
+     * Generates pin wrappers from an array of pins
+     *
+     * @param pins The pins to wwap
+     */ private wrapPins(pins: Pin[]) {
         const result: PinWrapper[] = []
         const length = pins.length
 
@@ -252,6 +367,9 @@ export class Gate {
         return result
     }
 
+    /**
+     * Returns all pins (input + output)
+     */
     public get pins() {
         const result = [
             ...this.wrapPins(this._pins.inputs),
@@ -261,6 +379,9 @@ export class Gate {
         return result
     }
 
+    /**
+     * Generates empty pins for any gate
+     */
     private static generatePins(options: PinCount, type: number, gate: Gate) {
         return [...Array(options.count)]
             .fill(true)

@@ -29,6 +29,7 @@ export const DefaultGateTemplate: GateTemplate = {
         scale: [100, 100]
     },
     code: {
+        async: false,
         activation: '',
         onClick: '',
         initialisation: ''
@@ -48,5 +49,8 @@ export const DefaultGateTemplate: GateTemplate = {
         output: false
     },
     info: [],
-    tags: ['base']
+    tags: ['base'],
+    properties: {
+        enabled: false
+    }
 }
