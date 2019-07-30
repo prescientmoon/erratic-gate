@@ -1,4 +1,4 @@
-import { vector2 } from '../../../common/math/classes/Transform'
+import { vector2 } from '../../../common/math/types/vector2'
 
 export type simulationMode = 'ic' | 'project'
 

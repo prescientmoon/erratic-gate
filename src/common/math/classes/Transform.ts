@@ -1,12 +1,17 @@
 import { allCombinations } from '../../../modules/simulation/helpers/allCombinations'
-import { rotateAroundVector } from '../../../modules/vector2/helpers/rotate'
+import { BehaviorSubject } from 'rxjs'
+import { vector2 } from '../types/vector2'
 
 export class Transform {
+    public positionSubject = new BehaviorSubject<vector2>([0, 0])
+
     public constructor(
-        public position: vector2 = [0, 0],
+        public _position: vector2 = [0, 0],
         public scale: vector2 = [1, 1],
         public rotation = 0
-    ) {}
+    ) {
+        this.updatePositionSubject()
+    }
 
     public getBoundingBox() {
         const result = [...this.position, ...this.scale] as vector4
@@ -35,6 +40,29 @@ export class Transform {
         }
 
         return edges as [vector2, vector2][]
+    }
+
+    /**
+     * Pushes the current position trough the position subject
+     */
+    private updatePositionSubject() {
+        this.positionSubject.next(this.position)
+    }
+
+    /**
+     * getter for the position
+     */
+    get position() {
+        return this._position
+    }
+
+    /**
+     * setter for the position
+     */
+    set position(value: vector2) {
+        this._position = value
+
+        this.updatePositionSubject()
     }
 
     /** Short forms for random stuff */
@@ -77,10 +105,14 @@ export class Transform {
 
     set x(value: number) {
         this.position = [value, this.y]
+
+        this.updatePositionSubject()
     }
 
     set y(value: number) {
         this.position = [this.x, value]
+
+        this.updatePositionSubject()
     }
 
     set width(value: number) {
@@ -92,7 +124,6 @@ export class Transform {
     }
 }
 
-export type vector2 = [number, number]
 export type vector3 = [number, number, number]
 export type vector4 = [number, number, number, number]
 export type vector8 = [

@@ -53,5 +53,9 @@ export const DefaultGateTemplate: GateTemplate = {
     properties: {
         enabled: false,
         data: []
+    },
+    innerText: {
+        enabled: false,
+        color: 'white'
     }
 }

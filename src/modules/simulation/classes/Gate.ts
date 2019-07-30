@@ -4,7 +4,7 @@ import { GateTemplate, PinCount } from '../types/GateTemplate'
 import { idStore } from '../stores/idStore'
 import { Context, InitialisationContext } from '../../activation/types/Context'
 import { toFunction } from '../../activation/helpers/toFunction'
-import { Subscription } from 'rxjs'
+import { Subscription, BehaviorSubject } from 'rxjs'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { getGateTimePipes } from '../helpers/getGateTimePipes'
 import { ImageStore } from '../../simulationRenderer/stores/imageStore'
@@ -15,6 +15,7 @@ import { saveStore } from '../../saving/stores/saveStore'
 import { Wire } from './Wire'
 import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 import { ExecutionQueue } from '../../activation/classes/ExecutionQueue'
+import { tap } from 'rxjs/operators'
 
 /**
  * The interface for the pins of a gate
@@ -116,9 +117,19 @@ export class Gate {
     public env: SimulationEnv = 'global'
 
     /**
+     * Holds all the gate-related text
+     */
+    public text = {
+        inner: new BehaviorSubject('text goes here')
+    }
+
+    /**
      * The props used by the activation function (the same as memory but presists)
      */
-    public props: Record<string, string | number | boolean> = {}
+    public props: Record<
+        string,
+        BehaviorSubject<string | number | boolean>
+    > = {}
 
     /**
      * The main logic gate class
@@ -129,7 +140,7 @@ export class Gate {
     public constructor(
         template: DeepPartial<GateTemplate> = {},
         id?: number,
-        props: Record<string, string> = {}
+        props: Record<string, string | number | boolean> = {}
     ) {
         this.template = completeTemplate(template)
 
@@ -259,15 +270,15 @@ export class Gate {
     /**
      * Assign the props passed to the gate and mere them with the base ones
      */
-    private assignProps(props: Record<string, string>) {
+    private assignProps(props: Record<string, string | boolean | number>) {
         let shouldUpdate = false
 
         if (this.template.properties.enabled) {
             for (const { base, name, needsUpdate } of this.template.properties
                 .data) {
-                this.props[name] = props.hasOwnProperty(name)
-                    ? props[name]
-                    : base
+                this.props[name] = new BehaviorSubject(
+                    props.hasOwnProperty(name) ? props[name] : base
+                )
 
                 if (!shouldUpdate && needsUpdate) {
                     shouldUpdate = true
@@ -299,6 +310,19 @@ export class Gate {
         if (this.functions.onClick) {
             this.functions.onClick(this.getContext())
         }
+    }
+
+    /**
+     * Used to get the props as an object
+     */
+    public getProps() {
+        const props: Record<string, string | boolean | number> = {}
+
+        for (const key in this.props) {
+            props[key] = this.props[key].value
+        }
+
+        return props
     }
 
     /**
@@ -349,10 +373,13 @@ export class Gate {
                 }
             },
             getProperty: (name: string) => {
-                return this.props[name]
+                return this.props[name].value
             },
             setProperty: (name: string, value: string | number | boolean) => {
-                this.props[name] = value
+                this.props[name].next(value)
+            },
+            innerText: (value: string) => {
+                this.text.inner.next(value)
             },
             update: () => {
                 this.update()
@@ -369,7 +396,8 @@ export class Gate {
      * Generates pin wrappers from an array of pins
      *
      * @param pins The pins to wwap
-     */ private wrapPins(pins: Pin[]) {
+     */
+    private wrapPins(pins: Pin[]) {
         const result: PinWrapper[] = []
         const length = pins.length
 

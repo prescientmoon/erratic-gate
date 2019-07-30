@@ -1,5 +1,5 @@
 import { SimulationRendererOptions } from './types/SimulationRendererOptions'
-import { vector2 } from '../../common/math/classes/Transform'
+import { vector2 } from '../../common/math/types/vector2'
 import { mouseButton } from '../core/types/mouseButton'
 import { KeyboardInput } from '../keybindings/classes/KeyboardInput'
 

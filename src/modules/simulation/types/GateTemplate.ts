@@ -1,4 +1,4 @@
-import { vector2 } from '../../../common/math/classes/Transform'
+import { vector2 } from '../../../common/math/types/vector2'
 
 export interface PinCount {
     variable: boolean
@@ -74,5 +74,9 @@ export interface GateTemplate {
     properties: {
         enabled: boolean
         data: Property[]
+    }
+    innerText: {
+        color: string
+        enabled: boolean
     }
 }

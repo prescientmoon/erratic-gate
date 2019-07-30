@@ -5,12 +5,18 @@ import { clearCanvas } from '../../../common/canvas/helpers/clearCanvas'
 import { renderClickedPins } from './renderClickedPins'
 import { renderWires } from './renderWires'
 import { renderSelectedArea } from './renderSelectedArea'
+import { currentContext } from '../subjects'
 
 export const renderSimulation = (
     ctx: CanvasRenderingContext2D,
     renderer: SimulationRenderer
 ) => {
     clearCanvas(ctx)
+
+    // push current context if it changed
+    if (currentContext.value !== ctx) {
+        currentContext.next(ctx)
+    }
 
     const transform = renderer.camera.transform
 

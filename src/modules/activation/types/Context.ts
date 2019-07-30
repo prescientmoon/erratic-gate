@@ -9,6 +9,7 @@ export interface Context {
     get: (index: number) => boolean
     set: (index: number, state: boolean) => void
     color: (color: string) => void
+    innerText: (value: string) => void
     update: () => void
     enviroment: SimulationEnv
     colors: Record<string, string>

@@ -1,6 +1,6 @@
 import { clamp } from '../../simulation/helpers/clamp'
 import { Camera } from '../classes/Camera'
-import { vector2 } from '../../../common/math/classes/Transform'
+import { vector2 } from '../../../common/math/types/vector2'
 import { multiply, substract } from '../../vector2/helpers/basic'
 import { repeat } from '../../vector2/helpers/repeat'
 

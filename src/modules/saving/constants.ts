@@ -12,6 +12,8 @@ import rgbLightTemplate from './templates/rgb'
 import sequentialDelayerTemplate from './templates/sequentialDelayer'
 import xnorTemplate from './templates/xnor'
 import xorTemplate from './templates/xor'
+import halfAdderTemplate from './templates/halfAdder'
+import fullAdderTemplate from './templates/fullAdder'
 
 export const defaultSimulationName = 'default'
 export const baseTemplates: DeepPartial<GateTemplate>[] = [
@@ -26,7 +28,10 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
     rgbLightTemplate,
     sequentialDelayerTemplate,
     xnorTemplate,
-    xorTemplate
+    xorTemplate,
+    halfAdderTemplate,
+    fullAdderTemplate
+    // commentTemplate
 ]
 
 export const baseSave: RendererState = {

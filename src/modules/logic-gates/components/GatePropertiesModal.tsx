@@ -1,8 +1,7 @@
 import './GateProperties.scss'
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, MouseEvent } from 'react'
 import { getRendererSafely } from '../helpers/getRendererSafely'
 import { Property } from '../../simulation/types/GateTemplate'
-import { BehaviorSubject } from 'rxjs'
 import { useObservable } from 'rxjs-hooks'
 import Divider from '@material-ui/core/Divider'
 import TextField from '@material-ui/core/TextField'
@@ -12,8 +11,6 @@ import { Gate } from '../../simulation/classes/Gate'
 
 export interface GatePropertyProps {
     raw: Property
-    name: string
-    output: BehaviorSubject<string | number | boolean>
     gate: Gate
 }
 
@@ -22,8 +19,10 @@ export interface GatePropertyProps {
  *
  * @param param0 The props passed to the component
  */
-export const GatePropery = ({ name, raw, output, gate }: GatePropertyProps) => {
-    const outputSnapshot = useObservable(() => output, '')
+export const GatePropery = ({ raw, gate }: GatePropertyProps) => {
+    const { name } = raw
+    const prop = gate.props[name]
+    const outputSnapshot = useObservable(() => prop, '')
 
     const displayableName = `${name[0].toUpperCase()}${name.slice(1)}:`
 
@@ -37,10 +36,8 @@ export const GatePropery = ({ name, raw, output, gate }: GatePropertyProps) => {
             value = Number(target.value)
         }
 
-        gate.props[name] = value
-
         if (raw.type !== 'boolean') {
-            output.next(target.value)
+            prop.next(value)
         }
 
         if (raw.needsUpdate === true) {
@@ -49,13 +46,16 @@ export const GatePropery = ({ name, raw, output, gate }: GatePropertyProps) => {
     }
 
     let input = <></>
-    if (raw.type === 'number' || raw.type === 'text') {
+
+    if (raw.type === 'number' || raw.type === 'text' || raw.type === 'string') {
         input = (
             <TextField
                 onChange={handleChange}
                 label={displayableName}
                 value={outputSnapshot}
                 type={raw.type}
+                multiline={raw.type === 'string'}
+                rowsMax={7}
             />
         )
     } else if (raw.type === 'boolean') {
@@ -64,7 +64,7 @@ export const GatePropery = ({ name, raw, output, gate }: GatePropertyProps) => {
                 <span className="checkbox-label">{displayableName}</span>
                 <CheckBox
                     onClick={() => {
-                        output.next(!outputSnapshot)
+                        prop.next(!outputSnapshot)
                     }}
                     onChange={handleChange}
                     checked={!!outputSnapshot}
@@ -93,7 +93,6 @@ const GateProperties = () => {
     }
 
     const gate = node.data
-    const gateProps = gate.props
 
     return (
         <div
@@ -113,20 +112,11 @@ const GateProperties = () => {
                 <Divider id="gate-props-divider" />
 
                 {gate.template.properties.data.map((raw, index) => {
-                    const { name, base } = raw
-
-                    const prop = gateProps[name]
-                    const output = new BehaviorSubject(
-                        gateProps.hasOwnProperty(name) ? prop : base
-                    )
-
                     return (
                         <GatePropery
-                            output={output}
                             raw={raw}
-                            name={name}
                             gate={gate}
-                            key={`${index}-${id.value}-${output.value}`}
+                            key={`${index}-${id.value}`}
                         />
                     )
                 })}

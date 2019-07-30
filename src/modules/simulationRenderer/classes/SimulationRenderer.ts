@@ -1,20 +1,11 @@
 import { Camera } from './Camera'
 import { Simulation } from '../../simulation/classes/Simulation'
 import { Subject } from 'rxjs'
-import { MouseEventInfo } from '../../core/components/MouseEventInfo'
-import { pointInSquare } from '../../../common/math/helpers/pointInSquare'
+import { MouseEventInfo } from '../../core/types/MouseEventInfo'
 import { vector2 } from '../../../common/math/types/vector2'
-import { relativeTo, add, invert } from '../../vector2/helpers/basic'
 import { SimulationRendererOptions } from '../types/SimulationRendererOptions'
-import {
-    defaultSimulationRendererOptions,
-    mouseButtons,
-    shiftInput
-} from '../constants'
-import { getPinPosition } from '../helpers/pinPosition'
-import { pointInCircle } from '../../../common/math/helpers/pointInCircle'
+import { defaultSimulationRendererOptions } from '../constants'
 import { SelectedPins } from '../types/SelectedPins'
-import { Wire } from '../../simulation/classes/Wire'
 import { currentStore } from '../../saving/stores/currentStore'
 import { saveStore } from '../../saving/stores/saveStore'
 import {
@@ -27,18 +18,14 @@ import { RefObject } from 'react'
 import { dumpSimulation } from '../../saving/helpers/dumpSimulation'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 import { SimulationError } from '../../errors/classes/SimulationError'
-import { deleteWire } from '../../simulation/helpers/deleteWire'
 import { RendererState, WireState } from '../../saving/types/SimulationSave'
 import { setToArray } from '../../../common/lang/arrays/helpers/setToArray'
 import { Transform } from '../../../common/math/classes/Transform'
-import { gatesInSelection } from '../helpers/gatesInSelection'
 import { selectionType } from '../types/selectionType'
-import { addIdToSelection, idIsSelected } from '../helpers/idIsSelected'
 import { GateInitter } from '../types/GateInitter'
-import {
-    open as propsAreOpen,
-    id as propsModalId
-} from '../../logic-gates/subjects/LogicGatePropsSubjects'
+import { handleMouseDown } from '../helpers/handleMouseDown'
+import { handleMouseUp } from '../helpers/handleMouseUp'
+import { handleMouseMove } from '../helpers/handleMouseMove'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -83,223 +70,9 @@ export class SimulationRenderer {
     }
 
     public init() {
-        this.mouseDownOutput.subscribe(event => {
-            const worldPosition = this.camera.toWordPostition(event.position)
-            const gates = Array.from(this.simulation.gates)
-
-            this.lastMousePosition = worldPosition
-
-            // We need to iterate from the last to the first
-            // because if we have 2 overlapping gates,
-            // we want to select the one on top
-            for (let index = gates.length - 1; index >= 0; index--) {
-                const { transform, id, pins, template } = gates[index]
-
-                if (pointInSquare(worldPosition, transform)) {
-                    if (event.button === mouseButtons.drag) {
-                        gates[index].onClick()
-
-                        this.mouseState |= 1
-
-                        if (!idIsSelected(this, id)) {
-                            this.clearSelection()
-                            addIdToSelection(this, 'temporary', id)
-                        }
-
-                        const gateNode = this.simulation.gates.get(id)
-
-                        if (gateNode) {
-                            return this.simulation.gates.moveOnTop(gateNode)
-                        } else {
-                            throw new SimulationError(
-                                `Cannot find gate with id ${id}`
-                            )
-                        }
-                    } else if (
-                        event.button === mouseButtons.properties &&
-                        template.properties.enabled
-                    ) {
-                        propsModalId.next(id)
-                        return propsAreOpen.next(true)
-                    }
-                }
-
-                for (const pin of pins) {
-                    const position = getPinPosition(this, transform, pin)
-
-                    if (
-                        pointInCircle(
-                            worldPosition,
-                            position,
-                            this.options.gates.pinRadius
-                        )
-                    ) {
-                        if (pin.value.pairs.size) {
-                            if (pin.value.type & 1) {
-                                const wire = this.simulation.wires.find(
-                                    wire => wire.end.value === pin.value
-                                )
-
-                                if (wire) {
-                                    deleteWire(this.simulation, wire)
-                                } else {
-                                    throw new SimulationError(
-                                        `Cannot find wire to remove`
-                                    )
-                                }
-
-                                return
-                            }
-                        }
-
-                        if (
-                            this.selectedPins.start &&
-                            pin.value === this.selectedPins.start.wrapper.value
-                        ) {
-                            this.selectedPins.start = null
-                            this.selectedPins.end = null
-                        } else if (
-                            this.selectedPins.end &&
-                            pin.value === this.selectedPins.end.wrapper.value
-                        ) {
-                            this.selectedPins.start = null
-                            this.selectedPins.end = null
-                        } else if ((pin.value.type & 2) >> 1) {
-                            this.selectedPins.start = {
-                                wrapper: pin,
-                                transform
-                            }
-                        } else if (pin.value.type & 1) {
-                            this.selectedPins.end = {
-                                wrapper: pin,
-                                transform
-                            }
-                        }
-
-                        if (this.selectedPins.start && this.selectedPins.end) {
-                            this.simulation.wires.push(
-                                new Wire(
-                                    this.selectedPins.start.wrapper,
-                                    this.selectedPins.end.wrapper
-                                )
-                            )
-                            this.selectedPins.start = null
-                            this.selectedPins.end = null
-                        }
-
-                        return
-                    }
-                }
-            }
-
-            if (!shiftInput.value && event.button === mouseButtons.unselect) {
-                this.clearSelection()
-            }
-
-            if (event.button === mouseButtons.pan) {
-                // the second bit = pannning
-                this.mouseState |= 0b10
-            } else if (event.button === mouseButtons.select) {
-                this.selectedArea.position = this.lastMousePosition
-                this.selectedArea.scale = [0, 0]
-
-                // the third bit = selecting
-                this.mouseState |= 0b100
-            }
-        })
-
-        this.mouseUpOutput.subscribe(event => {
-            if (event.button === mouseButtons.drag && this.mouseState & 1) {
-                const selected = this.getSelected()
-
-                for (const gate of selected) {
-                    gate.transform.rotation = 0
-                }
-
-                this.selectedGates.temporary.clear()
-
-                // turn first bit to 0
-                this.mouseState &= 6
-
-                // for debugging
-                if ((this.mouseState >> 1) & 1 || this.mouseState & 1) {
-                    throw new SimulationError(
-                        'First 2 bits of mouseState need to be set to 0'
-                    )
-                }
-            }
-
-            if (
-                event.button === mouseButtons.pan &&
-                (this.mouseState >> 1) & 1
-            ) {
-                // turn second bit to 0
-                this.mouseState &= 5
-            }
-
-            if (event.button === mouseButtons.select && this.mouseState >> 2) {
-                // turn the third bit to 0
-                this.mouseState &= 3
-
-                const selectedGates = gatesInSelection(
-                    this.selectedArea,
-                    Array.from(this.simulation.gates)
-                )
-
-                for (const { id } of selectedGates) {
-                    addIdToSelection(this, 'permanent', id)
-
-                    const node = this.simulation.gates.get(id)
-
-                    if (node) {
-                        this.simulation.gates.moveOnTop(node)
-                    } else {
-                        throw new SimulationError(
-                            `Cannot find node in gate storage with id ${id}`
-                        )
-                    }
-                }
-            }
-        })
-
-        this.mouseMoveOutput.subscribe(event => {
-            const worldPosition = this.camera.toWordPostition(event.position)
-
-            const offset = invert(
-                relativeTo(this.lastMousePosition, worldPosition)
-            )
-
-            const scaledOffset = offset.map(
-                (value, index) => value * this.camera.transform.scale[index]
-            ) as vector2
-
-            if (this.mouseState & 1) {
-                for (const gate of this.getSelected()) {
-                    const { transform } = gate
-
-                    transform.x -= offset[0]
-                    transform.y -= offset[1]
-                }
-            }
-
-            if ((this.mouseState >> 1) & 1) {
-                this.camera.transform.position = add(
-                    this.camera.transform.position,
-                    invert(scaledOffset)
-                )
-
-                this.spawnCount = 0
-            }
-
-            if ((this.mouseState >> 2) & 1) {
-                this.selectedArea.scale = relativeTo(
-                    this.selectedArea.position,
-                    this.camera.toWordPostition(event.position)
-                )
-            }
-
-            this.lastMousePosition = this.camera.toWordPostition(event.position)
-        })
+        this.mouseDownOutput.subscribe(handleMouseDown(this))
+        this.mouseUpOutput.subscribe(handleMouseUp(this))
+        this.mouseMoveOutput.subscribe(handleMouseMove(this))
 
         this.reloadSave()
     }
@@ -316,6 +89,11 @@ export class SimulationRenderer {
         }
     }
 
+    /**
+     * Loads a simulation state
+     *
+     * @param save LThe state to load
+     */
     public loadSave(save: RendererState) {
         this.simulation = fromSimulationState(save.simulation)
         this.camera = fromCameraState(save.camera)

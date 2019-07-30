@@ -1,23 +1,14 @@
 import React, { RefObject, forwardRef, MouseEvent, WheelEvent } from 'react'
 import { useObservable } from 'rxjs-hooks'
 import { Subject } from 'rxjs'
-import { mouseButton } from '../types/mouseButton'
-import { MouseEventInfo } from './MouseEventInfo'
+import { MouseEventInfo } from '../types/MouseEventInfo'
 import { width, height } from '../../screen/helpers/Screen'
+import { getEventInfo } from '../helpers/getEventInfo'
 
 export interface FluidCanvasProps {
     mouseDownOuput: Subject<MouseEventInfo>
     mouseUpOutput: Subject<MouseEventInfo>
     mouseMoveOutput: Subject<MouseEventInfo>
-}
-
-export const getEventInfo = (
-    e: MouseEvent<HTMLCanvasElement>
-): MouseEventInfo => {
-    return {
-        button: e.button as mouseButton,
-        position: [e.clientX, e.clientY]
-    }
 }
 
 export const mouseEventHandler = (output: Subject<MouseEventInfo>) => (

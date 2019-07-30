@@ -1,2 +1,6 @@
 @import './mui-overrides.scss';
 @import './toasts.scss';
+
+* {
+    user-select: none;
+}

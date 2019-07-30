@@ -3,6 +3,7 @@ import { GateStorage } from './GateStorage'
 import { LruCacheNode } from '@eix-js/utils'
 import { Wire } from './Wire'
 import { simulationMode } from '../../saving/types/SimulationSave'
+import { BehaviorSubject } from 'rxjs'
 
 /**
  * The env a simulation can run in
