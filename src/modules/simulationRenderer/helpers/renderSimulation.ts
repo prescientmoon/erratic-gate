@@ -6,6 +6,7 @@ import { renderClickedPins } from './renderClickedPins'
 import { renderWires } from './renderWires'
 import { renderSelectedArea } from './renderSelectedArea'
 import { currentContext } from '../subjects'
+import { textSettings } from '../data/textSettings'
 
 export const renderSimulation = (
     ctx: CanvasRenderingContext2D,
@@ -27,6 +28,8 @@ export const renderSimulation = (
         renderWires(ctx, renderer, wire)
     }
 
+    ctx.font = textSettings.font
+    ctx.textAlign = 'center'
     for (const gate of renderer.simulation.gates) {
         renderGate(ctx, renderer, gate)
     }

@@ -7,6 +7,7 @@ import { roundImage } from '../../../common/canvas/helpers/drawRoundedImage'
 import { ImageStore } from '../stores/imageStore'
 import { gatesInSelection } from './gatesInSelection'
 import { idIsSelected } from './idIsSelected'
+import { textSettings } from '../data/textSettings'
 
 export const renderGate = (
     ctx: CanvasRenderingContext2D,
@@ -58,5 +59,15 @@ export const renderGate = (
     }
 
     ctx.stroke()
+
+    if (gate.template.tags.includes('integrated')) {
+        ctx.fillStyle = textSettings.fill
+        ctx.fillText(
+            gate.template.metadata.name,
+            relativeTransform.center[0],
+            relativeTransform.maxY + textSettings.offset
+        )
+    }
+
     ctx.restore()
 }
