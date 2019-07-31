@@ -1,8 +1,9 @@
 export const categories = {
     basic: 0,
-    io: 3,
     math: 1,
     time: 2,
-    advancedIo: 4,
-    compressing: 5
+    compressing: 3,
+    io: 4,
+    advancedIo: 5,
+    ic: 6
 }

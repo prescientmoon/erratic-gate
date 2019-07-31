@@ -12,6 +12,7 @@ import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 import { fromSimulationState } from '../../saving/helpers/fromState'
 import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 import { getSimulationState } from '../../saving/helpers/getState'
+import { categories } from '../../saving/data/categories'
 
 /**
  * Compiles a simulation into a logicGate
@@ -46,7 +47,8 @@ export const compileIc = (state: SimulationState) => {
             outputs: {
                 count: outputCount
             }
-        }
+        },
+        category: categories.ic
     }
 
     templateStore.set(name, result)
