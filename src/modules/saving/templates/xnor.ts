@@ -13,11 +13,11 @@ const xnorTemplate: PartialTemplate = {
     },
     code: {
         activation: `
-        const a = context.get(0)
-        const b = context.get(1)
-        const c = (a && b) || !(a || b)
-        
-        context.set(0, c)`
+            const a = context.getBinary(0)
+            const b = context.getBinary(1)
+            const c = context.invertBinary(a ^ b)
+
+            context.setBinary(0, c)`
     },
     info: ['https://en.wikipedia.org/wiki/XNOR_gate'],
     pins: {

@@ -1,4 +1,5 @@
 import { PartialTemplate } from '../types/PartialTemplate'
+import { categories } from '../data/categories'
 
 /**
  * The template of the rgbLight gate
@@ -43,7 +44,8 @@ const rgbLightTemplate: PartialTemplate = {
         inputs: {
             count: 3
         }
-    }
+    },
+    category: categories.advancedIo
 }
 
 export default rgbLightTemplate

@@ -2,6 +2,8 @@ import { SubscriptionData } from '../types/SubscriptionData'
 import { BehaviorSubject } from 'rxjs'
 import { Gate } from './Gate'
 
+export type PinState = string
+
 /* Types:
 
 First bit = input
@@ -9,7 +11,7 @@ Second bit = output
 
 */
 export class Pin {
-    public state = new BehaviorSubject(false)
+    public state = new BehaviorSubject<PinState>('0')
     public pairs = new Set<Pin>()
 
     private subscriptions: SubscriptionData<Pin>[] = []

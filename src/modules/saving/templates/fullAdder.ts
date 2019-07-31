@@ -1,4 +1,6 @@
 import { PartialTemplate } from '../types/PartialTemplate'
+import { categories } from '../data/categories'
+import { adderActivation } from '../helpers/adderActivation'
 
 /**
  * The template of the fullAdder gate
@@ -12,12 +14,7 @@ const fullAdderTemplate: PartialTemplate = {
         fill: require('../../../assets/full-adder')
     },
     code: {
-        activation: `
-            const result = context.get(0) + context.get(1) + context.get(2)
-
-            context.set(0, result & 1)
-            context.set(1, result >> 1)
-        `
+        activation: adderActivation(true)
     },
     pins: {
         inputs: {
@@ -26,7 +23,8 @@ const fullAdderTemplate: PartialTemplate = {
         outputs: {
             count: 2
         }
-    }
+    },
+    category: categories.math
 }
 
 export default fullAdderTemplate

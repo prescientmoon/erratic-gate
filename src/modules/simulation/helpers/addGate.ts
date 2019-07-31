@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 import { GateInitter } from '../../simulationRenderer/types/GateInitter'
+import { calculateGateHeight } from '../../simulationRenderer/helpers/calculateGateHeight'
 
 /**
  * Adds a gate to a renderer
@@ -43,6 +44,7 @@ export const addGate = (
     const offset = multiply([scalarOffset, scalarOffset], renderer.spawnCount)
 
     gate.transform.position = add(origin, offset)
+    gate.transform.height = calculateGateHeight(renderer, gate)
 
     renderer.simulation.push(gate)
     renderer.spawnCount++

@@ -2,7 +2,7 @@ import { GateTemplate } from '../types/GateTemplate'
 import { debounceTime, throttleTime } from 'rxjs/operators'
 import { MonoTypeOperatorFunction, pipe } from 'rxjs'
 
-export type TimePipe = MonoTypeOperatorFunction<boolean>
+export type TimePipe = MonoTypeOperatorFunction<string>
 
 export const getGateTimePipes = (template: GateTemplate) => {
     const pipes: TimePipe[] = []

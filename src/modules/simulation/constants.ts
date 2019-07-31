@@ -1,4 +1,5 @@
 import { GateTemplate } from './types/GateTemplate'
+import { categories } from '../saving/data/categories'
 
 export const DefaultGateTemplate: GateTemplate = {
     metadata: {
@@ -57,5 +58,6 @@ export const DefaultGateTemplate: GateTemplate = {
     innerText: {
         enabled: false,
         color: 'white'
-    }
+    },
+    category: categories.basic
 }

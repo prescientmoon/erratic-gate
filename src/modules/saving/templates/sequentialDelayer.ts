@@ -1,5 +1,6 @@
 import { PartialTemplate } from '../types/PartialTemplate'
 import { delayProperties } from '../data/delayProperties'
+import { categories } from '../data/categories'
 
 /**
  * The template of the sequentialDelayer gate
@@ -25,7 +26,8 @@ const sequentialDelayerTemplate: PartialTemplate = {
         `,
         async: true
     },
-    properties: delayProperties
+    properties: delayProperties,
+    category: categories.time
 }
 
 export default sequentialDelayerTemplate

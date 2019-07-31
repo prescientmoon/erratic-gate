@@ -12,7 +12,12 @@ const orTemplate: PartialTemplate = {
         fill: require('../../../assets/or')
     },
     code: {
-        activation: `context.set(0, context.get(0) || context.get(1))`
+        activation: `
+            const a = context.getBinary(0)
+            const b = context.getBinary(1)
+
+            context.setBinary(0, a | b)
+        `
     },
     pins: {
         inputs: {

@@ -19,6 +19,7 @@ const LogicGatePage = () => {
                 <div className="gate-grid">
                     {gates
                         .map(getTemplateSafely)
+                        .sort((a, b) => a.category - b.category)
                         .filter(template => {
                             return (
                                 renderer.simulation.mode === 'project' ||

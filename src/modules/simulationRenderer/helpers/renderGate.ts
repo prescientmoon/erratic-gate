@@ -32,12 +32,12 @@ export const renderGate = (
 
     ctx.save()
 
-    const r = useTransform(ctx, gate.transform)
+    const relativeTransform = useTransform(ctx, gate.transform)
     const renderingParameters = [
-        r.x,
-        r.y,
-        r.width,
-        r.height,
+        relativeTransform.x,
+        relativeTransform.y,
+        relativeTransform.width,
+        relativeTransform.height,
         gate.template.shape.rounded ? gate.template.shape.radius : 0
     ]
 

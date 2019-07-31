@@ -1,4 +1,5 @@
 import { PartialTemplate } from '../types/PartialTemplate'
+import { categories } from '../data/categories'
 
 /**
  * The template of the button gate
@@ -27,7 +28,7 @@ const buttonTemplate: PartialTemplate = {
         activation: `
             const state = context.getProperty('active')
 
-            context.set(0, state)    
+            context.set(0, Number(state).toString(2))    
             context.color(!state ? context.colors.main : context.colors.pressed)
         `
     },
@@ -50,7 +51,8 @@ const buttonTemplate: PartialTemplate = {
                 needsUpdate: true
             }
         ]
-    }
+    },
+    category: categories.io
 }
 
 export default buttonTemplate

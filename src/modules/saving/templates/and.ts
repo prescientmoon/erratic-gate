@@ -12,7 +12,12 @@ const andTemplate: PartialTemplate = {
         fill: require('../../../assets/and')
     },
     code: {
-        activation: `context.set(0, context.get(0) && context.get(1))`
+        activation: `
+            const a = context.getBinary(0)
+            const b = context.getBinary(1)
+            const c = a & b
+            
+            context.setBinary(0, c)`
     },
     pins: {
         inputs: {

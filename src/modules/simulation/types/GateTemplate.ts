@@ -79,4 +79,5 @@ export interface GateTemplate {
         color: string
         enabled: boolean
     }
+    category: number // for better sorting
 }

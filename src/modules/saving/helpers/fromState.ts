@@ -9,6 +9,10 @@ import { Camera } from '../../simulationRenderer/classes/Camera'
 import { Simulation, SimulationEnv } from '../../simulation/classes/Simulation'
 import { Wire } from '../../simulation/classes/Wire'
 import { templateStore } from '../stores/templateStore'
+import { calculateGateHeight } from '../../simulationRenderer/helpers/calculateGateHeight'
+import { getRendererSafely } from '../../logic-gates/helpers/getRendererSafely'
+import { rendererSubject } from '../../core/subjects/rendererSubject'
+import { filter, take } from 'rxjs/operators'
 
 /**
  * Contains methods for transforming saved state into the respective class instances
@@ -38,9 +42,33 @@ export const fromSimulationState = (
             gateState.id,
             gateState.props
         )
+
         gate.transform = fromTransformState(gateState.transform)
 
-        simulation.push(gate)
+        const fixWrongHeight = () => {
+            gate.transform.height = calculateGateHeight(
+                getRendererSafely(),
+                gate
+            )
+        }
+
+        try {
+            fixWrongHeight()
+        } catch {
+            // retry if an error occured
+            rendererSubject
+                .pipe(
+                    filter(x => !!x),
+                    take(1)
+                )
+                .subscribe(() => {
+                    if (gate) {
+                        fixWrongHeight()
+                    }
+                })
+        } finally {
+            simulation.push(gate)
+        }
     }
 
     for (const wireState of state.wires) {

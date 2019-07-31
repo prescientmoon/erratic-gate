@@ -12,7 +12,13 @@ const notTemplate: PartialTemplate = {
         fill: require('../../../assets/not')
     },
     code: {
-        activation: `context.set(0, !context.get(0))`
+        activation: `
+            context.setBinary(0, 
+                context.invertBinary(
+                    context.getBinary(0)
+                )
+            )
+        `
     },
     info: ['https://en.wikipedia.org/wiki/Inverter_(logic_gate)']
 }

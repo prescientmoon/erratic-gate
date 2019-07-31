@@ -360,12 +360,48 @@ export class Gate {
      * Generates the activation context
      */
     public getContext(): Context {
+        const maxLength = Math.max(
+            ...this._pins.inputs.map(pin => pin.state.value.length)
+        )
+
+        const toLength = (
+            original: string | number,
+            length: number = maxLength
+        ) => {
+            const value = original.toString(2)
+
+            if (value.length === length) {
+                return value
+            } else if (value.length > length) {
+                const difference = value.length - length
+
+                return value.substr(difference)
+            } else {
+                return `${'0'.repeat(length - value.length)}${value}`
+            }
+        }
+
         return {
             get: (index: number) => {
                 return this._pins.inputs[index].state.value
             },
-            set: (index: number, state: boolean = false) => {
+            set: (index: number, state) => {
                 return this._pins.outputs[index].state.next(state)
+            },
+            getBinary: (index: number) => {
+                return parseInt(this._pins.inputs[index].state.value, 2)
+            },
+            setBinary: (
+                index: number,
+                value: number,
+                bits: number = maxLength
+            ) => {
+                return this._pins.outputs[index].state.next(
+                    toLength(value.toString(2), bits)
+                )
+            },
+            invertBinary: (value: number) => {
+                return value ^ ((1 << maxLength) - 1)
             },
             color: (color: string) => {
                 if (this.template.material.type === 'color') {
@@ -384,6 +420,8 @@ export class Gate {
             update: () => {
                 this.update()
             },
+            toLength,
+            maxLength,
             enviroment: this.env,
             memory: this.memory,
             colors: {
@@ -430,6 +468,6 @@ export class Gate {
     private static generatePins(options: PinCount, type: number, gate: Gate) {
         return [...Array(options.count)]
             .fill(true)
-            .map(() => new Pin(type, gate))
+            .map((v, index) => new Pin(type, gate))
     }
 }

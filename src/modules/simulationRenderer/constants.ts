@@ -13,8 +13,8 @@ export const defaultSimulationRendererOptions: SimulationRendererOptions = {
         pinStrokeColor: '#888888',
         pinStrokeWidth: 3,
         pinFill: {
-            open: 'rgb(255,216,20)',
-            closed: 'rgb(90,90,90)'
+            open: '#ffff22',
+            closed: '#555555'
         },
         gateStroke: {
             active: 'yellow',

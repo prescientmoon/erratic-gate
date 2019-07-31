@@ -14,6 +14,8 @@ import xnorTemplate from './templates/xnor'
 import xorTemplate from './templates/xor'
 import halfAdderTemplate from './templates/halfAdder'
 import fullAdderTemplate from './templates/fullAdder'
+import _4bitEncoderTemplate from './templates/4bitEncoder'
+import _4bitDecoderTemplate from './templates/4bitDecoder'
 
 export const defaultSimulationName = 'default'
 export const baseTemplates: DeepPartial<GateTemplate>[] = [
@@ -30,7 +32,9 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
     xnorTemplate,
     xorTemplate,
     halfAdderTemplate,
-    fullAdderTemplate
+    fullAdderTemplate,
+    _4bitEncoderTemplate,
+    _4bitDecoderTemplate
     // commentTemplate
 ]
 

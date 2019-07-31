@@ -1,4 +1,5 @@
 import { PartialTemplate } from '../types/PartialTemplate'
+import { categories } from '../data/categories'
 
 /**
  * The template of the light gate
@@ -23,7 +24,7 @@ const lightTemplate: PartialTemplate = {
         activation: `
             const { main, active } = context.colors
 
-            context.color(context.get(0) ? active : main)
+            context.color(parseInt(context.get(0),2) ? active : main)
         `
     },
     integration: {
@@ -34,7 +35,8 @@ const lightTemplate: PartialTemplate = {
         outputs: {
             count: 0
         }
-    }
+    },
+    category: categories.io
 }
 
 export default lightTemplate
