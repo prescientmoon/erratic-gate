@@ -8,7 +8,7 @@ const url = 'https://logic-gate-simulator.herokuapp.com/'
 const Head = () => {
     return (
         <Helmet>
-            <title>{title}r</title>
+            <title>{title}</title>
 
             <link
                 rel="stylesheet"
