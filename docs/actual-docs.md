@@ -115,3 +115,18 @@ Mentionez ca o mare parte din elementele acestei liste sunt libarii folosite in 
 -   [express](https://expressjs.com/) pentru servirea asseturilor statice
 -   [keycode](https://www.npmjs.com/package/keycode) pentru a transforma numele unei taste in codul potrivit (utilizat in rendarea combinatilor de taste sub butoane)
 -   [mainloop.js](https://github.com/IceCreamYou/MainLoop.js?utm_source=recordnotfound.com) pentru a a rula cod de 60 ori pe secunda intr-o maniera eficienta. Mentionez ca singurul lucru care este rulat in acest mod este cel responsabil pentru rendarea simulatiei. Simularea portilor logice este facuta doar atunci cand ceva se schima si doar acolo unde ceva s-a schimbat folosing `programarea reactiva`.
+
+## Testimoniale
+
+-   Player_0_1 a fost testerul principal de la incputul proiectului. El a gasit o multime de buguri pe care datorita lui am putut sa le aflu si sa le rezolv:
+
+````
+I have been testing the Logic Gate Simulator by Adriel. While testing it I found a few bugs, the first bug
+I found was a problem with the wires. If I started a wire at a component and didn't connect the wire to another component
+and then deleted the component the wire was connected to it would make a floating wire that was still connected to my mouse that I couldn't get rid
+of. Another bug I ran into was the IC in/out pins where they would overlap because the IC wouldn't fit there size. The last major bug that I ran into
+dealt with the pasting and duplicating components. when you pasted in the components they would paste in right on top of what you copied/duplicated. so you wouldn't be able to get the components that you pasted/duplicated without having to drag each component off. After finding these problems I and Adriel were able
+to talk about them and he was able to find the problem and fix them efficiently. After Adriel solved each bug it was very easy to go back into the Simulator and start making circuits/ICs again. I tested a variety of circuits like making half-adders and full adders. I also tested different types of flip flops and bit adding circuits.
+Everything I've made worked very well and if something didn't work Adriel was able to fix it so it worked in the future. After using this Simulator I feel like it
+has a very good and working concept and I cant wait to see what's done with it in the future.```
+````
