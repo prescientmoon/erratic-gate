@@ -6,7 +6,7 @@
 | :---------------------------------: | :---------------------: | :--------------------------------------------------------------------------: |
 |                Save                 |       `ctrl + s`        |                            `Simulation` > `Save`                             |
 |             Add a gate              |            -            |                click `logic-gates` > the gate you want to add                |
-|             Move a gate             |            -            |             drag & drop the gate using the `right mouse button`              |
+|             Move a gate             |            -            |              drag & drop the gate using the `left mouse button`              |
 |                 Pan                 |            -            |    click & move & release the background useing the `right mouse button`     |
 |        Select multiple gates        |            -            |             click & move & release using the `left mouse button`             |
 |          Add to selection           |         `shift`         |                         select while holding `shift`                         |
@@ -22,3 +22,7 @@
 |      Create integrated circuit      |            -            | `Create simulation` > `Integrated circuit` > type the name of the simulation |
 |           Change language           |            -            |     Click on the `Language: \<language\>` button (bottom of the sidebar)     |
 | Get more info about a built in gate |            -            |              `Logic gates` > <i class="material-icons">info</i>              |
+|         Duplicate selection         |       `ctrl + d`        |                     `Simulation` > `Duplicate selection`                     |
+|           Copy selection            |       `ctrl + c`        |                            `Simulation` > `Copy`                             |
+|            Cut selection            |       `ctrl + x`        |                             `Simulation` > `Cut`                             |
+|           Paste selection           |       `ctrl + v`        |                            `Simulation` > `Paste`                            |

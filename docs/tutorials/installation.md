@@ -38,17 +38,11 @@ To build the source run:
 npm run build
 ```
 
-To then run the simulation, open a server in the dist directory. A simple solution using npm:
+To then run the simulation, use the start command:
 
 ```sh
 # instal nano-server globally
-npm i nano-server -g
-
-# change directory
-cd dist
-
-# run server
-nano-server
+npm start
 
 # linux
 open http://localhost:5000
