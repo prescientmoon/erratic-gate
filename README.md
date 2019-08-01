@@ -22,7 +22,8 @@ Many thanks to:
 -   Simple & intuitive UI
 -   Multiple simulations support
 -   Integrated circuits
--   Multiple language support: Romanian, English, German, Dutch & more in the future
+-   Multiple bits per pin
+-   Multiple language support: Romanian, English, Dutch & more in the future
 
 ## Playing with the source
 
