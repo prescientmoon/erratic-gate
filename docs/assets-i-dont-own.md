@@ -6,7 +6,7 @@
 -   [The reset.css file](../src/modules/core/styles/reset.scss) is a modified version of the on found [here](https://meyerweb.com/eric/tools/css/reset/)
 -   [The removeElement function](../src/common/lang/arrays/helpers/removeElement.ts) is a typed version from a snippet found in a gist made by the creator of rollup (i can't find the link right now)
 -   [The google material icons](https://material.io/resources/icons/) are as the name suggests, made by Google.
--   Fonturile sunt importate de [aici](https://fonts.google.com/)
+-   The fonts are imported from [here](https://fonts.google.com/)
 
 A list with all code dependencies can be found [here](../package.json)
 
