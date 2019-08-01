@@ -7,7 +7,7 @@ import { categories } from '../data/categories'
  */
 const parallelDelayerTemplate: PartialTemplate = {
     metadata: {
-        name: 'Parallel delayer'
+        name: 'parallel delayer'
     },
     material: {
         type: 'image',

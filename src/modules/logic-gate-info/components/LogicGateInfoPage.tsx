@@ -14,6 +14,8 @@ export default withRouter(props => {
         const template = getTemplateSafely(name)
         const description = descriptions[name] || ''
 
+        console.log({ name, template })
+
         return (
             <div className="page" id="logic-gate-info-page">
                 <div className="gate-preview">
@@ -26,19 +28,23 @@ export default withRouter(props => {
                 <div id="gate-info-io-table">
                     <LogicGateIoTable name={name} />
                 </div>
-                <div id="gate-info-read-more">
-                    Read more: <br />
-                    {template.info.map((url, index) => {
-                        return (
-                            <Fragment key={index}>
-                                <a target="_blank" href={url}>
-                                    {url}
-                                </a>
-                                <br />
-                            </Fragment>
-                        )
-                    })}
-                </div>
+                {template.info.length ? (
+                    <div id="gate-info-read-more">
+                        Read more: <br />
+                        {template.info.map((url, index) => {
+                            return (
+                                <Fragment key={index}>
+                                    <a target="_blank" href={url}>
+                                        {url}
+                                    </a>
+                                    <br />
+                                </Fragment>
+                            )
+                        })}
+                    </div>
+                ) : (
+                    ''
+                )}
             </div>
         )
     } catch {

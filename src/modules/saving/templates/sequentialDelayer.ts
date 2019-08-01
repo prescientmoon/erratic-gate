@@ -7,7 +7,7 @@ import { categories } from '../data/categories'
  */
 const sequentialDelayerTemplate: PartialTemplate = {
     metadata: {
-        name: 'Sequential delayer'
+        name: 'sequential delayer'
     },
     material: {
         type: 'image',

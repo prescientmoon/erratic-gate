@@ -5,6 +5,11 @@ const carryExplanation = (half = true) => `
     } beeing 1 << (n + 1) - ${half ? 2 : 1})
 `
 
+const output = `General purpouse output component.`
+const delay = `
+    The delay is a property of the gate and can be modified by left clicking on the gate in the simulation view.
+`
+
 export const descriptions: Record<string, string> = {
     not: `
         The not gate is one of the most basic logic gates. 
@@ -47,5 +52,36 @@ export const descriptions: Record<string, string> = {
             x + y + z + 4 * x * y * z - 2 * (x * y + y * z + z * x), 
             x * y + y * z + z * x - 2 * x * y * z
         }
+    `,
+    comparator: `
+        Compares the 2 inputs. The first input is only true if a > b, the second input is 
+        only true if a === b and the 3rd input is only true if a < b.
+    `,
+    'parallel delayer': `
+        Delays the inputs by a certain delay. ${delay}
+    `,
+    'sequential delayer': `
+        Delays the input by a certain amount of time relative to the last change. ${delay}
+    `,
+    '4 bit encoder': `
+        Encodes the 4 inputs into a single output
+    `,
+    '4 bit decoder': `
+        Splits the input into 4 outputs
+    `,
+    'bit merger': `
+        Merges the bits of both inputs into 1 output
+    `,
+    'bit splitter': `
+        Splits the bits from the input into 2 chunks of the same length
+    `,
+    button: `
+        Outputs either 0 or 1. Has no inputs. You can change its value by left clicking on it.
+    `,
+    'light bulb': `
+        ${output} The color changes based on the input.
+    `,
+    'rgb light': `
+        ${output} The color is a based on the 3 inputs. The first input means red, the second green and the third blue.
     `
 }
