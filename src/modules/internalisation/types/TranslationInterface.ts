@@ -17,6 +17,7 @@ export interface Translation {
         simulation: string
         language: string
         backToSimulation: string
+        backToGates: string
     }
     createSimulation: {
         mode: {

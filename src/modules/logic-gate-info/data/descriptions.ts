@@ -58,7 +58,7 @@ export const descriptions: Record<string, string> = {
         only true if a === b and the 3rd input is only true if a < b.
     `,
     'parallel delayer': `
-        Delays the inputs by a certain delay. ${delay}
+        Delays the inputs by a amount of time. ${delay}
     `,
     'sequential delayer': `
         Delays the input by a certain amount of time relative to the last change. ${delay}

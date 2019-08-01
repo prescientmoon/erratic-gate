@@ -11,7 +11,8 @@ export const RomanianTranslation: Translation = {
         logicGates: 'Porți logice',
         simulation: 'Simulație',
         language: 'Limba',
-        backToSimulation: 'Înapoi la simulație'
+        backToSimulation: 'Înapoi la simulație',
+        backToGates: 'Înapoi la porțile logice'
     },
     createSimulation: {
         mode: {

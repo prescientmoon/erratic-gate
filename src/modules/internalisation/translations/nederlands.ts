@@ -11,7 +11,8 @@ export const DutchTranslation: Translation = {
         openSimulation: 'Open simulatie',
         simulation: 'Todo',
         language: 'Taal',
-        backToSimulation: 'Todo'
+        backToSimulation: 'Todo',
+        backToGates: 'Todo'
     },
     actions: {
         'delete selection': 'Todo',

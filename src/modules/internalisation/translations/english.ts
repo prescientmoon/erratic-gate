@@ -11,7 +11,8 @@ export const EnglishTranslation: Translation = {
         openSimulation: 'Open simulations',
         simulation: 'Simulation',
         language: 'Language',
-        backToSimulation: 'Back to simulation'
+        backToSimulation: 'Back to simulation',
+        backToGates: 'Back to logic gates'
     },
     createSimulation: {
         mode: {
