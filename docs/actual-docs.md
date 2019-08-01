@@ -22,9 +22,9 @@ In folderul [src](../src) se afla urmatoarele fisiere si foldere:
 
 ### Folderele modules si common
 
-Am ales sa folosesc structura folosita de [wavedistrict](https://gitlab.com/wavedistrict/web-client/tree/master/src). Aceasta consta in 2 foldere: `common` si `modules` continand subfoldere numite dupa functionalitatea pe care o implementeaza, la randul lor continand foldere care sunt numte dupa tipul de fisiere continute si un fisier numit `constants.ts` continand constante relevante pentru acel modul.
+Am ales sa folosesc structura folosita de [wavedistrict](https://gitlab.com/wavedistrict/web-client/tree/master/src). Aceasta consta in 2 foldere: `common` si `modules`. Acestea contin subfoldere numite dupa functionalitatea pe care o implementeaza. La randul lor, acestea, contin foldere care sunt numite dupa tipul de fisiere continute.
 
-Exemplu (aceste fisiere nu sunt reale, ci sunt aici doar ca sa arate intr-un mod intuitiv structura de fisiere):
+Exemplu:
 
 ```
 /modules
@@ -32,19 +32,12 @@ Exemplu (aceste fisiere nu sunt reale, ci sunt aici doar ca sa arate intr-un mod
         /helpers
             foo.ts
         /components
-            Simulation.scss
             Simulation.tsx
-        constants.ts
     /simulationRenderer
         /subjects
             mySubject.ts
         /stores
             myLocalStore.ts
-        /classes
-            SimulationRenderer.ts
-        /styles
-            /mixins
-                someMixin.scss
         /types
             myInterface.ts
 /common
@@ -60,7 +53,7 @@ Reprezentare grafica a fisierelor (fiecare cerc reprezinta un fisier):
 
 ### Module:
 
-Proiectul este impartit in 18 de module distincte:
+Proiectul este impartit in 18 module distincte:
 
 1. `Activation`: se ocupa cu transformarea functiilor de `activare` in cod javascript
 2. `Colors`: se ocupa de manipularea culorilor
@@ -85,7 +78,7 @@ Proiectul este impartit in 18 de module distincte:
 
 -   Programarea reactiva este bine cunoscuta pentru ca poate creia memory leaks foarte usor. Pentru a ma asigura ca asa ceva nu se poate intampla, am folosit urmatoarele 2 tehnici:
     1. Folosirea operatorului `take()` pentru a astepta doar un anumit numar de valori
-    2. Fiecare clasa care foloseste streamuri are o metoda `.dispose()` care curata toate subscriptile la toate streamurile folosite de instanta respectiva si cheama metoda cu acelasi nume pe toate proprietatile care la randul lor folosesc streamuri.
+    2. Fiecare clasa care foloseste streamuri are o metoda numita `.dispose()` care curata toate subscriptile streamurilor folosite de instanta respectiva si cheama metoda cu acelasi nume pe toate proprietatile care la randul lor folosesc streamuri.
 -   Pentru ca userul sa nu vada un ecran gol nici macar o secunda, am urmat urmatorii pasi:
     1. Userului ii este trimis fisierul `index.html` ,`index.js` si `splash.css` cu o marime totala de doar 18kb. Aceste fisiere au doar rolul de a afisa o animatie de loading pe ecran.
     2. Dupa ce animatia porneste, restul fisierelor sunt cerute de la server.
@@ -115,6 +108,16 @@ Mentionez ca o mare parte din elementele acestei liste sunt libarii folosite in 
 -   [express](https://expressjs.com/) pentru servirea asseturilor statice
 -   [keycode](https://www.npmjs.com/package/keycode) pentru a transforma numele unei taste in codul potrivit (utilizat in rendarea combinatilor de taste sub butoane)
 -   [mainloop.js](https://github.com/IceCreamYou/MainLoop.js?utm_source=recordnotfound.com) pentru a a rula cod de 60 ori pe secunda intr-o maniera eficienta. Mentionez ca singurul lucru care este rulat in acest mod este cel responsabil pentru rendarea simulatiei. Simularea portilor logice este facuta doar atunci cand ceva se schima si doar acolo unde ceva s-a schimbat folosing `programarea reactiva`.
+
+## Testare
+
+Aplicatia propriu zisa nu dispune de unit / integration tests. Aceasta a fost testata de aproximativ 30 de persoane.
+
+Mentionez ca am scris teste pentru o mica librarie pe care am scris-o acum mai mult timp numita eix-js.
+
+### De ce nu a fost nevoie de teste?
+
+In afara de faptul ca mai multi oameni au testat manual proiectul, typescript m-a ajutat sa detecte aproximativ 75% din erori la compile-time.
 
 ## Testimoniale
 
