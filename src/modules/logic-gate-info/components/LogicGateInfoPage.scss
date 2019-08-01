@@ -1,0 +1,33 @@
+@import '../../core/styles/mixins/flex.scss';
+
+#logic-gate-info-page {
+    display: grid;
+    grid-template-columns: 12rem auto;
+    grid-template-rows: 15rem auto 1fr;
+}
+
+#logic-gate-info-page > * {
+    padding: 3rem;
+}
+
+#gate-info-top-right > #gate-info-title {
+    font-size: 3rem;
+}
+
+#gate-info-io-table {
+    @include flex();
+    width: 100%;
+}
+
+#gate-info-io-table,
+#gate-info-read-more {
+    grid-column: 1 / 3;
+}
+
+#gate-info-io-table-paper {
+    width: 100%;
+}
+
+#gate-info-read-more > a {
+    color: #8888ff;
+}

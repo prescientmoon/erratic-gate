@@ -1,15 +1,7 @@
 @import '../../core/styles/mixins/flex.scss';
+@import './GatePreview.scss';
 
 $gate-margin: 1em;
-
-.gate > section > .gate-preview > * {
-    display: block;
-    height: 10em;
-    width: 10em;
-    border-radius: 1em;
-
-    margin: $gate-margin;
-}
 
 .gate:hover {
     border: 2px solid white !important;

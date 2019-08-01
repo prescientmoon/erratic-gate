@@ -22,13 +22,14 @@ const rgbLightTemplate: PartialTemplate = {
     },
     code: {
         activation: `
-            const color = (context.get(0) << 2) + (context.get(1) << 1) + context.get(2)
+            const get = (index) => context.getBinary(index) & 1
+            const color = (get(0) << 2) + (get(1) << 1) + get(2)
 
             if (color === 0){
                 context.color(context.colors.main)
             }
 
-            else{
+            else {
                 context.color(context.colors[color])
             }
         `

@@ -24,7 +24,12 @@ const halfAdderTemplate: PartialTemplate = {
             count: 2
         }
     },
-    category: categories.math
+    category: categories.math,
+    info: [
+        'https://www.elprocus.com/half-adder-and-full-adder/',
+        'https://en.wikipedia.org/wiki/Adder_(electronics)',
+        'http://isweb.redwoods.edu/instruct/calderwoodd/diglogic/half-add.htm'
+    ]
 }
 
 export default halfAdderTemplate

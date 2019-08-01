@@ -1,16 +1,16 @@
 import './LogicGate.scss'
 import React from 'react'
 import GateInfo from './GateInfo'
-import GateSettings from './GateSettings'
 import AddGate from './AddGate'
 import { addGateFromTemplate } from '../helpers/addGateFromTemplate'
 import DeleteGateIcon from './DeleteGate'
 import GatePreview from './GatePreview'
 import { LogicGateProps } from '../types/LogicGateProps'
+import { firstCharUpperCase } from '../../../common/lang/strings/firstCharUpperCase'
 
 const LogicGate = ({ template }: LogicGateProps) => {
     const rawName = template.metadata.name
-    const name = `${rawName[0].toUpperCase()}${rawName.substr(1)}`
+    const name = firstCharUpperCase(rawName)
 
     return (
         <div className="gate">
@@ -27,8 +27,9 @@ const LogicGate = ({ template }: LogicGateProps) => {
             </section>
             <section>
                 <div className="gate-icons">
-                    <GateInfo template={template} />
-                    {/* <GateSettings template={template} /> */}
+                    {!template.tags.includes('integrated') && (
+                        <GateInfo name={name} />
+                    )}
                     <AddGate template={template} />
                     <DeleteGateIcon template={template} />
                 </div>

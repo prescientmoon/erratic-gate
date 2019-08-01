@@ -16,6 +16,9 @@ import halfAdderTemplate from './templates/halfAdder'
 import fullAdderTemplate from './templates/fullAdder'
 import _4bitEncoderTemplate from './templates/4bitEncoder'
 import _4bitDecoderTemplate from './templates/4bitDecoder'
+import comparatorTemplate from './templates/comparator'
+import bitMergerTemplate from './templates/bitMerger'
+import bitSplitterTemplate from './templates/bitSplitter'
 
 export const defaultSimulationName = 'default'
 export const baseTemplates: DeepPartial<GateTemplate>[] = [
@@ -34,7 +37,10 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
     halfAdderTemplate,
     fullAdderTemplate,
     _4bitEncoderTemplate,
-    _4bitDecoderTemplate
+    _4bitDecoderTemplate,
+    comparatorTemplate,
+    bitMergerTemplate,
+    bitSplitterTemplate
     // commentTemplate
 ]
 

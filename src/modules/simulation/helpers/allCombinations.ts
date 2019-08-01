@@ -6,3 +6,19 @@ export function* allCombinations<T>(first: T[], second: T[]): Iterable<[T, T]> {
         }
     }
 }
+
+export const recursiveCombinations = <T>(values: T[], depth = 2) => {
+    if (depth === 0) {
+        return [[]]
+    }
+
+    const combinations: T[][] = []
+
+    for (const value of values) {
+        for (const combination of recursiveCombinations(values, depth - 1)) {
+            combinations.push([value, ...combination])
+        }
+    }
+
+    return combinations
+}

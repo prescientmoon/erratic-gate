@@ -9,16 +9,19 @@ import { useTranslation } from '../../internalisation/helpers/useLanguage'
 export interface CreateSimulationOption {
     mode: simulationMode
     icon: string
+    id: string
 }
 
 export const createSimulationOptions: CreateSimulationOption[] = [
     {
         mode: 'project',
-        icon: 'gamepad'
+        icon: 'gamepad',
+        id: 'create-project'
     },
     {
         icon: 'memory',
-        mode: 'ic'
+        mode: 'ic',
+        id: 'create-ic'
     }
 ]
 
@@ -52,7 +55,10 @@ const CreateSimulation = () => {
                             CreateSimulationStore.actions.next('submit')
                         }}
                     >
-                        <div className="create-option-icon">
+                        <div
+                            className={`create-option-icon ${option.id}`}
+                            id={option.id}
+                        >
                             <Icon>{option.icon}</Icon>
                         </div>
                         <div className="create-option-name" id={option.mode}>

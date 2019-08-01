@@ -16,7 +16,11 @@ const CreateSimulationButton = () => {
     const translation = useTranslation()
 
     return (
-        <ListItem button className="contained" onClick={handleCreating}>
+        <ListItem
+            button
+            className="contained create-simulation"
+            onClick={handleCreating}
+        >
             <ListItemIcon>
                 <Icon>note_add</Icon>
             </ListItemIcon>
