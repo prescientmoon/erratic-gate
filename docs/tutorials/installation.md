@@ -1,52 +1,48 @@
-# Running the simulator
+# Rularea simulatorului:
 
-There are 3 ways to get the simulator up and running:
+Exista 3 metode de a rula simulatorul:
 
-1. Using [the version hosted on heroku](https://logic-gate-simulator.herokuapp.com/):
+1. Folosind [versiunea hostata pe heroku](https://logic-gate-simulator.herokuapp.com/):
 
-This is by far the fastest solution - everything you need to do is open
-[the github-pages url](https://logic-gate-simulator.herokuapp.com/)
+Aceasta este cea mai usoara solutie - tot ce trebuie sa faceti este sa deschideti
+[acest url](https://logic-gate-simulator.herokuapp.com/)
 
-2. Using a development server:
+2. Folosind un server de dezvoltare:
 
-First you need to have [node.js & npm](https://nodejs.org/en/download/) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed on your machine.
+Pentru inceput trebuie sa aveti [node.js & npm](https://nodejs.org/en/download/) si [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) instalate pe dizpozitiv.
 
-Open a terminal in the desired folder and run:
+Deschideti un terminal, si introduceti urmatoarele comenzi:
 
 ```sh
-#  Clone repo
+#  Cloeaza repoul
 git clone https://github.com/Mateiadrielrafael/logicGateSimulator
 
-# Cd into the folder
+# Cd in folder
 cd logicGateSimulator
 
-# install dependencies
+# instaleaza librariile necesare
 npm install
 
-# run development server
+# ruleaza serverul de dezvoltare
 npm run dev
 ```
 
-3. Building the simulation yourself
+Browserul va fi deschis automat la adresa serverului.
 
-First, clone the repo and install the dependencies as explained in option 2.
+3. Prin compilarea locala a simulatorului
 
-To build the source run:
+Pentru inceput, clonati repoul si instalati librariile dupa cum este explicat in optiunea 2.
+
+Pentru a compila codul sursa, introduceti urmatoarea comanda:
 
 ```sh
-# build program
 npm run build
 ```
 
-To then run the simulation, use the start command:
+Pentru a rula simulatorul, rulati comanda:
 
 ```sh
-# instal nano-server globally
 npm start
-
-# linux
-open http://localhost:5000
-
-# Windows
-start http://localhost:5000
 ```
+
+Proiectul este acum accesibil sub portul `8080`
