@@ -38,14 +38,10 @@ Exemplu:
             mySubject.ts
         /stores
             myLocalStore.ts
-        /types
-            myInterface.ts
 /common
-    /lang
-        /arrays
-            /helpers
-                removeElement.ts
-                setToArray.ts
+    /dom
+        /helpers
+            safeQuerSelector.ts
 ```
 
 Reprezentare grafica a fisierelor (fiecare cerc reprezinta un fisier):
@@ -123,13 +119,4 @@ In afara de faptul ca mai multi oameni au testat manual proiectul, typescript m-
 
 -   Player_0_1 a fost testerul principal de la incputul proiectului. El a gasit o multime de buguri pe care datorita lui am putut sa le aflu si sa le rezolv:
 
-````
-I have been testing the Logic Gate Simulator by Adriel. While testing it I found a few bugs, the first bug
-I found was a problem with the wires. If I started a wire at a component and didn't connect the wire to another component
-and then deleted the component the wire was connected to it would make a floating wire that was still connected to my mouse that I couldn't get rid
-of. Another bug I ran into was the IC in/out pins where they would overlap because the IC wouldn't fit there size. The last major bug that I ran into
-dealt with the pasting and duplicating components. when you pasted in the components they would paste in right on top of what you copied/duplicated. so you wouldn't be able to get the components that you pasted/duplicated without having to drag each component off. After finding these problems I and Adriel were able
-to talk about them and he was able to find the problem and fix them efficiently. After Adriel solved each bug it was very easy to go back into the Simulator and start making circuits/ICs again. I tested a variety of circuits like making half-adders and full adders. I also tested different types of flip flops and bit adding circuits.
-Everything I've made worked very well and if something didn't work Adriel was able to fix it so it worked in the future. After using this Simulator I feel like it
-has a very good and working concept and I cant wait to see what's done with it in the future.```
-````
+_I have been testing the Logic Gate Simulator by Adriel. While testing it I found a few bugs, the first bug I found was a problem with the wires. If I started a wire at a component and didn't connect the wire to another component and then deleted the component the wire was connected to it would make a floating wire that was still connected to my mouse that I couldn't get rid of. Another bug I ran into was the IC in/out pins where they would overlap because the IC wouldn't fit there size. The last major bug that I ran into dealt with the pasting and duplicating components. when you pasted in the components they would paste in right on top of what you copied/duplicated. so you wouldn't be able to get the components that you pasted/duplicated without having to drag each component off. After finding these problems I and Adriel were able to talk about them and he was able to find the problem and fix them efficiently. After Adriel solved each bug it was very easy to go back into the Simulator and start making circuits/ICs again. I tested a variety of circuits like making half-adders and full adders. I also tested different types of flip flops and bit adding circuits. Everything I've made worked very well and if something didn't work Adriel was able to fix it so it worked in the future. After using this Simulator I feel like it has a very good and working concept and I cant wait to see what's done with it in the future._
