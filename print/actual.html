@@ -1,0 +1,104 @@
+<h1 id="simulator-de-porti-logice">Simulator de porti logice</h1>
+<p>Programul este un simulator de porti logice care permite experimentarea, testarea si cunoasterea ansamblelor de porti logice. Simulatorul suporta circuite integrate, mai multi biti pe acelasi pin, salvarea simulatiilor si suport pentru mai multe limbii.</p>
+<h2 id="arhitectura">Arhitectura:</h2>
+<h3 id="aspecte-generale">Aspecte generale:</h3>
+<ul>
+<li>Proiectul este scris folosing stilul de programare reactiva (bazata pe streamuri asincron)</li>
+</ul>
+<h3 id="structora-fisierelor">Structora fisierelor:</h3>
+<p>In folderul <a href="../src">src</a> se afla urmatoarele fisiere si foldere:</p>
+<ul>
+<li><a href="../src/assets">assets</a> - aici este stocata toata arta folosita in simulator. Totul in afara de fisierul <a href="../src/assets/favicon.ico">favicon.ico</a> a fost desenat de mine folosind <a href="https://www.figma.com/">Figma</a></li>
+<li><a href="../src/public">public</a> - contine toate fisierele ce trebuie copiate in folderul dist atunci cand aplicatia e compilata</li>
+<li><a href="../src/index.html">index.html</a> - fisierul de intrare al intregii aplicatii</li>
+<li><a href="../src/index.ts">index.ts</a> - fisierul care initializeaza animatia de incarcare</li>
+<li><a href="../src/main.tsx">main.tsx</a> - fisierul care se ocupa de pornirea aplicatiei. Acest fisier va fi descris mai amanuntit in sectiune <code>Performanta</code></li>
+<li><a href="../src/server.ts">server.ts</a> - fisierul care servest asseturile static in productie</li>
+<li><a href="../src/modules">modules</a> &amp; <a href="../src/common">common</a> - Aceste foldere contin aplicatia propriuzisa</li>
+</ul>
+<h3 id="folderele-modules-si-common">Folderele modules si common</h3>
+<p>Am ales sa folosesc structura folosita de <a href="https://gitlab.com/wavedistrict/web-client/tree/master/src">wavedistrict</a>. Aceasta consta in 2 foldere: <code>common</code> si <code>modules</code>. Acestea contin subfoldere numite dupa functionalitatea pe care o implementeaza. La randul lor, acestea, contin foldere care sunt numite dupa tipul de fisiere continute.</p>
+<p>Exemplu:</p>
+<pre><code>/modules
+    /simulationRenderer
+        /subjects
+            mySubject.ts
+        /components
+            Simulation.tsx
+/common
+    /dom
+        /helpers
+            safeQuerSelector.ts</code></pre>
+<p>Reprezentare grafica a fisierelor (fiecare cerc reprezinta un fisier): <img src="../docs/assets/files.png" alt="files" /></p>
+<h3 id="module">Module:</h3>
+<p>Proiectul este impartit in 18 module distincte:</p>
+<ol type="1">
+<li><code>Activation</code>: se ocupa cu transformarea functiilor de <code>activare</code> in cod javascript</li>
+<li><code>Colors</code>: se ocupa de manipularea culorilor</li>
+<li><code>Core</code>: contine componentele vizuale de baza ale apl<code>icatiei</code></li>
+<li><code>Create</code>-simulation: implementeaza procesul de cre<code>ere</code> a unei simulatii</li>
+<li><code>Erros</code>: se ocupa de prinsul si afisatul erorilor</li>
+<li><code>Input</code>: se ocupa de utilizarea textului ca input</li>
+<li><code>Integrated</code>-circuits: se ocupa de compilarea cir<code>cuitelor</code> integrate</li>
+<li><code>Internalisation</code>: se ocupa de afisarea textului in dif<code>erite</code> limbii</li>
+<li><code>Keybindings</code>: se ocupa de utilizarea tastaturii ca input</li>
+<li><code>Logic</code>-gate-info: implementeaza pagina cu informatii despre porti logice</li>
+<li><code>Logic</code>-gates: implementeaza pagina de unde se pot adauga porti logice</li>
+<li><code>Modals</code>: implementeaza caracteristicile generale folosite de toate dialogurile</li>
+<li><code>Saving</code>: se ocupa de salvarea simulatiilor</li>
+<li><code>Screen</code>: se oucpua de adaptarea aplicatiei la orice rezolutie</li>
+<li><code>Simulation</code>: se ocupa de simularea circuitelor</li>
+<li><code>Storage</code>: se ocupa de salvarea datelor in <code>localStorage</code></li>
+<li><code>Toasts</code>: se ocupa de stilizarea notificarilor oferite de <code>react-toastify</code>.</li>
+<li><code>Vector2</code>: functii de baza care permit folosirea arrayurilor pentru geometria vectoriala</li>
+</ol>
+<h3 id="performanta">Performanta</h3>
+<ul>
+<li>Programarea reactiva este bine cunoscuta pentru ca poate creia memory leaks foarte usor. Pentru a ma asigura ca asa ceva nu se poate intampla, am folosit urmatoarele 2 tehnici:
+<ol type="1">
+<li>Folosirea operatorului <code>take()</code> pentru a astepta doar un anumit numar de valori</li>
+<li>Fiecare clasa care foloseste streamuri are o metoda numita <code>.dispose()</code> care curata toate subscriptile streamurilor folosite de instanta respectiva si cheama metoda cu acelasi nume pe toate proprietatile care la randul lor folosesc streamuri.</li>
+</ol></li>
+<li>Pentru ca userul sa nu vada un ecran gol nici macar o secunda, am urmat urmatorii pasi:
+<ol type="1">
+<li>Userului ii este trimis fisierul <code>index.html</code> ,<code>index.js</code> si <code>splash.css</code> cu o marime totala de doar 18kb. Aceste fisiere au doar rolul de a afisa o animatie de loading pe ecran.</li>
+<li>Dupa ce animatia porneste, restul fisierelor sunt cerute de la server.</li>
+<li>Cand fisierul <code>main.js</code> este primit, acesta este rulat. El este responsabil pentru:
+<ul>
+<li>rendarea aplicatiei</li>
+<li>initializarea hotkeyurilor</li>
+<li>prinderea erorilor si aratarea acestora intr-un format usor de inteles</li>
+<li>creerea <code>subiectelor</code> (streamuri care au o metoda numita <code>next</code>) necesare intregii aplicatii</li>
+<li>actualizarea portilor logice salvate in eventualitatea unor noi aparitii</li>
+</ul></li>
+<li>Fisierul <code>main.js</code> expune o functie asincron numita <code>main</code> care este responsabila pentru functionalitatile enumerate mai sus. Aceasta functie este finalizata doar atunci cand toate aceste actiuni au fost realizate.</li>
+<li>Cand functia <code>main</code> din fisierul <code>main.js</code> este terminata, fisierul <code>index.js</code> isi termina munca prin scaderea opacitatii animatiei de incarcare si in final scoaterea acesteia din <code>DOM</code>.</li>
+</ol></li>
+</ul>
+<h3 id="librarii-limbaje-si-unelte-folosite">Librarii, limbaje si unelte folosite:</h3>
+<p>Mentionez ca o mare parte din elementele acestei liste sunt libarii folosite in timpul developmentului, doar o mica parte ajungand in buildul final.</p>
+<ul>
+<li><a href="https://sass-lang.com/">Sass</a> pentru styling. Am ales sa foloses sass in special pentru ca ofera variabile si mixinuri care sunt rezolvate la compilare, acestea ajutand la refolosirea stiurilor. De exemplu, nu toate modalele au titluri, si la unele layoutul este putin diferit, asa ca am hotarat sa scriu 2 mixinuri: <span class="citation" data-cites="modal-title">[@modal-title()]</span>(../src/modules/modals/styles/mixins/modal-title.scss) si <span class="citation" data-cites="modal-container">[@modal-container()]</span>(../src/modules/modals/styles/mixins/modal-container.scss), astfel respectand principiul compozitiei. Un alt exemplu sunt mixinurile <span class="citation" data-cites="flex">[@flex()]</span>(../src/modules/core/styles/mixins/flex.scss) si <span class="citation" data-cites="full-screen">[@full-screen()]</span>(../src/modules/core/styles/mixins/full-screen.scss) pe care le-am scris deoarece incorporeaza functionalitati pe care urma sa le folosesc in mai multe parti ale aplicatiei.</li>
+<li><a href="https://www.typescriptlang.org/">Typescript</a> - De aproximativ un an am facut trecerea de la javascript la typescript, si avantajele sunt enorme. Pot spune ca in acest proiect typescript m-a salvat de multe buguri deoarece ma anunta de existenta lor la compile-time.</li>
+<li><a href="https://webpack.js.org/">Webpack</a> &amp; plugins &amp; loaders pentru bundlingul asseturilor + code splitting.</li>
+<li><a href="https://babeljs.io/">Babel</a> pentru a compila jsx, typescript si pentru compatibilitatea cu browsere mai vechi.</li>
+<li><a href="https://reactjs.org/">React</a> &amp; <a href="https://reactjs.org/docs/react-dom.html">React-dom</a> &amp; <a href="https://www.npmjs.com/package/react-router-dom">React-router-dom</a> &amp; <a href="https://github.com/nfl/react-helmet">React-helmet</a> &amp; <a href="https://material-ui.com/">Material-ui</a> &amp; <a href="https://github.com/fkhadra/react-toastify">react-toastify</a> pentru ui. Aceste tehnologii au fost folosite pentru a creia bara laterala de pe partea dreapta, pagina /gates si pagina /info/:name. Mentionez ca rendarea, interactiunile (drag &amp; drop, hotkeys, selection etc) intregii si simulatii sunt facute de la 0 fara a folosii nici una din aceste libarii.</li>
+<li><a href="https://github.com/">Github</a> &amp; <a href="https://git-scm.com/">Git</a> - Git si github sunt niste unelte indispensabile pentru orice programator, si pot spune ca acest proiect a beneficiat mult deoarece am folosit aceste tehnologii. In primul rand, cu putin setup pot upolada pe heroku automat mereu cand rulez comanda <code>push</code> pe ramura <code>master</code>. In al doilea rand, la un moment dat laptopul meu a ramas fara baterie si inchizanduse cateva fisiere au fost corupte. Daca nu as fi folosit git acel incident mi-ar fi distru cateva ore de munca</li>
+<li><a href="https://code.visualstudio.com/">Visual studio code</a> Am ales acest editor deoarece are cel mai bun suport pentru typescript existent la momentul actual.</li>
+<li><a href="https://eix-js.github.io/core/">Eix-js</a> este un mic game engine pe care l-am scris impreuna cu un baiat de 13 ani din Rusia in timpul ludum-dare 44. In acest proiect am folosit modulul <a href="https://github.com/eix-js/utils">utils</a> care ofera diferiti decoratori utili cum ar fi: <span class="citation" data-cites="Singleton">[@Singleton]</span>(https://github.com/eix-js/utils/blob/master/src/modules/decorators/Singleton.ts) care imi permite sa modific automat constructorul unei clase in asa fel incat sa returneze mereu aceiasi instanta si <span class="citation" data-cites="CacheInstanceByKey">[@CacheInstanceByKey]</span>(https://github.com/eix-js/utils/blob/master/src/modules/decorators/CacheInstancesByKey.ts) care imi permite sa ma asigur ca pentru fiecare cheie exista o singura instants existenta. Am extins si o implementare a unui <a href="https://github.com/eix-js/utils/blob/master/src/modules/classes/LruCache.ts">nod dintr-un cache LRU</a> care mi-a permis sa ma asigur ca atunci cand mouseul este apasat interactiunea se va produce asupra componentului care este cel mai <code>aproape de utilizator</code> (sau care are pozitia pe axa Z cea mai mare).</li>
+<li><a href="https://rxjs-dev.firebaseapp.com/">Rxjs</a> - Am folosit rxjs deoarece proiectul este construit folosind <code>programarea reactiva</code> (sau bazata pe streamuri). Programarea reactiva este bine cunoscuta deoarece face creerea de <code>memory leaks</code> foarte usoara, asa ca proiectul este scris cu mare grija pentru a prevenii orice posibil incident de acest tip.</li>
+<li><a href="https://github.com/LeetCode-OpenSource/rxjs-hooks">Rxjs-hooks</a> imi permite sa folosesc functia <code>useObservable()</code> cu ajutorul careia pot renda valorile streamurilor direct cu ajutorul React.</li>
+<li><a href="https://expressjs.com/">express</a> pentru servirea asseturilor statice</li>
+<li><a href="https://www.npmjs.com/package/keycode">keycode</a> pentru a transforma numele unei taste in codul potrivit (utilizat in rendarea combinatilor de taste sub butoane)</li>
+<li><a href="https://github.com/IceCreamYou/MainLoop.js?utm_source=recordnotfound.com">mainloop.js</a> pentru a a rula cod de 60 ori pe secunda intr-o maniera eficienta. Mentionez ca singurul lucru care este rulat in acest mod este cel responsabil pentru rendarea simulatiei. Simularea portilor logice este facuta doar atunci cand ceva se schima si doar acolo unde ceva s-a schimbat folosing <code>programarea reactiva</code>.</li>
+</ul>
+<h2 id="testare">Testare</h2>
+<p>Aplicatia propriu zisa nu dispune de unit / integration tests. Aceasta a fost testata de aproximativ 30 de persoane.</p>
+<p>Mentionez ca am scris teste pentru o mica librarie pe care am folosit-o numita eix-js.</p>
+<h3 id="de-ce-nu-a-fost-nevoie-de-teste">De ce nu a fost nevoie de teste?</h3>
+<p>In afara de faptul ca mai multi oameni au testat manual proiectul, typescript m-a ajutat sa detecte aproximativ 75% din erori la compile-time.</p>
+<h2 id="testimoniale">Testimoniale</h2>
+<ul>
+<li>Player_0_1 a fost testerul principal de la incputul proiectului. El a gasit o multime de buguri pe care datorita lui am putut sa le aflu si sa le rezolv:</li>
+</ul>
+<p><em>I have been testing the Logic Gate Simulator by Adriel. While testing it I found a few bugs, the first bug I found was a problem with the wires. If I started a wire at a component and didn’t connect the wire to another component and then deleted the component the wire was connected to it would make a floating wire that was still connected to my mouse that I couldn’t get rid of. Another bug I ran into was the IC in/out pins where they would overlap because the IC wouldn’t fit there size. The last major bug that I ran into dealt with the pasting and duplicating components. when you pasted in the components they would paste in right on top of what you copied/duplicated. so you wouldn’t be able to get the components that you pasted/duplicated without having to drag each component off. After finding these problems I and Adriel were able to talk about them and he was able to find the problem and fix them efficiently. After Adriel solved each bug it was very easy to go back into the Simulator and start making circuits/ICs again. I tested a variety of circuits like making half-adders and full adders. I also tested different types of flip flops and bit adding circuits. Everything I’ve made worked very well and if something didn’t work Adriel was able to fix it so it worked in the future. After using this Simulator I feel like it has a very good and working concept and I cant wait to see what’s done with it in the future.</em></p>

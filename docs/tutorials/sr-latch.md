@@ -15,14 +15,14 @@ Pentru a explica utilizarea functilor de baza ale aplicatiei urmatoarea secventa
     - pentru a crea un cablue se apasa pe 2 pini (unul de input si unul de output)
     - pentru a sterge un cablu se apasa pe pinul de output al cablului
     - se conecteaza componentele in cunoscuta configuratie a latchului SR:
-      <br>
-      ![SR latch](../assets/SR.png)
-      <br>
+
+        ![SR latch](../assets/SR.png)
+
     - prin apasarea butoanelor se poate testa latchul, care ar trebui sa respecte cunosctul tablel:
 
-|  S  |  R  |   Q   | not Q |
-| :-: | :-: | :---: | ----- |
-|  0  |  0  | latch | latch |
-|  0  |  1  |   0   | 1     |
-|  1  |  0  |   1   | 0     |
-|  1  |  1  |   0   | 0     |
+        |  S  |  R  |   Q   | not Q |
+        | :-: | :-: | :---: | ----- |
+        |  0  |  0  | latch | latch |
+        |  0  |  1  |   0   | 1     |
+        |  1  |  0  |   1   | 0     |
+        |  1  |  1  |   0   | 0     |

@@ -40,7 +40,7 @@ Exemplu:
 ```
 
 Reprezentare grafica a fisierelor (fiecare cerc reprezinta un fisier):
-![files](/docs/assets/files.png)
+![files](../docs/assets/files.png)
 
 ### Module:
 
