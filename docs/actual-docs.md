@@ -28,16 +28,11 @@ Exemplu:
 
 ```
 /modules
-    /simulation
-        /helpers
-            foo.ts
-        /components
-            Simulation.tsx
     /simulationRenderer
         /subjects
             mySubject.ts
-        /stores
-            myLocalStore.ts
+        /components
+            Simulation.tsx
 /common
     /dom
         /helpers
