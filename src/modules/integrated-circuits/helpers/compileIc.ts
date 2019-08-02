@@ -48,7 +48,11 @@ export const compileIc = (state: SimulationState) => {
                 count: outputCount
             }
         },
-        category: categories.ic
+        category: categories.ic,
+        material: {
+            type: 'image',
+            fill: require('../../../assets/ic')
+        }
     }
 
     templateStore.set(name, result)

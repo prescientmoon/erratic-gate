@@ -1,7 +1,12 @@
 import { templateStore } from '../../saving/stores/templateStore'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { Gate } from '../classes/Gate'
-import { add, relativeTo, multiply } from '../../vector2/helpers/basic'
+import {
+    add,
+    relativeTo,
+    multiply,
+    multiplyVectors
+} from '../../vector2/helpers/basic'
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { DefaultGateTemplate } from '../constants'
 import { vector2 } from '../../../common/math/types/vector2'
@@ -35,16 +40,17 @@ export const addGate = (
             ? (template.shape.scale as vector2)
             : DefaultGateTemplate.shape.scale
 
-    const origin = relativeTo(
-        multiply(gateScale, 0.5),
-        relativeTo(renderer.camera.transform.position, Screen.center)
+    const origin = renderer.camera.toWordPostition(
+        add(multiply(gateScale, 0.5), Screen.center)
     )
 
     const scalarOffset = renderer.options.spawning.spawnOffset
     const offset = multiply([scalarOffset, scalarOffset], renderer.spawnCount)
 
     gate.transform.position = add(origin, offset)
-    gate.transform.height = calculateGateHeight(renderer, gate)
+    gate.transform.scale = [...Array(2)].fill(
+        calculateGateHeight(renderer, gate)
+    ) as vector2
 
     renderer.simulation.push(gate)
     renderer.spawnCount++

@@ -13,6 +13,7 @@ import { calculateGateHeight } from '../../simulationRenderer/helpers/calculateG
 import { getRendererSafely } from '../../logic-gates/helpers/getRendererSafely'
 import { rendererSubject } from '../../core/subjects/rendererSubject'
 import { filter, take } from 'rxjs/operators'
+import { vector2 } from '../../../common/math/types/vector2'
 
 /**
  * Contains methods for transforming saved state into the respective class instances
@@ -46,10 +47,9 @@ export const fromSimulationState = (
         gate.transform = fromTransformState(gateState.transform)
 
         const fixWrongHeight = () => {
-            gate.transform.height = calculateGateHeight(
-                getRendererSafely(),
-                gate
-            )
+            gate.transform.scale = [...Array(2)].fill(
+                calculateGateHeight(getRendererSafely(), gate)
+            ) as vector2
         }
 
         try {
