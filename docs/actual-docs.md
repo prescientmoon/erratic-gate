@@ -104,7 +104,7 @@ Mentionez ca o mare parte din elementele acestei liste sunt libarii folosite in 
 
 Aplicatia propriu zisa nu dispune de unit / integration tests. Aceasta a fost testata de aproximativ 30 de persoane.
 
-Mentionez ca am scris teste pentru o mica librarie pe care am scris-o acum mai mult timp numita eix-js.
+Mentionez ca am scris teste pentru o mica librarie pe care am folosit-o numita eix-js.
 
 ### De ce nu a fost nevoie de teste?
 
