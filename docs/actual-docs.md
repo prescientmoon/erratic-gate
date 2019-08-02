@@ -6,7 +6,7 @@ Programul este un simulator de porti logice care permite experimentarea, testare
 
 ### Aspecte generale:
 
--   Proiectul este scris folosing stilul de programare reactiva (bazata be streamuri asincron)
+-   Proiectul este scris folosing stilul de programare reactiva (bazata pe streamuri asincron)
 
 ### Structora fisierelor:
 
@@ -49,7 +49,7 @@ Exemplu:
 ```
 
 Reprezentare grafica a fisierelor (fiecare cerc reprezinta un fisier):
-![files](./assets/files.png)
+![files](/docs/assets/files.png)
 
 ### Module:
 
