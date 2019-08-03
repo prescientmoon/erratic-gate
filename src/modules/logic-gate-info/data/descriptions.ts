@@ -83,5 +83,8 @@ export const descriptions: Record<string, string> = {
     `,
     'rgb light': `
         ${output} The color is a based on the 3 inputs. The first input means red, the second green and the third blue.
+    `,
+    incrementor: `
+        Outputs the input + 1
     `
 }

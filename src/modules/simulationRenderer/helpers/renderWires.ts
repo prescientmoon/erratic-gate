@@ -3,7 +3,6 @@ import { pinFill } from './pinFill'
 import { getPinPosition } from './pinPosition'
 import { Wire } from '../../simulation/classes/Wire'
 import { wireRadius } from './wireRadius'
-import { clamp } from '../../simulation/helpers/clamp'
 
 export const renderWires = (
     ctx: CanvasRenderingContext2D,
@@ -56,7 +55,6 @@ export const renderWires = (
                     endPosition[1]) /
                     2
             )
-            // radiuses[0] =
         }
 
         const centerPosition = [

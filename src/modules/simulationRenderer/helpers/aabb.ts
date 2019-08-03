@@ -14,3 +14,16 @@ export const aabbCollisionDetection = (rect1: Transform, rect2: Transform) => {
         rect1.minY > rect2.maxY
     )
 }
+
+export const collision = (rect1: Transform, rect2: Transform) => {
+    const { minX, maxX } = rect1
+
+    if (
+        (minX > rect2.minX && minX < rect2.maxX) ||
+        (maxX > rect2.minX && minX < rect2.maxX)
+    ) {
+        return true
+    }
+
+    return false
+}

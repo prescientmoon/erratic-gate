@@ -120,5 +120,14 @@ export const ioTables: Record<
                 fromChunks(combination.map(value => (value ? 255 : 0)))
             ]
         })
+    },
+    incrementor: {
+        columns: ['x', 'x + 1'],
+        data: recursiveCombinations([0, 1], 2).map(combination => {
+            const input = combination.join('')
+            const output = (parseInt(input, 2) + 1).toString(2)
+
+            return [input, output]
+        })
     }
 }
