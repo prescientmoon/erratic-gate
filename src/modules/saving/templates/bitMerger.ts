@@ -18,7 +18,7 @@ const bitMergerTemplate: PartialTemplate = {
             const a = context.get(0)
             const b = context.get(1)
 
-            context.set(0, a + b)
+            context.set(0, b + a)
         `
     },
     category: categories.compressing,

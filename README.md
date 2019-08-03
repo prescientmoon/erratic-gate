@@ -23,7 +23,7 @@ Many thanks to:
 -   Multiple simulations support
 -   Integrated circuits
 -   Multiple bits per pin
--   Multiple language support: Romanian, English, Dutch & more in the future
+-   Multiple language support: Romanian, English, Dutch, Turkish, Chinese & more in the future
 
 ## Playing with the source
 

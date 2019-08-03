@@ -21,7 +21,7 @@ const bitSplitterTemplate: PartialTemplate = {
             ]
 
             for (let index = 0; index < 2; index++ ) {
-                context.set(index, chunks[index])
+                context.set(index, chunks[1 - index])
             }
         `
     },

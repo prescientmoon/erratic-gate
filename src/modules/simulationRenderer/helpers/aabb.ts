@@ -1,5 +1,11 @@
 import { Transform } from '../../../common/math/classes/Transform'
 
+/**
+ * Checks collision between 2 rects
+ *
+ * @param rect1 The first rect
+ * @param rect2 The second rect
+ */
 export const aabbCollisionDetection = (rect1: Transform, rect2: Transform) => {
     return !(
         rect1.maxX < rect2.minX ||

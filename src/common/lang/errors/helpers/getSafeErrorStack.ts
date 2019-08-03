@@ -1,3 +1,8 @@
+/**
+ * Gets safe error stack from error
+ *
+ * @param error The error to get the safe erro stack from
+ */
 export const getSafeErrorStack = (error: any) => {
     const errorString: string = error.toString()
     const stackString: string = error.stack

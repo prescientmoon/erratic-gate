@@ -1,10 +1,22 @@
 import { allCombinations } from '../../../modules/simulation/helpers/allCombinations'
 import { BehaviorSubject } from 'rxjs'
 import { vector2 } from '../types/vector2'
+import { vector4 } from '../types/vector4'
 
 export class Transform {
+    /**
+     * Gets the position as a subject
+     */
     public positionSubject = new BehaviorSubject<vector2>([0, 0])
 
+    /**
+     * Class used to represend the position scale and rotation
+     * of a body in 2d space
+     *
+     * @param _position The initial position
+     * @param scale The initial scale
+     * @param rotation The initial scale of the object
+     */
     public constructor(
         public _position: vector2 = [0, 0],
         public scale: vector2 = [1, 1],
@@ -13,12 +25,18 @@ export class Transform {
         this.updatePositionSubject()
     }
 
+    /**
+     * Gets the boundng box of the transform
+     */
     public getBoundingBox() {
         const result = [...this.position, ...this.scale] as vector4
 
         return result
     }
 
+    /**
+     * Gets an array of all points in the transform
+     */
     public getPoints() {
         const combinations = Array.from(allCombinations([0, 1], [0, 1]))
 
@@ -29,17 +47,6 @@ export class Transform {
         ])
 
         return points as vector2[]
-    }
-
-    public getEdges() {
-        const points = this.getPoints()
-        const edges = []
-
-        for (let index = 0; index < points.length; index++) {
-            edges.push([points[index], points[(index + 1) % points.length]])
-        }
-
-        return edges as [vector2, vector2][]
     }
 
     /**
@@ -65,74 +72,106 @@ export class Transform {
         this.updatePositionSubject()
     }
 
-    /** Short forms for random stuff */
-
+    /**
+     * The first element of the position vector
+     */
     get x() {
         return this.position[0]
     }
 
+    /**
+     * The second element of the position vector
+     */
     get y() {
         return this.position[1]
     }
 
+    /**
+     * The first element of the scale vector
+     */
     get width() {
         return this.scale[0]
     }
 
+    /**
+     * The second element of the scale vector
+     */
     get height() {
         return this.scale[1]
     }
 
+    /**
+     * The minimum x position of the buonding box
+     */
     get minX() {
         return Math.min(this.x, this.x + this.width)
     }
 
+    /**
+     * The maximum x position of the bounding box
+     */
     get maxX() {
         return Math.max(this.x, this.x + this.width)
     }
 
+    /**
+     * The minimum y position of the buonding box
+     */
     get minY() {
         return Math.min(this.y, this.y + this.height)
     }
 
+    /**
+     * The maximum y position of the buonding box
+     */
     get maxY() {
         return Math.max(this.y, this.y + this.height)
     }
 
+    /**
+     * The center of the bounding box
+     */
     get center() {
         return [this.x + this.width / 2, this.y + this.height / 2] as vector2
     }
 
+    /**
+     * Sets the first element of the position vector
+     *
+     * @param value The value to set x to
+     */
     set x(value: number) {
         this.position = [value, this.y]
 
         this.updatePositionSubject()
     }
 
+    /**
+     * Sets the second element of the position vector
+     *
+     * @param value The value to set y to
+     */
     set y(value: number) {
         this.position = [this.x, value]
 
         this.updatePositionSubject()
     }
 
+    /**
+     * Sets the first element of the scale vector
+     *
+     * @param value The value to set the width to
+     */
     set width(value: number) {
         this.scale = [value, this.height]
     }
 
+    /**
+     * Sets the second element of the scale vector
+     *
+     * @param value The value to set the height to
+     */
     set height(value: number) {
         this.scale = [this.width, value]
     }
 }
-
-export type vector3 = [number, number, number]
-export type vector4 = [number, number, number, number]
-export type vector8 = [
-    number,
-    number,
-    number,
-    number,
-    number,
-    number,
-    number,
-    number
-]

@@ -9,23 +9,23 @@ export const DutchTranslation: Translation = {
         createSimulation: 'Maak simulatie',
         logicGates: 'Logische poorten',
         openSimulation: 'Open simulatie',
-        simulation: 'Todo',
+        simulation: 'Simulatie',
         language: 'Taal',
-        backToSimulation: 'Todo',
-        backToGates: 'Todo'
+        backToSimulation: 'Terug naar simulatie',
+        backToGates: 'Terug naar poorten'
     },
     actions: {
-        'delete selection': 'Todo',
-        'select all': 'Todo',
-        clean: 'Todo',
-        refresh: 'Todo',
-        save: 'Todo',
-        undo: 'Todo',
-        'delete simulation': `Todo`,
-        copy: 'Todo',
-        cut: 'Todo',
-        duplicate: 'Todo',
-        paste: 'Todo'
+        'delete selection': 'Delete selectie',
+        'select all': 'Selecteer alles',
+        clean: 'Verwijder',
+        refresh: 'Ververs',
+        save: 'opslaan',
+        undo: 'ongedaan maken',
+        'delete simulation': 'Delete simulatie',
+        copy: 'Kopieer',
+        cut: 'Knippen',
+        duplicate: 'Dupliceer',
+        paste: 'Plak'
     },
     createSimulation: {
         mode: {
@@ -44,12 +44,12 @@ export const DutchTranslation: Translation = {
         createdSimulation: name => `Simulatie '${name}' succesvol gecreerd`,
         switchedToSimulation: name =>
             `Succesvol veranderd naar simulatie '${name}'`,
-        savedSimulation: name => `Simulatie succesvol opgeslagen '${name}'`,
-        compiledIc: name => `IC gecompileerd: ${name}`,
-        cleaned: name => `${name} gewist`,
-        refreshed: name => `${name} ververst`,
-        undone: name => `${name} ongedaan gemaakt`,
-        deletedSimulation: name => `Todo`,
-        addedGate: name => 'Todo'
+        savedSimulation: name => "Simulatie succesvol opgeslagen '${name}'",
+        compiledIc: name => "IC gecompileerd: '${name}'",
+        cleaned: name => `'${name}' gewist`,
+        refreshed: name => `'${name}' ververst`,
+        undone: name => `'${name}' ongedaan gemaakt`,
+        deletedSimulation: name => `Simulatie '${name}' verwijderd`,
+        addedGate: name => `Poort '${name}' toegevoegd`
     }
 }
