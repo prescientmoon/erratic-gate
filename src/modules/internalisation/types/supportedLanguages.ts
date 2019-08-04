@@ -7,3 +7,4 @@ export type supportedLanguage =
     | 'dutch'
     | '中文'
     | 'türkçe'
+    | 'deutsch'

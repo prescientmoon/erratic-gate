@@ -10,7 +10,7 @@ const incrementorTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/incrementor')
+        fill: require('../../../assets/incrementor.svg')
     },
     code: {
         activation: `
