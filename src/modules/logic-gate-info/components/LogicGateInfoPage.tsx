@@ -14,8 +14,6 @@ export default withRouter(props => {
         const template = getTemplateSafely(name)
         const description = descriptions[name] || ''
 
-        console.log({ name, template })
-
         return (
             <div className="page" id="logic-gate-info-page">
                 <div className="gate-preview">
