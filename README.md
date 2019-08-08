@@ -15,7 +15,7 @@ Many thanks to:
 
 1. [Canana](http://canana.xyz/) for the logo!
 2. Player_0_1#2955 for all the testing and ideas
-3. BlueGhost, Vyctor, Mao for all the design reviews
+3. BlueGhost, Vyctor661, Mao for all the design reviews
 
 ## Features
 
