@@ -1,5 +1,3 @@
-console.log("nut");
-
 function but(id) {
     this.wait = true;
     this.id = id;
@@ -21,7 +19,6 @@ function but(id) {
 
     this.y = function() {
         let name = "#" + this.id;
-        //console.log("y"+parseFloat($(name).attr("y")));
         return parseFloat($(name).attr("y"));
     }
 

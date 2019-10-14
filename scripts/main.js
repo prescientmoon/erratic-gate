@@ -108,7 +108,6 @@ $("body").on("mousemove touchmove", function(e) {
 });
 $("body").on("mouseup touchend", function(e) {
     selected = "yay";
-    console.log("got a mouse up");
 });
 $("body").on("mousedown touchstart", function(e) {
     //beeing sure that we actually want to drag something
@@ -193,7 +192,6 @@ function set_position(name, x, y) {
             x = Math.floor(x / 80) * 80;
             y = Math.floor(y / 80) * 80;
         }
-        //console.log("obj:"+obj+"objx:"+objx+"objy:"+objy+"xdif:"+xdif+"ydif:"+ydif)
         //setting the new positions
         $(obj).attr("x", (x).toString());
         $(obj).attr("y", (y).toString());
@@ -219,7 +217,6 @@ function set_position(name, x, y) {
             x = Math.floor(x / 80) * 80 + 40;
             y = Math.floor(y / 80) * 80 + 40;
         }
-        //console.log("obj:"+obj+"objx:"+objx+"objy:"+objy+"xdif:"+xdif+"ydif:"+ydif)
         //setting the new positions
         $(obj).attr("cx", (x).toString());
         $(obj).attr("cy", (y).toString());
@@ -253,8 +250,6 @@ function add(h, w, color, stroke, id, on) {
     elem.appendChild(g);
     return el;
 }
-
-console.log(pieces);
 
 setInterval(function() {
     for (let i = 0; i < pieces.length; i++) {

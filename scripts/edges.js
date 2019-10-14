@@ -1,17 +1,11 @@
 let l_count = 0;
 let lines = [];
-console.log("started2");
 
 function edge(start, end) {
     this.id = l_count.toString() + "line";
     l_count++;
     this.start = start;
     this.end = end;
-    console.log(start + end);
-
-    console.log(this.end);
-    console.log(this.start);
-
     lines[lines.length] = this;
 
     let g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -33,7 +27,6 @@ function edge(start, end) {
     let elem = document.getElementById("svg1");
     elem.appendChild(g);
 
-    //console.log("succes"+lines);
 
     this.rep = el;
     this.name = "#" + this.id;
@@ -42,7 +35,6 @@ function edge(start, end) {
         let adr = this.start.name;
         let temp = $(adr).attr("x");
         let n = this.name;
-        //console.log("updating"+adr+temp+n);
         temp = (parseFloat(temp)).toString();
         $(n).attr("x1", temp);
         temp = $(adr).attr("y");

@@ -1,5 +1,3 @@
-console.log("bulb");
-
 function light(id) {
     this.id = id;
     let g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -40,7 +38,6 @@ function light(id) {
 
     this.y = function() {
         let name = "#" + this.id;
-        //console.log("y"+parseFloat($(name).attr("y")));
         return parseFloat($(name).attr("cy"));
     }
 
@@ -57,7 +54,6 @@ function light(id) {
                 $((this.rep)).attr("fill", "white");
             }
         }
-        //console.log($((this.rep)).attr("fill"));
         let x = this.x();
         let y = this.y();
         this.i.set(x - 60, y - 10);

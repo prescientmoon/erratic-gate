@@ -20,7 +20,6 @@ function buffer(id) {
 
     this.y = function() {
         let name = "#" + this.id;
-        //console.log("y"+parseFloat($(name).attr("y")));
         return parseFloat($(name).attr("y"));
     }
 

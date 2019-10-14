@@ -51,9 +51,7 @@ function clicked(ob) {
         } else {
             sele = ob;
         }
-        console.log("click" + sels + sele + ob.type);
         if ((sels != "yay") && (sele != "yay")) {
-            console.log("step 2");
             if ((sels.state)) {
                 sels.nei = sele;
                 sels.state = false;
@@ -61,7 +59,6 @@ function clicked(ob) {
                 a = new edge(sels, sele);
                 sels = "yay";
                 sele = "yay";
-                console.log("end");
             }
         }
     });

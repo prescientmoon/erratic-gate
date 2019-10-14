@@ -69,7 +69,6 @@ $("svg").on("mousemove touchmove", function(e) {
 
             xbeg += xvb;
             ybeg += yvb;
-            console.log("started zooming" + xbeg + "and" + ybeg);
             //moveing = (moveing +1)%2;
         }
 
@@ -83,7 +82,6 @@ $("svg").on("mousemove touchmove", function(e) {
         yvb -= newy - ybeg;
         updatescr();
 
-        console.log(xvb + "newx" + newx + "xbeg" + xbeg);
     }
 });
 
