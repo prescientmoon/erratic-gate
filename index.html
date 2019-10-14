@@ -1,63 +1,65 @@
 <html>
-	<head>.
-		<title>
-			Logic simulator
-		</title>
-		<!-- Scripts -->
-			<!-- jquery -->
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<!-- Optional theme --
+
+<head>.
+    <title>
+        Logic simulator
+    </title>
+    <!-- Scripts -->
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme --
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 		!--Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	</head>
-	<body id="body">
-		<svg height = "100%" width = "100%" id = "svg1" viewbox = "0 0 700 700">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body id="body">
+    <svg height="100%" width="100%" id="svg1" viewbox="0 0 700 700">
 		</svg>
-		
-		<!--And-->
-		<script src="scripts/and_gate.js"></script>
-		<!--Pin-->
-		<script src="scripts/pins.js"></script>
-		<!--Edges-->
-		<script src="scripts/edges.js"></script>
-		<!--Button-->
-		<script src="scripts/but.js"></script>
-		<!--light bulb-->
-		<script src="scripts/light.js"></script>
-		<!--or-->
-		<script src="scripts/or.js"></script>
-		<!--or-->
-		<script src="scripts/text.js"></script>
-		<!--not-->
-		<script src="scripts/not.js"></script>
-		<!--buffer-->
-		<script src="scripts/buffer.js"></script>
-		<!--nand-->
-		<script src="scripts/nand.js"></script>
-		<!--nand with 3 inputs-->
-		<script src="scripts/nand3.js"></script>
-		<!--xor-->
-		<script src="scripts/xor.js"></script>
-		<!--zoom-->
-		<script src="scripts/events.js"></script>
-		<!--Main-->
-		<script src="scripts/main.js"></script>
-		
-		
-		<div class = "modal fade" id = "addel">
-			<div class = "modal-dialog">
-				<div class = "modal-content">
-					<div class = "modal-header">
-						<p>
-							Add a piece!
-						</p>
-					</div>
-					<div class = "modal-body">
-						<select id="sel">
+
+    <!--And-->
+    <script src="scripts/and_gate.js"></script>
+    <!--Pin-->
+    <script src="scripts/pins.js"></script>
+    <!--Edges-->
+    <script src="scripts/edges.js"></script>
+    <!--Button-->
+    <script src="scripts/but.js"></script>
+    <!--light bulb-->
+    <script src="scripts/light.js"></script>
+    <!--or-->
+    <script src="scripts/or.js"></script>
+    <!--or-->
+    <script src="scripts/text.js"></script>
+    <!--not-->
+    <script src="scripts/not.js"></script>
+    <!--buffer-->
+    <script src="scripts/buffer.js"></script>
+    <!--nand-->
+    <script src="scripts/nand.js"></script>
+    <!--nand with 3 inputs-->
+    <script src="scripts/nand3.js"></script>
+    <!--xor-->
+    <script src="scripts/xor.js"></script>
+    <!--zoom-->
+    <script src="scripts/events.js"></script>
+    <!--Main-->
+    <script src="scripts/main.js"></script>
+
+
+    <div class="modal fade" id="addel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p>
+                        Add a piece!
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <select id="sel">
 							<option value = "not">Not gate</option>
 							<option value = "light">Light bulb</option>
 							<option value = "but">Button</option>
@@ -67,30 +69,18 @@
 							<option value = "nand">Nand gate</option>
 							<option value = "nand3">Nand gate (3 inputs)</option>
 							<option value = "xor">Xor gate</option>
-						</select>
-						Quantity:
-						<input id = "times" type = "number">
-					</div>
-					<div class = "modal-footer">
-						<button type="button" onclick = '$("#addel").modal("hide"); addel();' class="btn btn-primmary" id = "done">
+						</select> Quantity:
+                    <input id="times" type="number">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick='$("#addel").modal("hide"); addel();' class="btn btn-primmary" id="done">
 							Add!!!
 						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<link href="st.css" rel="Stylesheet" type="text/css" />
-	</body>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link href="st.css" rel="Stylesheet" type="text/css" />
+</body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,22 +1,24 @@
 body {
-    background-color:rgba(0,0,0,0.7);
-	/*
+    background-color: rgba(0, 0, 0, 0.7);
+    /*
     background-image: url("bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 	*/
-	margin:0;
+    margin: 0;
 }
 
-.heavy { font: bold 20px sans-serif; }
+.heavy {
+    font: bold 20px sans-serif;
+}
 
 img {
-	border-radius: 17px;
-	height: 74;
-	width: 74;
+    border-radius: 17px;
+    height: 74;
+    width: 74;
 }
 
 #butt {
-	rx: 10;
-	ry: 10;
+    rx: 5;
+    ry: 5;
 }
