@@ -85,7 +85,7 @@ export const instantiateGateInitter = (
     const gate = renderer.simulation.gates.get(id)
 
     if (gate && gate.data) {
-        gate.data.transform.position = initter.position
+        gate.data.transform.position = add(initter.position, renderer.camera.toWordPostition(Screen.center))
     }
 
     return id

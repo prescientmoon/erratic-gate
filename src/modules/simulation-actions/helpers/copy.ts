@@ -1,6 +1,7 @@
 import { SimulationRenderer } from '../../simulationRenderer/classes/SimulationRenderer'
 import { idStore } from '../../simulation/stores/idStore'
 import { deleteGate } from '../../simulationRenderer/helpers/deleteGate'
+import { substract, averege } from '../../vector2/helpers/basic'
 
 /**
  * Helper to copy the selection of a renderer
@@ -10,10 +11,12 @@ import { deleteGate } from '../../simulationRenderer/helpers/deleteGate'
 export const copy = (renderer: SimulationRenderer) => {
     const selected = renderer.getSelected()
 
+    const center = averege(...selected.map(({ transform }) => transform.position))
+
     renderer.wireClipboard = []
     renderer.clipboard = selected.map(gate => ({
         name: gate.template.metadata.name,
-        position: gate.transform.position
+        position: substract(gate.transform.position, center)
     }))
 
     for (const wire of renderer.simulation.wires) {

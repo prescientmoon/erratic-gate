@@ -63,3 +63,10 @@ export const substract = (vector: vector2, other: vector2) =>
     relativeTo(other, vector)
 
 export const inverse = (vector: vector2) => vector.map(a => 1 / a) as vector2
+
+/**
+ * Find the aritmetic averege of n vectors.
+ * 
+ * @param vectors tHe vectors to find the averege of
+ */
+export const averege = (...vectors: vector2[]) => multiply(add(...vectors), 1 / vectors.length)
