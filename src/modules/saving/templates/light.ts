@@ -24,6 +24,8 @@ const lightTemplate: PartialTemplate = {
         activation: `
             const { main, active } = context.colors
 
+            const bits = context.get(0)
+
             context.color(parseInt(context.get(0),2) ? active : main)
         `
     },
