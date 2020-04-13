@@ -30,7 +30,7 @@ export class Wire {
     public dispose() {
         this.end.value.removePair(this.start.value)
         this.start.value.removePair(this.end.value)
-        this.end.value.state.next(false)
+        this.end.value.state.next("0")
 
         this.active = false
     }
