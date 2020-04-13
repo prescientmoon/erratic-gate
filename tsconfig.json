@@ -4,15 +4,11 @@
         "esModuleInterop": true,
         "jsx": "preserve",
         "experimentalDecorators": true,
-        "target": "esnext",
+        "target": "ESNext",
         "downlevelIteration": true,
         "strictNullChecks": true,
         "module": "esnext"
     },
-    "exclude": [
-        "node_modules"
-    ],
-    "include": [
-        "src"
-    ]
+    "exclude": ["node_modules"],
+    "include": ["src"]
 }

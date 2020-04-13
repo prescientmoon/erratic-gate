@@ -80,7 +80,7 @@ export class SimulationRenderer {
 
     public updateWheelListener(ref: RefObject<HTMLCanvasElement>) {
         if (ref.current) {
-            ref.current.addEventListener('wheel', event => {
+            ref.current.addEventListener('wheel', (event) => {
                 if (!modalIsOpen() && location.pathname === '/') {
                     event.preventDefault()
 
@@ -119,7 +119,7 @@ export class SimulationRenderer {
      * @throws SimulationError if the id doesnt have a data prop
      */
     public getSelected(): Gate[] {
-        return setToArray(this.allSelectedIds()).map(id => {
+        return setToArray(this.allSelectedIds()).map((id) => {
             const gate = this.simulation.gates.get(id)
 
             if (!gate) {

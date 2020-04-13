@@ -1,10 +1,20 @@
 import { Transform } from '../../../common/math/classes/Transform'
 import { Pin } from './Pin'
-import { GateTemplate, PinCount } from '../types/GateTemplate'
+import {
+    GateTemplate,
+    PinCount,
+    isGroup,
+    Property
+} from '../types/GateTemplate'
 import { idStore } from '../stores/idStore'
 import { Context, InitialisationContext } from '../../activation/types/Context'
 import { toFunction } from '../../activation/helpers/toFunction'
-import { Subscription, BehaviorSubject, asapScheduler, animationFrameScheduler } from 'rxjs'
+import {
+    Subscription,
+    BehaviorSubject,
+    asapScheduler,
+    animationFrameScheduler
+} from 'rxjs'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { getGateTimePipes } from '../helpers/getGateTimePipes'
 import { ImageStore } from '../../simulationRenderer/stores/imageStore'
@@ -16,6 +26,8 @@ import { Wire } from './Wire'
 import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 import { ExecutionQueue } from '../../activation/classes/ExecutionQueue'
 import { tap, observeOn } from 'rxjs/operators'
+import { PropsSave } from '../../saving/types/SimulationSave'
+import { ValueOf } from '../../../common/lang/record/types/ValueOf'
 
 /**
  * The interface for the pins of a gate
@@ -45,6 +57,13 @@ export type GateFunction = null | ((ctx: Context) => void)
 export interface GateFunctions {
     activation: GateFunction
     onClick: GateFunction
+}
+
+export type GateProps = {
+    [K in keyof PropsSave]: BehaviorSubject<PropsSave[K]> | GateProps
+} & {
+    external: BehaviorSubject<boolean>
+    label: BehaviorSubject<string>
 }
 
 export class Gate {
@@ -126,10 +145,7 @@ export class Gate {
     /**
      * The props used by the activation function (the same as memory but presists)
      */
-    public props: Record<
-        string,
-        BehaviorSubject<string | number | boolean>
-    > = {}
+    public props: GateProps = {} as GateProps
 
     /**
      * The main logic gate class
@@ -140,10 +156,9 @@ export class Gate {
     public constructor(
         template: DeepPartial<GateTemplate> = {},
         id?: number,
-        props: Record<string, string | number | boolean> = {}
+        props: PropsSave = {}
     ) {
         this.template = completeTemplate(template)
-
         this.transform.scale = this.template.shape.scale
 
         if (this.template.material.type === 'color') {
@@ -204,9 +219,7 @@ export class Gate {
 
             if (!state) {
                 throw new SimulationError(
-                    `Cannot run ic ${
-                    this.template.metadata.name
-                    } - save not found`
+                    `Cannot run ic ${this.template.metadata.name} - save not found`
                 )
             }
 
@@ -219,30 +232,26 @@ export class Gate {
             const gates = Array.from(this.ghostSimulation.gates)
 
             const inputs = gates
-                .filter(gate => gate.template.integration.input)
+                .filter((gate) => gate.template.integration.input)
                 .sort(sortByPosition)
-                .map(gate => gate.wrapPins(gate._pins.outputs))
+                .map((gate) => gate.wrapPins(gate._pins.outputs))
                 .flat()
 
             const outputs = gates
-                .filter(gate => gate.template.integration.output)
+                .filter((gate) => gate.template.integration.output)
                 .sort(sortByPosition)
-                .map(gate => gate.wrapPins(gate._pins.inputs))
+                .map((gate) => gate.wrapPins(gate._pins.inputs))
                 .flat()
 
             if (inputs.length !== this._pins.inputs.length) {
                 throw new SimulationError(
-                    `Input count needs to match with the container gate: ${
-                    inputs.length
-                    } !== ${this._pins.inputs.length}`
+                    `Input count needs to match with the container gate: ${inputs.length} !== ${this._pins.inputs.length}`
                 )
             }
 
             if (outputs.length !== this._pins.outputs.length) {
                 throw new SimulationError(
-                    `Output count needs to match with the container gate: ${
-                    outputs.length
-                    } !== ${this._pins.outputs.length}`
+                    `Output count needs to match with the container gate: ${outputs.length} !== ${this._pins.outputs.length}`
                 )
             }
 
@@ -267,28 +276,95 @@ export class Gate {
         this.assignProps(props)
     }
 
+    private updateNestedProp(
+        path: string[],
+        value: ValueOf<PropsSave>,
+        gate: Gate = this
+    ) {
+        if (!path.length) {
+            return
+        }
+
+        if (path.length === 1) {
+            const subject = gate.props[path[0]]
+
+            if (subject instanceof BehaviorSubject) {
+                subject.next(value)
+            }
+
+            return
+        }
+
+        const nextGates = [...gate.ghostSimulation.gates].filter(
+            (gate) => gate.props?.label?.value === path[0]
+        )
+
+        for (const nextGate of nextGates) {
+            this.updateNestedProp(path.slice(1), value, nextGate)
+        }
+    }
+
     /**
      * Assign the props passed to the gate and mere them with the base ones
      */
-    private assignProps(props: Record<string, string | boolean | number>) {
+    private assignProps(
+        source: PropsSave,
+        props: Property[] = this.template.properties.data,
+        target: GateProps = this.props,
+        path: string[] = []
+    ) {
         let shouldUpdate = false
 
         if (this.template.properties.enabled) {
-            for (const { base, name, needsUpdate } of this.template.properties
-                .data) {
-                this.props[name] = new BehaviorSubject(
-                    props.hasOwnProperty(name) ? props[name] : base
+            for (const prop of props) {
+                if (isGroup(prop)) {
+                    const { groupName } = prop
+                    target[groupName] = {} as GateProps
+                    const needsUpdate = this.assignProps(
+                        typeof source[groupName] === 'object'
+                            ? (source[groupName] as PropsSave)
+                            : {},
+                        prop.props,
+                        target[groupName] as GateProps,
+                        [...path, groupName]
+                    )
+
+                    if (needsUpdate) {
+                        shouldUpdate = true
+                    }
+
+                    continue
+                }
+
+                const { name, base, needsUpdate } = prop
+
+                const subject = new BehaviorSubject(
+                    source.hasOwnProperty(name) ? source[name] : base
                 )
 
-                if (!shouldUpdate && needsUpdate) {
+                target[name] = subject
+
+                this.subscriptions.push(
+                    subject.subscribe((value) => {
+                        if (needsUpdate && path.length === 0) {
+                            return this.update()
+                        }
+
+                        if (path.length === 0) {
+                            return
+                        }
+
+                        this.updateNestedProp([...path, name], value)
+                    })
+                )
+
+                if (needsUpdate) {
                     shouldUpdate = true
                 }
             }
         }
 
-        if (shouldUpdate) {
-            this.update()
-        }
+        return shouldUpdate
     }
 
     /**
@@ -315,11 +391,15 @@ export class Gate {
     /**
      * Used to get the props as an object
      */
-    public getProps() {
-        const props: Record<string, string | boolean | number> = {}
+    public getProps(target = this.props) {
+        const props: PropsSave = {}
 
-        for (const key in this.props) {
-            props[key] = this.props[key].value
+        for (const [key, value] of Object.entries(target)) {
+            if (value instanceof BehaviorSubject) {
+                props[key] = value.value
+            } else {
+                props[key] = this.getProps(value)
+            }
         }
 
         return props
@@ -361,7 +441,7 @@ export class Gate {
      */
     public getContext(): Context {
         const maxLength = Math.max(
-            ...this._pins.inputs.map(pin => pin.state.value.length)
+            ...this._pins.inputs.map((pin) => pin.state.value.length)
         )
 
         const toLength = (
@@ -412,7 +492,10 @@ export class Gate {
                 return this.props[name].value
             },
             setProperty: (name: string, value: string | number | boolean) => {
-                this.props[name].next(value)
+                const subject = this.props[name]
+                if (subject instanceof BehaviorSubject) {
+                    subject.next(value)
+                }
             },
             innerText: (value: string) => {
                 this.text.inner.next(value)

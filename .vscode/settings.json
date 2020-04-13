@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": true,
     "prettier.eslintIntegration": true,
-    "explorer.autoReveal": false
+    "explorer.autoReveal": false,
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

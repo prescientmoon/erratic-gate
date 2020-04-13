@@ -1,23 +1,31 @@
 import { vector2 } from '../../../common/math/types/vector2'
-import { Gate } from '../classes/Gate'
 
 export interface PinCount {
     variable: boolean
     count: number
 }
 
-export interface Property<
+export type PropGroup<
     T extends boolean | number | string = boolean | number | string
-> {
+> = {
+    groupName: string
+    props: Property<T>[]
+}
+
+export const isGroup = (prop: Property): prop is PropGroup =>
+    (prop as PropGroup).groupName !== undefined
+
+export type RawProp<
+    T extends boolean | number | string = boolean | number | string
+> = {
     type: 'number' | 'string' | 'text' | 'boolean'
     base: T
     name: string
     needsUpdate?: boolean
-    show?: (
-        obj: Record<string, string | boolean | number>,
-        gate: Gate
-    ) => boolean
 }
+export type Property<
+    T extends boolean | number | string = boolean | number | string
+> = PropGroup<T> | RawProp<T>
 
 export interface Material {
     type: 'color' | 'image'
@@ -74,7 +82,6 @@ export interface GateTemplate {
         input: boolean
         output: boolean
     }
-    info: string[]
     tags: GateTag[]
     properties: {
         enabled: boolean

@@ -1,6 +1,11 @@
 import { SimulationState } from '../../saving/types/SimulationSave'
 import { SimulationError } from '../../errors/classes/SimulationError'
-import { GateTemplate } from '../../simulation/types/GateTemplate'
+import {
+    GateTemplate,
+    Property,
+    PropGroup,
+    isGroup
+} from '../../simulation/types/GateTemplate'
 import {
     simulationInputCount,
     simulationOutputCount
@@ -13,6 +18,8 @@ import { fromSimulationState } from '../../saving/helpers/fromState'
 import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 import { getSimulationState } from '../../saving/helpers/getState'
 import { categories } from '../../saving/data/categories'
+import { getTemplateSafely } from '../../logic-gates/helpers/getTemplateSafely'
+import { reservedPropNames } from '../../simulation/constants'
 
 /**
  * Compiles a simulation into a logicGate
@@ -35,6 +42,8 @@ export const compileIc = (state: SimulationState) => {
     const inputCount = simulationInputCount(cleanState.gates)
     const outputCount = simulationOutputCount(cleanState.gates)
 
+    const props = cleanState.gates.filter(({ props }) => props.external)
+
     const result: DeepPartial<GateTemplate> = {
         metadata: {
             name
@@ -52,6 +61,24 @@ export const compileIc = (state: SimulationState) => {
         material: {
             type: 'image',
             fill: require('../../../assets/ic')
+        },
+        properties: {
+            enabled: !!props.length,
+            data: props.map((gate) => {
+                const template = getTemplateSafely(gate.template)
+                return {
+                    groupName: gate.props.label,
+                    props: template.properties.data.map((prop) => {
+                        if (isGroup(prop)) {
+                            return prop
+                        }
+                        return {
+                            ...prop,
+                            base: gate.props[prop.name]
+                        }
+                    })
+                } as PropGroup
+            })
         }
     }
 

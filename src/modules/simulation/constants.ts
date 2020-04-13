@@ -1,5 +1,6 @@
-import { GateTemplate } from './types/GateTemplate'
+import { GateTemplate, Property, RawProp } from './types/GateTemplate'
 import { categories } from '../saving/data/categories'
+import { getRendererSafely } from '../logic-gates/helpers/getRendererSafely'
 
 export const DefaultGateTemplate: GateTemplate = {
     metadata: {
@@ -49,7 +50,6 @@ export const DefaultGateTemplate: GateTemplate = {
         input: false,
         output: false
     },
-    info: [],
     tags: ['base'],
     properties: {
         enabled: false,
@@ -57,18 +57,12 @@ export const DefaultGateTemplate: GateTemplate = {
             {
                 type: 'boolean',
                 base: false,
-                name: 'internal',
-                show: (_, gate) =>
-                    gate.env === 'global' &&
-                    !gate.template.properties.data.some(
-                        (prop) => prop.needsUpdate
-                    )
+                name: 'external'
             },
             {
                 type: 'string',
                 base: 'my-logic-gate',
-                name: 'label',
-                show: ({ internal }: { internal: boolean }) => internal
+                name: 'label'
             }
         ]
     },
@@ -78,3 +72,10 @@ export const DefaultGateTemplate: GateTemplate = {
     },
     category: categories.basic
 }
+
+/**
+ * Prop names which need to not be overriten
+ */
+export const reservedPropNames = DefaultGateTemplate.properties.data.map(
+    ({ name }: RawProp) => name
+)

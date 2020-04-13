@@ -17,21 +17,24 @@ $gate-props-margin: 1rem;
 }
 
 div #gate-properties-container {
-    @include flex;
+    display: flex;
+    flex-direction: column;
 
     background-color: $grey;
-    padding: $gate-props-margin * 4;
     border-radius: 1em;
-}
 
-#gate-props-divider {
-    margin-top: $gate-props-margin;
-    margin-bottom: $gate-props-margin;
+    padding: $gate-props-margin * 4;
+    box-sizing: border-box;
+
+    max-height: 80vh;
+    overflow: auto;
 }
 
 div #gate-props-title {
     color: white;
     font-size: 3em;
+
+    margin-bottom: 2 * $gate-props-margin;
 }
 
 div .gate-prop-container {
@@ -43,6 +46,12 @@ div .gate-prop-container {
     &.visible {
         margin: 1rem;
     }
+}
+
+div .gate-prop-group-container {
+    @include flex;
+
+    margin-left: 1rem;
 }
 
 div #save-props {

@@ -8,11 +8,15 @@ export interface TransformState {
     rotation: number
 }
 
+export type PropsSave = {
+    [K in string]: string | number | boolean | PropsSave
+}
+
 export interface GateState {
     transform: TransformState
     id: number
     template: string
-    props: Record<string, string | number | boolean>
+    props: PropsSave
 }
 
 export interface CameraState {
