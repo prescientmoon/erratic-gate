@@ -26,6 +26,7 @@ import { GateInitter } from '../types/GateInitter'
 import { handleMouseDown } from '../helpers/handleMouseDown'
 import { handleMouseUp } from '../helpers/handleMouseUp'
 import { handleMouseMove } from '../helpers/handleMouseMove'
+import { Gate } from '../../simulation/classes/Gate'
 
 export class SimulationRenderer {
     public mouseDownOutput = new Subject<MouseEventInfo>()
@@ -117,7 +118,7 @@ export class SimulationRenderer {
      * @throws SimulationError if an id isnt valid
      * @throws SimulationError if the id doesnt have a data prop
      */
-    public getSelected() {
+    public getSelected(): Gate[] {
         return setToArray(this.allSelectedIds()).map(id => {
             const gate = this.simulation.gates.get(id)
 

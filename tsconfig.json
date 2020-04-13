@@ -3,12 +3,16 @@
         "moduleResolution": "node",
         "esModuleInterop": true,
         "jsx": "preserve",
-        "noImplicitAny": true,
         "experimentalDecorators": true,
         "target": "esnext",
+        "downlevelIteration": true,
         "strictNullChecks": true,
         "module": "esnext"
     },
-    "exclude": ["node_modules"],
-    "include": ["src"]
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "src"
+    ]
 }

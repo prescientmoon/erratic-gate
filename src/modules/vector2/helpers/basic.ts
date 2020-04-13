@@ -7,7 +7,7 @@ import { vector2 } from '../../../common/math/types/vector2'
 export const add = (...vectors: vector2[]): vector2 => {
     const first = vectors[0]
     const others = vectors.slice(1)
-    const othersSum = others.length > 1 ? add(...others) : others[0]
+    const othersSum = others.length >= 1 ? add(...others) : [0, 0]
 
     return first.map((value, index) => value + othersSum[index]) as vector2
 }
@@ -69,4 +69,4 @@ export const inverse = (vector: vector2) => vector.map(a => 1 / a) as vector2
  * 
  * @param vectors tHe vectors to find the averege of
  */
-export const averege = (...vectors: vector2[]) => multiply(add(...vectors), 1 / vectors.length)
+export const averege = (...vectors: vector2[]): vector2 => vectors.length ? multiply(add(...vectors), 1 / vectors.length) : [0, 0]
