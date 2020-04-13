@@ -63,6 +63,12 @@ export const DefaultGateTemplate: GateTemplate = {
                     !gate.template.properties.data.some(
                         (prop) => prop.needsUpdate
                     )
+            },
+            {
+                type: 'string',
+                base: 'my-logic-gate',
+                name: 'label',
+                show: ({ internal }: { internal: boolean }) => internal
             }
         ]
     },

@@ -103,7 +103,15 @@ export const GatePropery = ({ raw, gate }: GatePropertyProps) => {
         }
     })()
 
-    return <div className="gate-prop-container">{input}</div>
+    return (
+        <div
+            className={`gate-prop-container ${
+                input !== emptyInput ? 'visible' : ''
+            }`}
+        >
+            {input}
+        </div>
+    )
 }
 
 /**
