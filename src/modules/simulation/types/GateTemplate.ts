@@ -1,4 +1,5 @@
 import { vector2 } from '../../../common/math/types/vector2'
+import { Gate } from '../classes/Gate'
 
 export interface PinCount {
     variable: boolean
@@ -12,6 +13,10 @@ export interface Property<
     base: T
     name: string
     needsUpdate?: boolean
+    show?: (
+        obj: Record<string, string | boolean | number>,
+        gate: Gate
+    ) => boolean
 }
 
 export interface Material {

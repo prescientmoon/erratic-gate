@@ -53,7 +53,18 @@ export const DefaultGateTemplate: GateTemplate = {
     tags: ['base'],
     properties: {
         enabled: false,
-        data: []
+        data: [
+            {
+                type: 'boolean',
+                base: false,
+                name: 'internal',
+                show: (_, gate) =>
+                    gate.env === 'global' &&
+                    !gate.template.properties.data.some(
+                        (prop) => prop.needsUpdate
+                    )
+            }
+        ]
     },
     innerText: {
         enabled: false,

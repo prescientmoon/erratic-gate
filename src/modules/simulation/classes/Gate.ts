@@ -4,7 +4,7 @@ import { GateTemplate, PinCount } from '../types/GateTemplate'
 import { idStore } from '../stores/idStore'
 import { Context, InitialisationContext } from '../../activation/types/Context'
 import { toFunction } from '../../activation/helpers/toFunction'
-import { Subscription, BehaviorSubject } from 'rxjs'
+import { Subscription, BehaviorSubject, asapScheduler, animationFrameScheduler } from 'rxjs'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import { getGateTimePipes } from '../helpers/getGateTimePipes'
 import { ImageStore } from '../../simulationRenderer/stores/imageStore'
@@ -15,7 +15,7 @@ import { saveStore } from '../../saving/stores/saveStore'
 import { Wire } from './Wire'
 import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 import { ExecutionQueue } from '../../activation/classes/ExecutionQueue'
-import { tap } from 'rxjs/operators'
+import { tap, observeOn } from 'rxjs/operators'
 
 /**
  * The interface for the pins of a gate
@@ -205,7 +205,7 @@ export class Gate {
             if (!state) {
                 throw new SimulationError(
                     `Cannot run ic ${
-                        this.template.metadata.name
+                    this.template.metadata.name
                     } - save not found`
                 )
             }
@@ -233,7 +233,7 @@ export class Gate {
             if (inputs.length !== this._pins.inputs.length) {
                 throw new SimulationError(
                     `Input count needs to match with the container gate: ${
-                        inputs.length
+                    inputs.length
                     } !== ${this._pins.inputs.length}`
                 )
             }
@@ -241,7 +241,7 @@ export class Gate {
             if (outputs.length !== this._pins.outputs.length) {
                 throw new SimulationError(
                     `Output count needs to match with the container gate: ${
-                        outputs.length
+                    outputs.length
                     } !== ${this._pins.outputs.length}`
                 )
             }

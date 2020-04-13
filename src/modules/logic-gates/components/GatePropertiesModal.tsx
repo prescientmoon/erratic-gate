@@ -8,11 +8,16 @@ import TextField from '@material-ui/core/TextField'
 import CheckBox from '@material-ui/core/Checkbox'
 import { open, id } from '../subjects/LogicGatePropsSubjects'
 import { Gate } from '../../simulation/classes/Gate'
+import { mapRecord } from '../../../common/lang/record/map'
+import { BehaviorSubject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 export interface GatePropertyProps {
     raw: Property
     gate: Gate
 }
+
+const emptyInput = <></>
 
 /**
  * Renders a single props of the gate
@@ -24,7 +29,18 @@ export const GatePropery = ({ raw, gate }: GatePropertyProps) => {
     const prop = gate.props[name]
     const outputSnapshot = useObservable(() => prop, '')
 
-    const displayableName = `${name[0].toUpperCase()}${name.slice(1)}:`
+    // rerender when the internal checkbox changes
+    const internal = useObservable(
+        () =>
+            gate.props.internal.pipe(
+                map((value) => value && name !== 'internal')
+            ),
+        false
+    )
+
+    const displayableName = `${name[0].toUpperCase()}${name.slice(1)} ${
+        internal ? '(default value)' : ''
+    }:`
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement
@@ -45,33 +61,47 @@ export const GatePropery = ({ raw, gate }: GatePropertyProps) => {
         }
     }
 
-    let input = <></>
+    let input = (() => {
+        if (
+            raw.show &&
+            !raw.show(
+                mapRecord(gate.props, (subject) => subject.value),
+                gate
+            )
+        ) {
+            return emptyInput
+        }
 
-    if (raw.type === 'number' || raw.type === 'text' || raw.type === 'string') {
-        input = (
-            <TextField
-                onChange={handleChange}
-                label={displayableName}
-                value={outputSnapshot}
-                type={raw.type}
-                multiline={raw.type === 'string'}
-                rowsMax={7}
-            />
-        )
-    } else if (raw.type === 'boolean') {
-        input = (
-            <>
-                <span className="checkbox-label">{displayableName}</span>
-                <CheckBox
-                    onClick={() => {
-                        prop.next(!outputSnapshot)
-                    }}
+        if (
+            raw.type === 'number' ||
+            raw.type === 'text' ||
+            raw.type === 'string'
+        ) {
+            return (input = (
+                <TextField
                     onChange={handleChange}
-                    checked={!!outputSnapshot}
-                />{' '}
-            </>
-        )
-    }
+                    label={displayableName}
+                    value={outputSnapshot}
+                    type={raw.type}
+                    multiline={raw.type === 'string'}
+                    rowsMax={7}
+                />
+            ))
+        } else if (raw.type === 'boolean') {
+            return (input = (
+                <>
+                    <span className="checkbox-label">{displayableName}</span>
+                    <CheckBox
+                        onClick={() => {
+                            prop.next(!outputSnapshot)
+                        }}
+                        onChange={handleChange}
+                        checked={!!outputSnapshot}
+                    />{' '}
+                </>
+            ))
+        }
+    })()
 
     return <div className="gate-prop-container">{input}</div>
 }
@@ -104,7 +134,7 @@ const GateProperties = () => {
         >
             <div
                 id="gate-properties-container"
-                onClick={e => {
+                onClick={(e) => {
                     e.stopPropagation()
                 }}
             >
