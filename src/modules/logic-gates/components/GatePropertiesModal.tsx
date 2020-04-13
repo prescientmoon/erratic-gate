@@ -96,16 +96,18 @@ const GateRawProperty = ({
     }
 
     let input = (() => {
+        const root = gate.props[name] === prop
+        const renderer = getRendererSafely()
         const displayExternal = () =>
-            getRendererSafely().simulation.mode === 'ic' &&
-            gate.env === 'global' &&
+            renderer.simulation.mode === 'ic' &&
+            root &&
             !gate.template.properties.data.some(
                 (prop) => (prop as RawProp).needsUpdate
             )
 
         if (
             (raw.name === 'external' && !displayExternal()) ||
-            (raw.name === 'label' && !external)
+            (raw.name === 'label' && (!external || !root))
         ) {
             return emptyInput
         }
