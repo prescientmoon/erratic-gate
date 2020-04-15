@@ -1,6 +1,6 @@
 import { SidebarAction } from './types/SidebarAction'
 import { possibleAction } from './types/possibleAction'
-import { save } from '../saving/helpers/save'
+import { save, notifyAboutAutosave } from '../saving/helpers/save'
 import { refresh } from './helpers/refresh'
 import { undo } from './helpers/undo'
 import { createActionConfig } from './helpers/createActionConfig'
@@ -30,7 +30,7 @@ export const actionIcons: Record<possibleAction, string> = {
  * Array with all the actions for the SimulationAction component to render
  */
 export const SidebarActions: Record<possibleAction, SidebarAction> = {
-    ...createActionConfig('save', save, ['control', 's']),
+    ...createActionConfig('save', notifyAboutAutosave, ['control', 's']),
     ...createActionConfig(
         'refresh',
         {

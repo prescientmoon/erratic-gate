@@ -10,6 +10,7 @@ import { take, filter } from 'rxjs/operators'
 import { logWelcome } from './modules/core/helpers/logWelcome'
 import { initRenderer } from './modules/simulationRenderer/helpers/initRenderer'
 import { updateLogicGateList } from './modules/logic-gates/subjects/LogicGateList'
+import { initAutoSave } from './modules/simulation-actions/helpers/initAutoSave'
 
 /**
  * The function wich does the heavy lifting for starting the app
@@ -18,7 +19,7 @@ export const start = async () => {
     // This will resolve at the first render
     const result = loadSubject
         .pipe(
-            filter(a => a),
+            filter((a) => a),
             take(1)
         )
         .toPromise()
@@ -40,6 +41,9 @@ export const start = async () => {
 
     // Update the logic gates in local storage
     updateLogicGateList()
+
+    // start the autosaving stuff
+    initAutoSave()
 
     // Render app component
     render(<App />, document.getElementById('app'))

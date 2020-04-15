@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { dumpSimulation } from './dumpSimulation'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
+import { compileIc } from '../../integrated-circuits/helpers/compileIc'
+import { getRendererState } from './getState'
 
 /**
  * Used to switch to a simulation
@@ -22,6 +24,12 @@ export const switchTo = (simulationName: string = 'default') => {
     if (rendererSubject.value) {
         const renderer = rendererSubject.value
         const translation = CurrentLanguage.getTranslation()
+        const state = getRendererState(renderer)
+
+        // compile the ic just in case
+        if (state.simulation.mode === 'ic') {
+            compileIc(state.simulation, true)
+        }
 
         dumpSimulation(renderer)
 

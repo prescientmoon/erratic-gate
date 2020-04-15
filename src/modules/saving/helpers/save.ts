@@ -7,6 +7,20 @@ import { toast } from 'react-toastify'
 import { createToastArguments } from '../../toasts/helpers/createToastArguments'
 import { CurrentLanguage } from '../../internalisation/stores/currentLanguage'
 import { compileIc } from '../../integrated-circuits/helpers/compileIc'
+import { EnglishTranslation } from '../../internalisation/translations/english'
+
+export const notifyAboutAutosave = () => {
+    const translation = CurrentLanguage.getTranslation()
+
+    toast(
+        ...createToastArguments(
+            translation.messages.autoSave ||
+                EnglishTranslation.messages.autoSave ||
+                'this sentence was not translated yet',
+            'save'
+        )
+    )
+}
 
 /**
  * Saves the state from a renderer in localStorage,
@@ -22,20 +36,11 @@ export const save = (renderer: SimulationRenderer) => {
 
     if (current) {
         const state = getRendererState(renderer)
-        const translation = CurrentLanguage.getTranslation()
-
         saveStore.set(current, state)
 
         if (state.simulation.mode === 'ic') {
             compileIc(state.simulation)
         }
-
-        toast(
-            ...createToastArguments(
-                translation.messages.savedSimulation(current),
-                'save'
-            )
-        )
     } else {
         throw new SimulationError(
             'Cannot save without knowing the name of the active simulation'

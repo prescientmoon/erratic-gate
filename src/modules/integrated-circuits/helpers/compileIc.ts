@@ -2,7 +2,6 @@ import { SimulationState } from '../../saving/types/SimulationSave'
 import { SimulationError } from '../../errors/classes/SimulationError'
 import {
     GateTemplate,
-    Property,
     PropGroup,
     isGroup
 } from '../../simulation/types/GateTemplate'
@@ -24,9 +23,10 @@ import { getTemplateSafely } from '../../logic-gates/helpers/getTemplateSafely'
  * Compiles a simulation into a logicGate
  *
  * @param simulaton The simulation to compile
+ * @param log Allow disabling logging
  */
-export const compileIc = (state: SimulationState) => {
-    const { mode, name, gates } = state
+export const compileIc = (state: SimulationState, log = false) => {
+    const { mode, name } = state
 
     if (mode === 'project') {
         throw new SimulationError('Cannot compile project')
@@ -82,10 +82,13 @@ export const compileIc = (state: SimulationState) => {
     }
 
     templateStore.set(name, result)
-    toast(
-        ...createToastArguments(
-            translation.messages.compiledIc(name),
-            'markunread_mailbox'
+
+    if (log) {
+        toast(
+            ...createToastArguments(
+                translation.messages.compiledIc(name),
+                'markunread_mailbox'
+            )
         )
-    )
+    }
 }
