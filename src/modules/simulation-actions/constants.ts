@@ -30,39 +30,43 @@ export const actionIcons: Record<possibleAction, string> = {
  * Array with all the actions for the SimulationAction component to render
  */
 export const SidebarActions: Record<possibleAction, SidebarAction> = {
-    ...createActionConfig('save', save, ['ctrl', 's']),
+    ...createActionConfig('save', save, ['control', 's']),
     ...createActionConfig(
         'refresh',
         {
             run: refresh
         },
-        ['ctrl', 'r']
+        ['control', 'r']
     ),
     ...createActionConfig(
         'undo',
         {
             run: undo
         },
-        ['ctrl', 'z']
+        ['control', 'z']
     ),
     ...createActionConfig(
         'clean',
         {
             run: cleanRenderer
         },
-        ['ctrl', 'delete']
+        ['control', 'delete']
     ),
     ...createActionConfig(
         'delete simulation',
         {
             run: deleteSimulation
         },
-        ['ctrl', 'shift', 'delete']
+        ['control', 'shift', 'delete']
     ),
-    ...createActionConfig('cut', cut, ['ctrl', 'x']),
-    ...createActionConfig('paste', paste, ['ctrl', 'v']),
-    ...createActionConfig('duplicate', duplicate, ['ctrl', 'd']),
-    ...createActionConfig('copy', copy, ['ctrl', 'c']),
-    ...createActionConfig('select all', selectAll, ['ctrl', 'a']),
+    ...createActionConfig('cut', cut, ['control', 'x']),
+    ...createActionConfig('paste', paste, ['control', 'v']),
+    ...createActionConfig('duplicate', duplicate, ['control', 'd']),
+    ...createActionConfig('copy', copy, ['control', 'c']),
+    ...createActionConfig('select all', selectAll, ['control', 'a']),
     ...createActionConfig('delete selection', deleteSelection, ['delete'])
+}
+
+export const keyboardAliases = {
+    delete: ['backspace']
 }

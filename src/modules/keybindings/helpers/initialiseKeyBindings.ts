@@ -1,6 +1,9 @@
 import { KeyboardInput } from '../classes/KeyboardInput'
 import { KeyBindingMap, KeyBinding } from '../types/KeyBindingMap'
-import { SidebarActions } from '../../simulation-actions/constants'
+import {
+    SidebarActions,
+    keyboardAliases
+} from '../../simulation-actions/constants'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 
 export const listeners: Record<string, KeyboardInput> = {}
@@ -16,7 +19,10 @@ const keyBindings = Object.values(SidebarActions)
         }
     )
 
-export const initKeyBindings = (bindings: KeyBindingMap = keyBindings) => {
+export const initKeyBindings = (
+    aliases: Record<string, string[]> = keyboardAliases,
+    bindings: KeyBindingMap = keyBindings
+) => {
     const allKeys = new Set<string>()
 
     for (const binding of bindings) {
@@ -26,7 +32,7 @@ export const initKeyBindings = (bindings: KeyBindingMap = keyBindings) => {
     }
 
     for (const key of allKeys.values()) {
-        listeners[key] = new KeyboardInput(key)
+        listeners[key] = new KeyboardInput(aliases, key)
     }
 
     window.addEventListener('keydown', (e) => {

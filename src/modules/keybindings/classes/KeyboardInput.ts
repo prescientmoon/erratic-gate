@@ -30,15 +30,36 @@ export class KeyboardInput {
     /**
      * Check if a key is pressed
      */
-    private isPressed(key: string, event: KeyboardEvent) {
-        return (key === 'ctrl' && event.metaKey) || keycode(event) === key
+    private isPressed(
+        key: string,
+        event: KeyboardEvent,
+        visited: Set<string> = new Set()
+    ) {
+        // Prevent inifnite recursion
+        if (visited.has(key)) {
+            return false
+        }
+
+        visited.add(key)
+
+        return (
+            (key === 'control' && event.metaKey) ||
+            event.key.toLowerCase() === key ||
+            this.aliases[key]?.some((alias) =>
+                this.isPressed(alias, event, visited)
+            )
+        )
     }
 
     /**
      * use for keyboard events
+     * @param aliases Specifies a mapping of aliases to bind.
      * @param params the keys to listen to
      */
-    public constructor(...params: string[]) {
+    public constructor(
+        public aliases: Record<string, string[]>,
+        ...params: string[]
+    ) {
         //save the keys
         this.keys = params
 

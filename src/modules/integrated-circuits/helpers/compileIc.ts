@@ -19,7 +19,6 @@ import { cleanSimulation } from '../../simulation-actions/helpers/clean'
 import { getSimulationState } from '../../saving/helpers/getState'
 import { categories } from '../../saving/data/categories'
 import { getTemplateSafely } from '../../logic-gates/helpers/getTemplateSafely'
-import { reservedPropNames } from '../../simulation/constants'
 
 /**
  * Compiles a simulation into a logicGate
