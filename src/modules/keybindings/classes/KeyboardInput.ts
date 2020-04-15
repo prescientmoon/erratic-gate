@@ -28,6 +28,13 @@ export class KeyboardInput {
     private subscription: Array<Subscription> = []
 
     /**
+     * Check if a key is pressed
+     */
+    private isPressed(key: string, event: KeyboardEvent) {
+        return (key === 'ctrl' && event.metaKey) || keycode(event) === key
+    }
+
+    /**
      * use for keyboard events
      * @param params the keys to listen to
      */
@@ -37,7 +44,7 @@ export class KeyboardInput {
 
         //push a new subscription to the subscriptions array
         this.subscription.push(
-            fromEvent(document, 'keydown').subscribe(e => {
+            fromEvent(document, 'keydown').subscribe((e: KeyboardEvent) => {
                 //remember the length of the pressed array
                 //used to see if anything changed
                 const last = this.pressed.length
@@ -45,7 +52,7 @@ export class KeyboardInput {
                 //if the key is pressed and it isnt already pressed,
                 //then add it to the pressed array
                 for (let i of this.keys)
-                    if (i == keycode(e) && this.pressed.indexOf(i) == -1)
+                    if (this.isPressed(i, e) && this.pressed.indexOf(i) == -1)
                         this.pressed.push(i)
 
                 //if there was no key pressd before, and now there is
@@ -59,7 +66,7 @@ export class KeyboardInput {
 
         //push a new subscription to the subscriptions array
         this.subscription.push(
-            fromEvent(document, 'keyup').subscribe(e => {
+            fromEvent(document, 'keyup').subscribe((e: KeyboardEvent) => {
                 //remember the length of the pressed array
                 //used to see if anything changed
                 const last = this.pressed.length
@@ -68,7 +75,7 @@ export class KeyboardInput {
                 //if the key is released and it was pressed,
                 //then remove it from the pressed array
                 for (let i of this.keys)
-                    if (i == keycode(e) && this.pressed.indexOf(i) != -1)
+                    if (this.isPressed(i, e) && this.pressed.indexOf(i) != -1)
                         this.pressed.splice(this.pressed.indexOf(i), 1)
 
                 //if there was at least a key pressd before, and now there isnt
@@ -86,7 +93,7 @@ export class KeyboardInput {
      * ends the listening
      */
     public dispose() {
-        this.subscription.forEach(e => e.unsubscribe())
+        this.subscription.forEach((e) => e.unsubscribe())
         this.value = false
         this.valueChanges.next(false)
         this.valueChanges.complete()

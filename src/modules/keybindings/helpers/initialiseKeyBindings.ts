@@ -1,13 +1,12 @@
 import { KeyboardInput } from '../classes/KeyboardInput'
 import { KeyBindingMap, KeyBinding } from '../types/KeyBindingMap'
 import { SidebarActions } from '../../simulation-actions/constants'
-import { SidebarAction } from '../../simulation-actions/types/SidebarAction'
 import { modalIsOpen } from '../../modals/helpers/modalIsOpen'
 
 export const listeners: Record<string, KeyboardInput> = {}
 
 const keyBindings = Object.values(SidebarActions)
-    .filter(action => action.keybinding)
+    .filter((action) => action.keybinding)
     .map(
         (action): KeyBinding => {
             return {
@@ -30,7 +29,7 @@ export const initKeyBindings = (bindings: KeyBindingMap = keyBindings) => {
         listeners[key] = new KeyboardInput(key)
     }
 
-    window.addEventListener('keydown', e => {
+    window.addEventListener('keydown', (e) => {
         if (!modalIsOpen() && location.pathname === '/') {
             const current: {
                 keys: string[]
