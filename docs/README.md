@@ -1,4 +1,4 @@
-# Table of content:
+# Table of contents:
 
 -   [Installation / Running guide](./tutorials/running.md)
 -   [Controls](./tutorials/controls.md)
