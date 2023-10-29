@@ -8,11 +8,11 @@
 # upstream dream2nix flake:
 #   nix run github:nix-community/dream2nix#detect-projects $source
 
-[logic-gate-simulator]
-name = "logic-gate-simulator"
+[erratic-gate]
+name = "erratic-gate"
 relPath = ""
 subsystem = "nodejs"
-translator = "package-lock"
-translators = [ "package-lock", "package-json",]
+translator = "package-json"
+builder = "strict-builder"
 
-[logic-gate-simulator.subsystemInfo]
+[erratic-gate.subsystemInfo]

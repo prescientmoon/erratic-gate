@@ -70,7 +70,8 @@ export const DefaultGateTemplate: GateTemplate = {
         enabled: false,
         color: 'white'
     },
-    category: categories.basic
+    category: categories.basic,
+    info: []
 }
 
 /**

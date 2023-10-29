@@ -11,7 +11,6 @@ import React, { useEffect } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Theme from '@material-ui/styles/ThemeProvider'
 import Sidebar from './Sidebar'
-import Head from './Head'
 import Root from './Root'
 import LogicGatePage from '../../logic-gates/components/LogicGatesPage'
 import { loadSubject } from '../subjects/loadedSubject'
@@ -25,7 +24,6 @@ const App = () => {
 
     return (
         <>
-            <Head />
             <CssBaseline />
 
             <Theme theme={muiTheme}>
