@@ -1,6 +1,3 @@
-import { CacheInstancesByKey } from '@eix-js/utils'
-
-@CacheInstancesByKey(Infinity)
 export class LocalStore<T> {
     public constructor(public name: string) {
         if (!localStorage.getItem(name)) {
@@ -13,9 +10,7 @@ export class LocalStore<T> {
 
         if (!raw)
             throw new Error(
-                `An error occured when accesing ${
-                    this.name
-                } in the local storage!`
+                `An error occured when accesing ${this.name} in the local storage!`
             )
         else {
             return JSON.parse(raw)

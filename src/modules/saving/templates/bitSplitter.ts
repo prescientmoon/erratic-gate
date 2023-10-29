@@ -27,7 +27,7 @@ const bitSplitterTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/splitter')
+        fill: require('../../../assets/splitter.svg')
     },
     category: categories.compressing,
     pins: {

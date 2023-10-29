@@ -9,7 +9,7 @@ const xnorTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/xnor')
+        fill: require('../../../assets/xnor.svg')
     },
     code: {
         activation: `

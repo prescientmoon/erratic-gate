@@ -24,7 +24,7 @@ const bitMergerTemplate: PartialTemplate = {
     category: categories.compressing,
     material: {
         type: 'image',
-        fill: require('../../../assets/merger')
+        fill: require('../../../assets/merger.svg')
     }
 }
 

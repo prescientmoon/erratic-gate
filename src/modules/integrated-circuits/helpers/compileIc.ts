@@ -59,7 +59,7 @@ export const compileIc = (state: SimulationState, log = false) => {
         category: categories.ic,
         material: {
             type: 'image',
-            fill: require('../../../assets/ic')
+            fill: require('../../../assets/ic.svg')
         },
         properties: {
             enabled: !!props.length,

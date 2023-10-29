@@ -1,8 +1,8 @@
-@import '../../core/styles/indexes.scss';
-@import '../../core/styles/colors.scss';
-@import '../../core/styles/mixins/flex.scss';
-@import '../../core/styles/mixins/full-screen.scss';
-@import '../../core/styles/mixins/visibility.scss';
+@import '../../../core/styles/indexes.scss';
+@import '../../../core/styles/colors.scss';
+@import '../../../core/styles/mixins/flex.scss';
+@import '../../../core/styles/mixins/full-screen.scss';
+@import '../../../core/styles/mixins/visibility.scss';
 
 @mixin modal-container {
     @include flex();

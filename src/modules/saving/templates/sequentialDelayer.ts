@@ -11,7 +11,7 @@ const sequentialDelayerTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/sequential')
+        fill: require('../../../assets/sequential.svg')
     },
     code: {
         activation: `

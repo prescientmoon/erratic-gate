@@ -9,7 +9,7 @@ const norTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/nor')
+        fill: require('../../../assets/nor.svg')
     },
     code: {
         activation: `

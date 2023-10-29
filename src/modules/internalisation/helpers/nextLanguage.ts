@@ -1,7 +1,4 @@
-import {
-    CurrentLanguage,
-    CurrentLanguageLocalStore
-} from '../stores/currentLanguage'
+import { CurrentLanguage } from '../stores/currentLanguage'
 import { allSupportedLanguages } from '../constants'
 
 /**

@@ -11,7 +11,7 @@ const halfAdderTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/half-adder')
+        fill: require('../../../assets/half-adder.svg')
     },
     code: {
         activation: adderActivation(false)

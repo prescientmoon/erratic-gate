@@ -12,6 +12,7 @@ import LogicGate from './LogicGate'
 const LogicGatePage = () => {
     const gates = useObservable(() => LogicGateList, [])
     const renderer = getRendererSafely()
+    console.log('got this far')
 
     return (
         <main>
@@ -20,7 +21,7 @@ const LogicGatePage = () => {
                     {gates
                         .map(getTemplateSafely)
                         .sort((a, b) => a.category - b.category)
-                        .filter(template => {
+                        .filter((template) => {
                             return (
                                 renderer.simulation.mode === 'project' ||
                                 template.metadata.name !==
