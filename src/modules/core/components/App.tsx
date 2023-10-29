@@ -17,36 +17,36 @@ import { loadSubject } from '../subjects/loadedSubject'
 import LogicGateInfoPage from '../../logic-gate-info/components/LogicGateInfoPage'
 
 const App = () => {
-    useEffect(() => {
-        loadSubject.next(true)
-    })
+  useEffect(() => {
+    loadSubject.next(true)
+  })
 
-    return (
-        <>
-            <CssBaseline />
+  return (
+    <>
+      <CssBaseline />
 
-            <Theme theme={muiTheme}>
-                <BrowserRouter>
-                    <Sidebar />
+      <Theme theme={muiTheme}>
+        <BrowserRouter basename={process.env.BASEURL}>
+          <Sidebar />
 
-                    <Route path="/" component={Root} exact />
-                    <Route path="/gates" component={LogicGatePage} />
-                    <Route path="/info/:name" component={LogicGateInfoPage} />
-                </BrowserRouter>
-            </Theme>
+          <Route path="/" component={Root} exact />
+          <Route path="/gates" component={LogicGatePage} />
+          <Route path="/info/:name" component={LogicGateInfoPage} />
+        </BrowserRouter>
+      </Theme>
 
-            <ToastContainer
-                position="top-left"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                draggable
-                pauseOnHover
-            />
-        </>
-    )
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+      />
+    </>
+  )
 }
 
 export default App

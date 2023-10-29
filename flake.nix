@@ -15,10 +15,16 @@
           src = pkgs.lib.cleanSource ./.;
           npmDepsHash = "sha256-f5mw6IjkhZgsIuzCz9d7DvoAdceY1y+yWXn1BOonsVI=";
 
+          ESBUILD_BASEURL = "";
+
           installPhase = ''
             mkdir $out
             cp -r dist $out/www
           '';
+        };
+
+        packages.erratic-gate-github-pages = packages.erratic-gate.overrideAttrs {
+          ESBUILD_BASEURL = "/erratic-gate";
         };
 
         packages.default = packages.erratic-gate;
