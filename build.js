@@ -17,7 +17,8 @@ const ctx = await esbuild.context({
   outdir: 'dist',
   format: 'esm',
   target: ['es2020'],
-  assetNames: 'assets/[name]-[hash]',
+  assetNames: 'assets/[name]',
+  chunkNames: 'chunks/[name]',
   loader: {
     '.svg': 'file'
   },
