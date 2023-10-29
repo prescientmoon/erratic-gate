@@ -81,7 +81,7 @@ export class SimulationRenderer {
   public updateWheelListener(ref: RefObject<HTMLCanvasElement>) {
     if (ref.current) {
       ref.current.addEventListener('wheel', (event) => {
-        if (!modalIsOpen() && location.pathname === process.env.BASEURL) {
+        if (!modalIsOpen() && location.pathname === `${process.env.BASEURL}/`) {
           event.preventDefault()
 
           handleScroll(event, this.camera)

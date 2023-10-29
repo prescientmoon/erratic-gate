@@ -4,7 +4,7 @@ import { sassPlugin } from 'esbuild-sass-plugin'
 import * as fs from 'fs'
 
 const serve = process.env.ESBUILD_SERVE === '1'
-const baseurl = process.env.ESBUILD_BASEURL || '/'
+const baseurl = process.env.ESBUILD_BASEURL || ''
 
 console.log(`Building with baseurl ${baseurl}`)
 
