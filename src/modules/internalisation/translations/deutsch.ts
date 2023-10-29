@@ -7,12 +7,12 @@ export const DeutschTranslation: Translation = {
     language: 'deutsch',
     sidebar: {
         createSimulation: 'Simulation erstellen',
-        logicGates: ' Logische Tore',
-        openSimulation: ' Simulationen öffnen ',
+        logicGates: 'Logikgatter',
+        openSimulation: 'Simulationen öffnen',
         simulation: 'Simulation',
-        language: ' Sprache ',
-        backToSimulation: ' Zurück zur Simulation',
-        backToGates: ' Zurück zur Logische Tore'
+        language: 'Sprache',
+        backToSimulation: 'Zurück zur Simulation',
+        backToGates: 'Zurück zu den Logikgattern'
     },
     createSimulation: {
         mode: {
@@ -23,33 +23,33 @@ export const DeutschTranslation: Translation = {
             }
         },
         name: {
-            question: 'Was wollen Sie Ihre Simulation genannt werden?'
+            question: 'Wie soll Ihre Simulation genannt werden?'
         }
     },
     actions: {
         save: 'Speichern',
-        clean: 'Reinigen',
-        refresh: 'Aktualisierung',
+        clean: 'Bereinigen',
+        refresh: 'Aktualisieren',
         undo: 'Rückgängig machen',
         paste: 'Einfügen',
         copy: 'Kopieren',
         duplicate: 'Duplizieren',
-        cut: 'Schnitt',
-        'select all': 'Wählen Sie Alle',
+        cut: 'Ausschneiden',
+        'select all': 'Alles auswählen',
         'delete selection': 'Auswahl löschen',
         'delete simulation': 'Simulation löschen'
     },
     messages: {
-        createdSimulation: name => `Erfolgreich erstellte Simulation '${name}'`,
+        createdSimulation: name => `Simulation '${name}' erfolgreich erstellt`,
         switchedToSimulation: name =>
-            `Erfolgreich auf Simulation umgestellt '${name}'`,
+            `Erfolgreich zu Simulation '${name}' gewechselt`,
         savedSimulation: name =>
-            `Erfolgreich gespeicherte Simulation '${name}'`,
-        compiledIc: name => `Erfolgreich kompilierte Schaltung '${name}'`,
-        cleaned: name => `Erfolgreich bereinigte Simulation '${name}'`,
-        refreshed: name => `Erfolgreich aktualisierte Simulation '${name}'`,
-        undone: name => `Simulation erfolgreich rückgängig gemacht ' ${name}'`,
-        deletedSimulation: name => `Simulation erfolgreich gelöscht ' ${name}'`,
-        addedGate: name => `Tor erfolgreich hinzugefügt`
+            `Simulation '${name}' erfolgreich gespeichert`,
+        compiledIc: name => `Integrierter Schaltkreis '${name}' erfolgreich kompiliert`,
+        cleaned: name => `Simulation '${name}' erfolgreich bereinigt`,
+        refreshed: name => `Simulation '${name}' erfolgreich aktualisiert`,
+        undone: name => `Simulation '${name}' erfolgreich Rückgängig gemacht`,
+        deletedSimulation: name => `Simulation '${name}' erfolgreich gelöscht`,
+        addedGate: name => `Logikgatter erfolgreich hinzugefügt`
     }
 }
