@@ -20,7 +20,6 @@ b * (a - x0) = a - x1
 x1 = a - b * (a - x0)
 */
 export const handleScroll = (e: WheelEvent, camera: Camera) => {
-  console.log('got here')
   const sign = -e.deltaY / Math.abs(e.deltaY)
   const zoom = scrollStep ** sign
 
