@@ -14,7 +14,6 @@
 
           src = pkgs.lib.cleanSource ./.;
           npmDepsHash = "sha256-f5mw6IjkhZgsIuzCz9d7DvoAdceY1y+yWXn1BOonsVI=";
-          npmBuild = "npm run build";
 
           installPhase = ''
             mkdir $out
