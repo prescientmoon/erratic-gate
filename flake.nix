@@ -23,10 +23,7 @@
           '';
         };
 
-        packages.erratic-gate-github-pages = packages.erratic-gate.overrideAttrs {
-          ESBUILD_BASEURL = "/erratic-gate";
-        };
-
+        packages.erratic-gate-github-pages = packages.erratic-gate;
         packages.default = packages.erratic-gate;
 
         devShells.default =
