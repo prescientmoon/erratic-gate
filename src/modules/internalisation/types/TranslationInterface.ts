@@ -29,6 +29,7 @@ export interface Translation {
         }
     }
     messages: {
+        autoSave?: string
         createdSimulation: NameSentence
         switchedToSimulation: NameSentence
         savedSimulation: NameSentence

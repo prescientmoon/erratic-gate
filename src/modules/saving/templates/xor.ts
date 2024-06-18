@@ -9,7 +9,7 @@ const xorTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/xor')
+        fill: require('../../../assets/xor.svg')
     },
     code: {
         activation: `

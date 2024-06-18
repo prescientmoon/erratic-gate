@@ -9,7 +9,7 @@ const orTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/or')
+        fill: require('../../../assets/or.svg')
     },
     code: {
         activation: `

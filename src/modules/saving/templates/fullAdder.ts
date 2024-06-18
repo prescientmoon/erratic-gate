@@ -11,7 +11,7 @@ const fullAdderTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/full-adder')
+        fill: require('../../../assets/full-adder.svg')
     },
     code: {
         activation: adderActivation(true)

@@ -117,7 +117,7 @@ const GateRawProperty = ({
             raw.type === 'text' ||
             raw.type === 'string'
         ) {
-            return (input = (
+            return (
                 <TextField
                     onChange={handleChange}
                     label={displayableName}
@@ -126,9 +126,9 @@ const GateRawProperty = ({
                     multiline={raw.type === 'string'}
                     rowsMax={7}
                 />
-            ))
+            )
         } else if (raw.type === 'boolean') {
-            return (input = (
+            return (
                 <>
                     <span className="checkbox-label">{displayableName}</span>
                     <CheckBox
@@ -139,7 +139,7 @@ const GateRawProperty = ({
                         checked={!!outputSnapshot}
                     />{' '}
                 </>
-            ))
+            )
         }
     })()
 

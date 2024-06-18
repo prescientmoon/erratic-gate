@@ -92,4 +92,5 @@ export interface GateTemplate {
         enabled: boolean
     }
     category: number // for better sorting
+    info: string[]
 }

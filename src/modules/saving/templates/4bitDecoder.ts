@@ -25,7 +25,7 @@ const _4bitDecoderTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/4decoder')
+        fill: require('../../../assets/4decoder.svg')
     },
     shape: {
         scale: _4BitScale

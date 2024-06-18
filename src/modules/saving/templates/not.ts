@@ -9,7 +9,7 @@ const notTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/not')
+        fill: require('../../../assets/not.svg')
     },
     code: {
         activation: `

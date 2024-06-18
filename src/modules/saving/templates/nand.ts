@@ -9,7 +9,7 @@ const nandTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/nand')
+        fill: require('../../../assets/nand.svg')
     },
     code: {
         activation: `

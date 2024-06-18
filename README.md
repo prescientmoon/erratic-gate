@@ -4,10 +4,8 @@ This is a logic gate simulator made for infoeducatie 2019.
 
 ## Getting started
 
-Check out the [demo](https://logic-gate-simulator.herokuapp.com/)
-Or read the [docs](./docs/main.md)
-
-I've also made a [trello board](https://trello.com/b/LW3XSnGN/logic-gate-simulator) .
+Check out the [demo](https://mateiadrielrafael.github.io/erratic-gate/)
+Or read the [docs](./docs/main.md).
 
 ## Credits
 
@@ -21,30 +19,10 @@ Many thanks to:
 
 -   Simple & intuitive UI
 -   Multiple simulations support
--   Integrated circuits
+-   (Configurable) integrated circuits
 -   Multiple bits per pin
 -   Multiple language support: Romanian, English, Dutch, Turkish, Chinese & more in the future
 
 ## Playing with the source
 
-To run locally clone this repo, and then install all dependencies by rrunning:
-
-```sh
-npm install
-```
-
-Start the development server by running:
-
-```sh
-npm run dev
-```
-
-Or bundle the source with:
-
-```sh
-npm run build
-```
-
-## Assets & code wich i didn't make myself:
-
-You can read a full list with what i don't own [here](./docs/assets-i-dont-own.md)
+This repo provides a nix flake for deployment.

@@ -40,15 +40,16 @@ export const EnglishTranslation: Translation = {
         'delete simulation': 'Delete simulation'
     },
     messages: {
-        createdSimulation: name => `Succesfully created simulation '${name}'`,
-        switchedToSimulation: name =>
+        autoSave: 'The sim saves your work automatically :D',
+        createdSimulation: (name) => `Succesfully created simulation '${name}'`,
+        switchedToSimulation: (name) =>
             `Succesfully switched to simulation '${name}'`,
-        savedSimulation: name => `Succesfully saved simulation '${name}'`,
-        compiledIc: name => `Succesfully compiled circuit '${name}'`,
-        cleaned: name => `Succesfully cleaned simulation '${name}'`,
-        refreshed: name => `Succesfully refreshed simulation '${name}'`,
-        undone: name => `Succesfully undone simulation '${name}'`,
-        deletedSimulation: name => `Succesfully deleted simulation '${name}'`,
-        addedGate: name => `Succesfully added gate '${name}'`
+        savedSimulation: (name) => `Succesfully saved simulation '${name}'`,
+        compiledIc: (name) => `Succesfully compiled circuit '${name}'`,
+        cleaned: (name) => `Succesfully cleaned simulation '${name}'`,
+        refreshed: (name) => `Succesfully refreshed simulation '${name}'`,
+        undone: (name) => `Succesfully undone simulation '${name}'`,
+        deletedSimulation: (name) => `Succesfully deleted simulation '${name}'`,
+        addedGate: (name) => `Succesfully added gate '${name}'`
     }
 }

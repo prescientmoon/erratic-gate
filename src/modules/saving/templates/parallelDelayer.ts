@@ -11,7 +11,7 @@ const parallelDelayerTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/parallel')
+        fill: require('../../../assets/parallel.svg')
     },
     code: {
         activation: `

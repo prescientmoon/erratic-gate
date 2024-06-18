@@ -9,7 +9,7 @@ const andTemplate: PartialTemplate = {
     },
     material: {
         type: 'image',
-        fill: require('../../../assets/and')
+        fill: require('../../../assets/and.svg')
     },
     code: {
         activation: `
