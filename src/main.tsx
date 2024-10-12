@@ -15,38 +15,38 @@ import { initAutoSave } from './modules/simulation-actions/helpers/initAutoSave'
  * The function wich does the heavy lifting for starting the app
  */
 export const start = async () => {
-    // This will resolve at the first render
-    const result = loadSubject
-        .pipe(
-            filter((a) => a),
-            take(1)
-        )
-        .toPromise()
+  // This will resolve at the first render
+  const result = loadSubject
+    .pipe(
+      filter((a) => a),
+      take(1)
+    )
+    .toPromise()
 
-    // Handle possible errors
-    handleErrors()
+  // Handle possible errors
+  handleErrors()
 
-    // Create main renderer for the app
-    initRenderer()
+  // Create main renderer for the app
+  initRenderer()
 
-    // Register key bindings
-    initKeyBindings()
+  // Register key bindings
+  initKeyBindings()
 
-    // Update base templates
-    initBaseTemplates()
+  // Update base templates
+  initBaseTemplates()
 
-    // Easter egg
-    logWelcome()
+  // Easter egg
+  logWelcome()
 
-    // Update the logic gates in local storage
-    updateLogicGateList()
+  // Update the logic gates in local storage
+  updateLogicGateList()
 
-    // start the autosaving stuff
-    initAutoSave()
+  // start the autosaving stuff
+  initAutoSave()
 
-    // Render app component
-    render(<App />, document.getElementById('app'))
+  // Render app component
+  render(<App />, document.getElementById('app'))
 
-    // wait for the first render
-    await result
+  // wait for the first render
+  await result
 }
