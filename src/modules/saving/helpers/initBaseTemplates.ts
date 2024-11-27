@@ -8,13 +8,13 @@ import { SimulationError } from '../../errors/classes/SimulationError'
  * @throws SimulationError if something is wrong with the template
  */
 export const initBaseTemplates = () => {
-    for (const template of baseTemplates) {
-        if (template.metadata && template.metadata.name) {
-            templateStore.set(template.metadata.name, template)
-        } else {
-            throw new SimulationError(
-                `Template ${JSON.stringify(template)} cannot be stored.`
-            )
-        }
+  for (const template of baseTemplates) {
+    if (template.metadata && template.metadata.name) {
+      templateStore.set(template.metadata.name, template)
+    } else {
+      throw new SimulationError(
+        `Template ${JSON.stringify(template)} cannot be stored.`
+      )
     }
+  }
 }

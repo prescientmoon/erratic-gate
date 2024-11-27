@@ -16,7 +16,7 @@ export const pinFill = (renderer: SimulationRenderer, pin: Pin) => {
       .map((key) =>
         chunked
           .flat()
-          .filter((v, index) => index % 3 === key)
+          .filter((_v, index) => index % 3 === key)
           .reduce((acc, curr) => acc + curr, 0)
       )
       .map((value) => Math.floor(value / digits.length))

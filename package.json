@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
+        "dev": "ESBUILD_SERVE=1 node ./build.js",
         "build": "node ./build.js",
         "check": "tsc"
     },

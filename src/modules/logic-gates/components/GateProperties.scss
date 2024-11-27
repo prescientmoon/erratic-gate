@@ -7,60 +7,64 @@
 $gate-props-margin: 1rem;
 
 #gate-properties-modal {
-    @include modal-container();
+  @include modal-container();
 
-    justify-content: center;
+  justify-content: center;
 }
 
 .visible#gate-properties-modal {
-    @include visible();
+  @include visible();
 }
 
 div #gate-properties-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    background-color: $grey;
-    border-radius: 1em;
+  background-color: $grey;
+  border-radius: 1em;
 
-    padding: $gate-props-margin * 4;
-    box-sizing: border-box;
+  padding: $gate-props-margin * 4;
+  box-sizing: border-box;
 
-    max-height: 80vh;
-    overflow: auto;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 div #gate-props-title {
-    color: white;
-    font-size: 3em;
+  color: white;
+  font-size: 3em;
 
-    margin-bottom: 2 * $gate-props-margin;
+  margin-bottom: 2 * $gate-props-margin;
 }
 
 div .gate-prop-container {
-    @include flex();
+  @include flex();
 
-    flex-direction: row;
-    justify-content: start;
+  flex-direction: row;
+  justify-content: start;
 
-    &.visible {
-        margin: 1rem;
-    }
+  &.visible {
+    margin: 1rem;
+  }
+
+  &>* {
+    width: 100%;
+  }
 }
 
 div .gate-prop-group-container {
-    @include flex;
+  @include flex;
 
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
 
 div #save-props {
-    width: 50%;
-    margin: $gate-props-margin * 2;
-    margin-bottom: 0;
+  width: 50%;
+  margin: $gate-props-margin * 2;
+  margin-bottom: 0;
 }
 
 .checkbox-label {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }

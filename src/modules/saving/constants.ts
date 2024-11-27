@@ -20,43 +20,45 @@ import comparatorTemplate from './templates/comparator'
 import bitMergerTemplate from './templates/bitMerger'
 import bitSplitterTemplate from './templates/bitSplitter'
 import incrementorTemplate from './templates/incrementor'
+import constantTemplate from './templates/constant'
 
 export const defaultSimulationName = 'default'
 export const baseTemplates: DeepPartial<GateTemplate>[] = [
-    andTemplate,
-    buttonTemplate,
-    lightTemplate,
-    nandTemplate,
-    norTemplate,
-    notTemplate,
-    orTemplate,
-    parallelDelayerTemplate,
-    rgbLightTemplate,
-    sequentialDelayerTemplate,
-    xnorTemplate,
-    xorTemplate,
-    halfAdderTemplate,
-    fullAdderTemplate,
-    _4bitEncoderTemplate,
-    _4bitDecoderTemplate,
-    comparatorTemplate,
-    bitMergerTemplate,
-    bitSplitterTemplate,
-    incrementorTemplate
+  andTemplate,
+  buttonTemplate,
+  lightTemplate,
+  nandTemplate,
+  norTemplate,
+  notTemplate,
+  orTemplate,
+  parallelDelayerTemplate,
+  rgbLightTemplate,
+  sequentialDelayerTemplate,
+  xnorTemplate,
+  xorTemplate,
+  halfAdderTemplate,
+  fullAdderTemplate,
+  _4bitEncoderTemplate,
+  _4bitDecoderTemplate,
+  comparatorTemplate,
+  bitMergerTemplate,
+  bitSplitterTemplate,
+  incrementorTemplate,
+  constantTemplate
 ]
 
 export const baseSave: RendererState = {
-    camera: {
-        transform: {
-            position: [0, 0],
-            scale: [1, 1],
-            rotation: 0
-        }
-    },
-    simulation: {
-        gates: [],
-        mode: 'project',
-        wires: [],
-        name: 'default'
+  camera: {
+    transform: {
+      position: [0, 0],
+      scale: [1, 1],
+      rotation: 0
     }
+  },
+  simulation: {
+    gates: [],
+    mode: 'project',
+    wires: [],
+    name: 'default'
+  }
 }

@@ -43,7 +43,11 @@ const ctx = await esbuild.context({
 })
 
 if (serve) {
-  const { port, host } = await ctx.serve({ servedir: 'dist' })
+  await ctx.watch()
+  const { port, host } = await ctx.serve({
+    servedir: 'dist',
+    fallback: 'dist/index.html'
+  })
   console.log(`Serving on ${host}:${port}`)
 } else {
   await ctx.rebuild()
