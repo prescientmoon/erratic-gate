@@ -12,6 +12,7 @@ export interface Context {
   printHex: (value: number, length?: number) => string
   setBinary: (index: number, value: number, bits?: number) => void
   getOutputBinary: (index: number) => number
+  displayBinary: (value: number) => void
   invertBinary: (value: number) => number
   color: (color: string) => void
   innerText: (value: string) => void

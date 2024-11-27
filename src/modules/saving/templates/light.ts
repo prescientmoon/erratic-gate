@@ -22,12 +22,10 @@ const lightTemplate: PartialTemplate = {
   },
   code: {
     activation: `
-            const { main, active } = context.colors
+      const { main, active } = context.colors
 
-            const bits = context.get(0)
-
-            context.color(parseInt(context.get(0),2) ? active : main)
-        `
+      context.color(context.getBinary(2) ? active : main)
+    `
   },
   integration: {
     output: true

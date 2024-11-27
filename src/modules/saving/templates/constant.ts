@@ -19,12 +19,9 @@ const constTemplate: PartialTemplate = {
       const state = context.getProperty('value')
       const bits = context.getProperty('output bits')
       const length = state.toString(2).length
-      const text = length > 10
-        ? "0x" + context.printHex(state, Math.ceil(length/4))
-        : context.printBinary(state, length)
 
+      context.displayBinary(state)
       context.setBinary(0, state, bits === 0 ? length : bits)
-      context.innerText(text)
     `
   },
   pins: {

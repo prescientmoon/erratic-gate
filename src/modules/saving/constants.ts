@@ -21,6 +21,7 @@ import bitMergerTemplate from './templates/bitMerger'
 import bitSplitterTemplate from './templates/bitSplitter'
 import incrementorTemplate from './templates/incrementor'
 import constantTemplate from './templates/constant'
+import displayTemplate from './templates/display'
 
 export const defaultSimulationName = 'default'
 export const baseTemplates: DeepPartial<GateTemplate>[] = [
@@ -44,7 +45,8 @@ export const baseTemplates: DeepPartial<GateTemplate>[] = [
   bitMergerTemplate,
   bitSplitterTemplate,
   incrementorTemplate,
-  constantTemplate
+  constantTemplate,
+  displayTemplate
 ]
 
 export const baseSave: RendererState = {

@@ -439,11 +439,20 @@ export class Gate {
       }
     }
 
-    return {
+    const context: Context = {
       printBinary: (value: number, bits: number = maxLength) =>
         toLength(value.toString(2), bits),
       printHex: (value: number, bits: number = maxLength) =>
         toLength(value.toString(16), bits),
+      displayBinary: (value: number) => {
+        const length = value.toString(2).length
+        const text =
+          length > 10
+            ? '0x' + context.printHex(value, Math.ceil(length / 4))
+            : context.printBinary(value, length)
+
+        context.innerText(text)
+      },
       get: (index: number) => {
         return this._pins.inputs[index].state.value
       },
@@ -504,6 +513,8 @@ export class Gate {
         ...this.template.material.colors
       }
     }
+
+    return context
   }
 
   /**
