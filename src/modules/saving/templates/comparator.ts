@@ -15,9 +15,9 @@ const comparatorTemplate: PartialTemplate = {
       const a = context.getBinary(0)
       const b = context.getBinary(1)
 
-      context.setBinary(0, Number(a > b), 1)
+      context.setBinary(0, Number(a < b), 1)
       context.setBinary(1, Number(a === b), 1)
-      context.setBinary(2, Number(a < b), 1)
+      context.setBinary(2, Number(a > b), 1)
     `
   },
   pins: {
