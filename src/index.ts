@@ -33,7 +33,11 @@ async function main() {
   }
 }
 
-new EventSource('/esbuild').addEventListener('change', () => location.reload())
+if (process.env.BASEURL === 'development') {
+  new EventSource('/esbuild').addEventListener('change', () =>
+    location.reload()
+  )
+}
 
 // Call entry
 main().catch((error) => {

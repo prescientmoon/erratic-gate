@@ -295,8 +295,9 @@ export class Gate {
     props: Property[] = this.template.properties.data,
     target: GateProps = this.props,
     path: string[] = []
-  ) {
+  ): boolean {
     // We don't want to update until every prop has been created
+    let shouldUpdate = false
     let lockUpdates = true
 
     if (this.template.properties.enabled) {
@@ -304,7 +305,7 @@ export class Gate {
         if (isGroup(prop)) {
           const { groupName } = prop
           target[groupName] = {} as GateProps
-          this.assignProps(
+          shouldUpdate ||= this.assignProps(
             typeof source[groupName] === 'object'
               ? (source[groupName] as PropsSave)
               : {},
@@ -312,36 +313,38 @@ export class Gate {
             target[groupName] as GateProps,
             [...path, groupName]
           )
+        } else {
+          const { name, base, needsUpdate } = prop
+          shouldUpdate ||= needsUpdate || false
 
-          continue
+          const subject = new BehaviorSubject(
+            source.hasOwnProperty(name) ? source[name] : base
+          )
+
+          target[name] = subject
+
+          this.subscriptions.push(
+            subject.subscribe((value) => {
+              if (!lockUpdates && needsUpdate && path.length === 0) {
+                return this.update()
+              }
+
+              if (path.length === 0) {
+                return
+              }
+
+              this.updateNestedProp([...path, name], value)
+            })
+          )
         }
-
-        const { name, base, needsUpdate } = prop
-
-        const subject = new BehaviorSubject(
-          source.hasOwnProperty(name) ? source[name] : base
-        )
-
-        target[name] = subject
-
-        this.subscriptions.push(
-          subject.subscribe((value) => {
-            if (!lockUpdates && needsUpdate && path.length === 0) {
-              return this.update()
-            }
-
-            if (path.length === 0) {
-              return
-            }
-
-            this.updateNestedProp([...path, name], value)
-          })
-        )
       }
     }
 
     lockUpdates = false
-    this.update()
+
+    if (path.length === 0 && shouldUpdate) this.update()
+
+    return shouldUpdate
   }
 
   /**

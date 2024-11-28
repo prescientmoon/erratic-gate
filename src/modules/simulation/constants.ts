@@ -1,6 +1,5 @@
-import { GateTemplate, Property, RawProp } from './types/GateTemplate'
+import { GateTemplate, RawProp } from './types/GateTemplate'
 import { categories } from '../saving/data/categories'
-import { getRendererSafely } from '../logic-gates/helpers/getRendererSafely'
 
 export const DefaultGateTemplate: GateTemplate = {
   metadata: {

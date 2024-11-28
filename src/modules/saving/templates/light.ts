@@ -24,7 +24,7 @@ const lightTemplate: PartialTemplate = {
     activation: `
       const { main, active } = context.colors
 
-      context.color(context.getBinary(2) ? active : main)
+      context.color(context.getBinary(0) ? active : main)
     `
   },
   integration: {
