@@ -5,7 +5,7 @@ import * as fs from 'fs'
 
 const serve = process.env.ESBUILD_SERVE === '1'
 const baseurl = process.env.ESBUILD_BASEURL || ''
-const nodeEnv = process.env.NODE_ENV
+const nodeEnv = process.env.NODE_ENV || 'production'
 const isProd = nodeEnv !== 'development'
 
 console.log(`Building with baseurl ${baseurl}`)
